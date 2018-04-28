@@ -1,7 +1,7 @@
 KBEngine
 ========
 
-[![Build Status](https://travis-ci.org/kbengine/kbengine.svg)](https://travis-ci.org/krogank9/kbengine)
+[![Build Status](https://travis-ci.org/krogank9/kbengine.svg?branch=master)](https://travis-ci.org/krogank9/kbengine)
 [![Appveyor (Windows) Build  Status](https://ci.appveyor.com/api/projects/status/github/krogank9/kbengine?branch=master&svg=true)](https://ci.appveyor.com/project/krogank9/kbengine/branch/master)
 
 
