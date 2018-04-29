@@ -278,7 +278,7 @@ int EndPoint::findIndicatedInterface(const char * spec, u_int32_t & address)
 		return -1;
 	}
 
-	// 是否指定地址
+	// 鏄惁鎸囧畾鍦板潃
 	if (0 == Address::string2ip(spec, address))
 	{
 		return 0;
@@ -385,7 +385,7 @@ int EndPoint::getInterfaceAddressByMAC(const char * mac, u_int32_t & address)
 		return ret;
 	}
 
-	// mac地址转换
+	// mac鍦板潃杞崲
 	unsigned char macAddress[16] = {0};
 	unsigned char macAddressIdx = 0;
 	char szTemp[2] = {0};

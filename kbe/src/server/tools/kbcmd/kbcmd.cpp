@@ -114,7 +114,7 @@ bool KBCMD::initializeBegin()
 bool KBCMD::inInitialize()
 {
 	PythonApp::inInitialize();
-	// 广播自己的地址给网上上的所有kbemachine
+	// 骞挎挱鑷繁鐨勫湴鍧�缁欑綉涓婁笂鐨勬墍鏈塳bemachine
 	Components::getSingleton().pHandler(this);
 	return true;
 }

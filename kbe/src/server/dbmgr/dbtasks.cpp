@@ -194,7 +194,7 @@ thread::TPTask::TPTaskState DBTaskExecuteRawDatabaseCommandByEntity::presentMain
 {
 	DEBUG_MSG(fmt::format("Dbmgr::ExecuteRawDatabaseCommandByEntity::presentMainThread: {}.\n", sdatas_.c_str()));
 
-	// Èç¹û²»ĞèÒª»Øµ÷Ôò½áÊø
+	// å¦‚æœä¸éœ€è¦å›è°ƒåˆ™ç»“æŸ
 	if(callbackID_ <= 0)
 		return EntityDBTask::presentMainThread();
 
@@ -237,7 +237,7 @@ thread::TPTask::TPTaskState DBTaskExecuteRawDatabaseCommand::presentMainThread()
 {
 	DEBUG_MSG(fmt::format("Dbmgr::ExecuteRawDatabaseCommandByEntity::presentMainThread: {}.\n", sdatas_.c_str()));
 
-	// Èç¹û²»ĞèÒª»Øµ÷Ôò½áÊø
+	// å¦‚æœä¸éœ€è¦å›è°ƒåˆ™ç»“æŸ
 	if(callbackID_ <= 0)
 		return thread::TPTask::TPTASK_STATE_COMPLETED;
 
@@ -320,7 +320,7 @@ bool DBTaskWriteEntity::db_thread_process()
 	{
 		success_ = false;
 
-		// ÏÈĞ´log£¬ Èç¹ûĞ´Ê§°ÜÔò¿ÉÄÜÕâ¸öentityÒÑ¾­ÔÚÏß
+		// å…ˆå†™logï¼Œ å¦‚æœå†™å¤±è´¥åˆ™å¯èƒ½è¿™ä¸ªentityå·²ç»åœ¨çº¿
 		KBEEntityLogTable* pELTable = static_cast<KBEEntityLogTable*>(entityTables.findKBETable(KBE_TABLE_PERFIX "_entitylog"));
 		KBE_ASSERT(pELTable);
 
@@ -342,7 +342,7 @@ thread::TPTask::TPTaskState DBTaskWriteEntity::presentMainThread()
 	ScriptDefModule* pModule = EntityDef::findScriptModule(sid_);
 	DEBUG_MSG(fmt::format("Dbmgr::writeEntity: {0}({1}).\n", pModule->getName(), entityDBID_));
 
-	// ·µ»ØĞ´entityµÄ½á¹û£¬ ³É¹¦»òÕßÊ§°Ü
+	// è¿”å›å†™entityçš„ç»“æœï¼Œ æˆåŠŸæˆ–è€…å¤±è´¥
 
 	Network::Bundle* pBundle = Network::Bundle::createPoolObject();
 	(*pBundle).newMessage(BaseappInterface::onWriteToDBCallback);
@@ -433,7 +433,7 @@ bool DBTaskDeleteEntityByDBID::db_thread_process()
 
 	haslog = pELTable->queryEntity(pdbi_, entityDBID_, entitylog, pModule->getUType());
 
-	// Èç¹ûÓĞÔÚÏß¼ÍÂ¼
+	// å¦‚æœæœ‰åœ¨çº¿çºªå½•
 	if(haslog)
 	{
 		success_ = false;
@@ -560,7 +560,7 @@ bool DBTaskLookUpEntityByDBID::db_thread_process()
 
 	ScriptDefModule* pModule = EntityDef::findScriptModule(sid_);
 
-	// Èç¹ûÓĞÔÚÏß¼ÍÂ¼
+	// å¦‚æœæœ‰åœ¨çº¿çºªå½•
 	if(pELTable->queryEntity(pdbi_, entityDBID_, entitylog, pModule->getUType()))
 	{
 		if(entitylog.logger != g_componentID)
@@ -652,8 +652,8 @@ bool DBTaskCreateAccount::writeAccount(DBInterface* pdbi, const std::string& acc
 		return false;
 	}
 
-	// Ñ°ÕÒdblogÊÇ·ñÓĞ´ËÕËºÅ£¬ Èç¹ûÓĞÔò´´½¨Ê§°Ü
-	// Èç¹ûÃ»ÓĞÔòÏòaccount±íĞÂ½¨Ò»¸öentityÊı¾İÍ¬Ê±ÔÚaccountlog±íĞ´ÈëÒ»¸ölog¹ØÁªdbid
+	// å¯»æ‰¾dblogæ˜¯å¦æœ‰æ­¤è´¦å·ï¼Œ å¦‚æœæœ‰åˆ™åˆ›å»ºå¤±è´¥
+	// å¦‚æœæ²¡æœ‰åˆ™å‘accountè¡¨æ–°å»ºä¸€ä¸ªentityæ•°æ®åŒæ—¶åœ¨accountlogè¡¨å†™å…¥ä¸€ä¸ªlogå…³è”dbid
 	EntityTables& entityTables = EntityTables::findByInterfaceName(pdbi->name());
 	KBEAccountTable* pTable = static_cast<KBEAccountTable*>(entityTables.findKBETable(KBE_TABLE_PERFIX "_accountinfos"));
 	KBE_ASSERT(pTable);
@@ -689,7 +689,7 @@ bool DBTaskCreateAccount::writeAccount(DBInterface* pdbi, const std::string& acc
 	
 	if(entityDBID == 0)
 	{
-		// ·ÀÖ¹¶àÏß³ÌÎÊÌâ£¬ ÕâÀï×öÒ»¸ö¿½±´¡£
+		// é˜²æ­¢å¤šçº¿ç¨‹é—®é¢˜ï¼Œ è¿™é‡Œåšä¸€ä¸ªæ‹·è´ã€‚
 		MemoryStream copyAccountDefMemoryStream(pTable->accountDefMemoryStream());
 
 		entityDBID = EntityTables::findByInterfaceName(pdbi->name()).writeEntity(pdbi, 0, -1,
@@ -801,7 +801,7 @@ bool DBTaskCreateMailAccount::db_thread_process()
 		return false;
 	}
 
-	// Ñ°ÕÒdblogÊÇ·ñÓĞ´ËÕËºÅ£¬ Èç¹ûÓĞÔò´´½¨Ê§°Ü
+	// å¯»æ‰¾dblogæ˜¯å¦æœ‰æ­¤è´¦å·ï¼Œ å¦‚æœæœ‰åˆ™åˆ›å»ºå¤±è´¥
 	EntityTables& entityTables = EntityTables::findByInterfaceName(pdbi_->name());
 	KBEAccountTable* pTable = static_cast<KBEAccountTable*>(entityTables.findKBETable(KBE_TABLE_PERFIX "_accountinfos"));
 	KBE_ASSERT(pTable);
@@ -818,8 +818,8 @@ bool DBTaskCreateMailAccount::db_thread_process()
 		return false;
 	}
 
-	// Éú³É¼¤»îÂë²¢´æ´¢¼¤»îÂëµ½Êı¾İ¿â
-	// ·¢ËÍsmtpÓÊ¼şµ½ÓÊÏä£¬ ÓÃ»§µã»÷È·ÈÏºó¼´¿É¼¤»î
+	// ç”Ÿæˆæ¿€æ´»ç å¹¶å­˜å‚¨æ¿€æ´»ç åˆ°æ•°æ®åº“
+	// å‘é€smtpé‚®ä»¶åˆ°é‚®ç®±ï¼Œ ç”¨æˆ·ç‚¹å‡»ç¡®è®¤åå³å¯æ¿€æ´»
 	std::string codestr = genmail_code(password_);
 	KBEEmailVerificationTable* pTable1 = static_cast<KBEEmailVerificationTable*>(entityTables.findKBETable(KBE_TABLE_PERFIX "_email_verification"));
 	KBE_ASSERT(pTable1);
@@ -963,8 +963,8 @@ bool DBTaskReqAccountResetPassword::db_thread_process()
 	if(info.dbid == 0 || info.flags != ACCOUNT_FLAG_NORMAL)
 		return false;
 	
-	// Éú³É¼¤»îÂë²¢´æ´¢¼¤»îÂëµ½Êı¾İ¿â
-	// ·¢ËÍsmtpÓÊ¼şµ½ÓÊÏä£¬ ÓÃ»§µã»÷È·ÈÏºó¼´¿É¼¤»î
+	// ç”Ÿæˆæ¿€æ´»ç å¹¶å­˜å‚¨æ¿€æ´»ç åˆ°æ•°æ®åº“
+	// å‘é€smtpé‚®ä»¶åˆ°é‚®ç®±ï¼Œ ç”¨æˆ·ç‚¹å‡»ç¡®è®¤åå³å¯æ¿€æ´»
 	KBEEmailVerificationTable* pTable1 = 
 		static_cast<KBEEmailVerificationTable*>(entityTables.findKBETable(KBE_TABLE_PERFIX "_email_verification"));
 	KBE_ASSERT(pTable1);
@@ -1079,8 +1079,8 @@ bool DBTaskReqAccountBindEmail::db_thread_process()
 		return false;
 	}
 
-	// Éú³É¼¤»îÂë²¢´æ´¢¼¤»îÂëµ½Êı¾İ¿â
-	// ·¢ËÍsmtpÓÊ¼şµ½ÓÊÏä£¬ ÓÃ»§µã»÷È·ÈÏºó¼´¿É¼¤»î
+	// ç”Ÿæˆæ¿€æ´»ç å¹¶å­˜å‚¨æ¿€æ´»ç åˆ°æ•°æ®åº“
+	// å‘é€smtpé‚®ä»¶åˆ°é‚®ç®±ï¼Œ ç”¨æˆ·ç‚¹å‡»ç¡®è®¤åå³å¯æ¿€æ´»
 	KBEEmailVerificationTable* pTable1 = static_cast<KBEEmailVerificationTable*>(
 		EntityTables::findByInterfaceName(pdbi_->name()).findKBETable(KBE_TABLE_PERFIX "_email_verification"));
 
@@ -1283,7 +1283,7 @@ bool DBTaskQueryAccount::db_thread_process()
 	info.dbid = dbid_;
 	info.datas = "";
 
-	// ÎªÁËÃ¿´Î¶¼ÄÜ»ñµÃbindataÒò´ËÕâÀïĞèÒªÃ¿´Î¶¼²éÑ¯
+	// ä¸ºäº†æ¯æ¬¡éƒ½èƒ½è·å¾—bindataå› æ­¤è¿™é‡Œéœ€è¦æ¯æ¬¡éƒ½æŸ¥è¯¢
 	//if(dbid_ == 0)
 	{
 		if(!pTable->queryAccount(pdbi_, accountName_, info))
@@ -1334,7 +1334,7 @@ bool DBTaskQueryAccount::db_thread_process()
 
 	success_ = false;
 
-	// ÏÈĞ´log£¬ Èç¹ûĞ´Ê§°ÜÔò¿ÉÄÜÕâ¸öentityÒÑ¾­ÔÚÏß
+	// å…ˆå†™logï¼Œ å¦‚æœå†™å¤±è´¥åˆ™å¯èƒ½è¿™ä¸ªentityå·²ç»åœ¨çº¿
 	KBEEntityLogTable* pELTable = static_cast<KBEEntityLogTable*>
 		(entityTables.findKBETable(KBE_TABLE_PERFIX "_entitylog"));
 	
@@ -1418,7 +1418,7 @@ thread::TPTask::TPTaskState DBTaskAccountOnline::presentMainThread()
 	DEBUG_MSG(fmt::format("Dbmgr::onAccountOnline: componentID:{}, entityID:{}.\n", componentID_, EntityDBTask_entityID()));
 
 	/*
-	// Èç¹ûÃ»ÓĞÁ¬½ÓdbÔò´ÓlogÖĞ²éÕÒÕËºÅÊÇ·ñ»¹ÔÚÏß
+	// å¦‚æœæ²¡æœ‰è¿æ¥dbåˆ™ä»logä¸­æŸ¥æ‰¾è´¦å·æ˜¯å¦è¿˜åœ¨çº¿
 	if(!pDBInterface_)
 	{
 		PROXICES_ONLINE_LOG::iterator iter = proxicesOnlineLogs_.find(accountName_);
@@ -1503,7 +1503,7 @@ DBTaskAccountLogin::~DBTaskAccountLogin()
 //-------------------------------------------------------------------------------------
 bool DBTaskAccountLogin::db_thread_process()
 {
-	// Èç¹ûInterfacesÒÑ¾­ÅĞ¶Ï²»³É¹¦¾ÍÃ»±ØÒª¼ÌĞøÏÂÈ¥
+	// å¦‚æœInterfaceså·²ç»åˆ¤æ–­ä¸æˆåŠŸå°±æ²¡å¿…è¦ç»§ç»­ä¸‹å»
 	if(retcode_ != SERVER_SUCCESS)
 	{
 		ERROR_MSG(fmt::format("DBTaskAccountLogin::db_thread_process(): interfaces is failed!\n"));
@@ -1562,7 +1562,7 @@ bool DBTaskAccountLogin::db_thread_process()
 		}
 
 		if (g_kbeSrvConfig.getDBMgr().notFoundAccountAutoCreate || 
-			(Network::Address::NONE != g_kbeSrvConfig.interfacesAddr() && !needCheckPassword_/*µÚÈı·½´¦Àí³É¹¦Ôò×Ô¶¯´´½¨ÕËºÅ*/))
+			(Network::Address::NONE != g_kbeSrvConfig.interfacesAddr() && !needCheckPassword_/*ç¬¬ä¸‰æ–¹å¤„ç†æˆåŠŸåˆ™è‡ªåŠ¨åˆ›å»ºè´¦å·*/))
 		{
 			if(!DBTaskCreateAccount::writeAccount(pdbi_, accountName_, password_, postdatas_, info) || info.dbid == 0 || info.flags != ACCOUNT_FLAG_NORMAL)
 			{
@@ -1612,7 +1612,7 @@ bool DBTaskAccountLogin::db_thread_process()
 	KBEEntityLogTable::EntityLog entitylog;
 	bool success = !pELTable->queryEntity(pdbi_, info.dbid, entitylog, pModule->getUType());
 
-	// Èç¹ûÓĞÔÚÏß¼ÍÂ¼
+	// å¦‚æœæœ‰åœ¨çº¿çºªå½•
 	if(!success)
 	{
 		componentID_ = entitylog.componentID;
@@ -1658,7 +1658,7 @@ thread::TPTask::TPTaskState DBTaskAccountLogin::presentMainThread()
 		entityID_ = 0;
 	}
 	
-	// Ò»¸öÓÃ»§µÇÂ¼£¬ ¹¹ÔìÒ»¸öÊı¾İ¿â²éÑ¯Ö¸Áî²¢¼ÓÈëµ½Ö´ĞĞ¶ÓÁĞ£¬ Ö´ĞĞÍê±Ï½«½á¹û·µ»Ø¸øloginapp
+	// ä¸€ä¸ªç”¨æˆ·ç™»å½•ï¼Œ æ„é€ ä¸€ä¸ªæ•°æ®åº“æŸ¥è¯¢æŒ‡ä»¤å¹¶åŠ å…¥åˆ°æ‰§è¡Œé˜Ÿåˆ—ï¼Œ æ‰§è¡Œå®Œæ¯•å°†ç»“æœè¿”å›ç»™loginapp
 	Network::Bundle* pBundle = Network::Bundle::createPoolObject();
 	(*pBundle).newMessage(LoginappInterface::onLoginAccountQueryResultFromDbmgr);
 
@@ -1667,7 +1667,7 @@ thread::TPTask::TPTaskState DBTaskAccountLogin::presentMainThread()
 	(*pBundle) << accountName_;
 	(*pBundle) << password_;
 	(*pBundle) << needCheckPassword_;
-	(*pBundle) << componentID_;   // Èç¹û´óÓÚ0Ôò±íÊ¾ÕËºÅ»¹´æ»îÔÚÄ³¸öbaseappÉÏ
+	(*pBundle) << componentID_;   // å¦‚æœå¤§äº0åˆ™è¡¨ç¤ºè´¦å·è¿˜å­˜æ´»åœ¨æŸä¸ªbaseappä¸Š
 	(*pBundle) << entityID_;
 	(*pBundle) << dbid_;
 	(*pBundle) << flags_;
@@ -1716,7 +1716,7 @@ bool DBTaskQueryEntity::db_thread_process()
 
 	if(success_)
 	{
-		// ÏÈĞ´log£¬ Èç¹ûĞ´Ê§°ÜÔò¿ÉÄÜÕâ¸öentityÒÑ¾­ÔÚÏß
+		// å…ˆå†™logï¼Œ å¦‚æœå†™å¤±è´¥åˆ™å¯èƒ½è¿™ä¸ªentityå·²ç»åœ¨çº¿
 		KBEEntityLogTable* pELTable = static_cast<KBEEntityLogTable*>
 			(entityTables.findKBETable(KBE_TABLE_PERFIX "_entitylog"));
 

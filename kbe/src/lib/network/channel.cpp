@@ -210,10 +210,10 @@ bool Channel::initialize(NetworkInterface & networkInterface,
 
 		KBE_ASSERT(pPacketReceiver_->type() == PacketReceiver::TCP_PACKET_RECEIVER);
 
-		// UDP²»ÐèÒª×¢²áÃèÊö·û
+		// UDPä¸éœ€è¦æ³¨å†Œæè¿°ç¬¦
 		pNetworkInterface_->dispatcher().registerReadFileDescriptor(*pEndPoint_, pPacketReceiver_);
 
-		// ÐèÒª·¢ËÍÊý¾ÝÊ±ÔÙ×¢²á
+		// éœ€è¦å‘é€æ•°æ®æ—¶å†æ³¨å†Œ
 		// pPacketSender_ = new TCPPacketSender(*pEndPoint_, *pNetworkInterface_);
 		// pNetworkInterface_->dispatcher().registerWriteFileDescriptor(*pEndPoint_, pPacketSender_);
 	}
@@ -281,7 +281,7 @@ void Channel::startInactivityDetection( float period, float checkPeriod )
 {
 	stopInactivityDetection();
 
-	// Èç¹ûÖÜÆÚÎª¸ºÊýÔò²»¼ì²é
+	// å¦‚æžœå‘¨æœŸä¸ºè´Ÿæ•°åˆ™ä¸æ£€æŸ¥
 	if(period > 0.001f)
 	{
 		checkPeriod = std::max(1.f, checkPeriod);
@@ -328,7 +328,7 @@ void Channel::destroy()
 //-------------------------------------------------------------------------------------
 void Channel::clearState( bool warnOnDiscard /*=false*/ )
 {
-	// Çå¿ÕÎ´´¦ÀíµÄ½ÓÊÜ°ü»º´æ
+	// æ¸…ç©ºæœªå¤„ç†çš„æŽ¥å—åŒ…ç¼“å­˜
 	if (bufferedReceives_.size() > 0)
 	{
 		BufferedReceives::iterator iter = bufferedReceives_.begin();
@@ -378,7 +378,7 @@ void Channel::clearState( bool warnOnDiscard /*=false*/ )
 		}
 	}
 
-	// ÕâÀïÖ»Çå¿Õ×´Ì¬£¬²»ÊÍ·Å
+	// è¿™é‡Œåªæ¸…ç©ºçŠ¶æ€ï¼Œä¸é‡Šæ”¾
 	//SAFE_RELEASE(pPacketReader_);
 	//SAFE_RELEASE(pPacketSender_);
 
@@ -387,7 +387,7 @@ void Channel::clearState( bool warnOnDiscard /*=false*/ )
 
 	stopInactivityDetection();
 
-	// ÓÉÓÚpEndPointÍ¨³£ÓÉÍâ²¿¸øÈë£¬±ØÐëÊÍ·Å£¬ÆµµÀÖØÐÂ¼¤»îÊ±»áÖØÐÂ¸³Öµ
+	// ç”±äºŽpEndPointé€šå¸¸ç”±å¤–éƒ¨ç»™å…¥ï¼Œå¿…é¡»é‡Šæ”¾ï¼Œé¢‘é“é‡æ–°æ¿€æ´»æ—¶ä¼šé‡æ–°èµ‹å€¼
 	if(pEndPoint_)
 	{
 		pEndPoint_->close();
@@ -518,7 +518,7 @@ void Channel::send(Bundle * pBundle)
 
 		pPacketSender_->processSend(this);
 
-		// Èç¹û²»ÄÜÁ¢¼´·¢ËÍµ½ÏµÍ³»º³åÇø£¬ÄÇÃ´½»¸øpoller´¦Àí
+		// å¦‚æžœä¸èƒ½ç«‹å³å‘é€åˆ°ç³»ç»Ÿç¼“å†²åŒºï¼Œé‚£ä¹ˆäº¤ç»™pollerå¤„ç†
 		if(bundles_.size() > 0 && !isCondemn() && !isDestroyed())
 		{
 			flags_ |= FLAG_SENDING;
@@ -737,7 +737,7 @@ void Channel::handshake()
 		
 		flags_ |= FLAG_HANDSHAKE;
 
-		// ´Ë´¦ÅÐ¶¨ÊÇ·ñÎªwebsocket»òÕßÆäËûÐ­ÒéµÄÎÕÊÖ
+		// æ­¤å¤„åˆ¤å®šæ˜¯å¦ä¸ºwebsocketæˆ–è€…å…¶ä»–åè®®çš„æ¡æ‰‹
 		if(websocket::WebSocketProtocol::isWebSocketProtocol(pPacket))
 		{
 			channelType_ = CHANNEL_WEB;
@@ -865,12 +865,12 @@ Bundle* Channel::createSendBundle()
 		Bundle* pBundle = bundles_.back();
 		Bundle::Packets& packets = pBundle->packets();
 
-		// pBundleºÍpackets[0]¶¼±ØÐëÊÇÃ»ÓÐ±»¶ÔÏó³Ø»ØÊÕµÄ¶ÔÏó
-		// ±ØÐëÊÇÎ´¾­¹ý¼ÓÃÜµÄ°ü£¬Èç¹ûÒÑ¾­¼ÓÃÜÁË¾Í²»ÒªÔÙÖØ¸´ÄÃ³öÀ´ÓÃÁË£¬·ñÔòÍâ²¿ÈÝÒ×ÏòÆäÖÐÌí¼ÓÎ´¼ÓÃÜÊý¾Ý 
+		// pBundleå’Œpackets[0]éƒ½å¿…é¡»æ˜¯æ²¡æœ‰è¢«å¯¹è±¡æ± å›žæ”¶çš„å¯¹è±¡
+		// å¿…é¡»æ˜¯æœªç»è¿‡åŠ å¯†çš„åŒ…ï¼Œå¦‚æžœå·²ç»åŠ å¯†äº†å°±ä¸è¦å†é‡å¤æ‹¿å‡ºæ¥ç”¨äº†ï¼Œå¦åˆ™å¤–éƒ¨å®¹æ˜“å‘å…¶ä¸­æ·»åŠ æœªåŠ å¯†æ•°æ® 
 		if (pBundle->packetHaveSpace() &&
 			!packets[0]->encrypted())
 		{
-			// ÏÈ´Ó¶ÓÁÐÉ¾³ý
+			// å…ˆä»Žé˜Ÿåˆ—åˆ é™¤
 			bundles_.pop_back();
 			pBundle->pChannel(this);
 			pBundle->pCurrMsgHandler(NULL);

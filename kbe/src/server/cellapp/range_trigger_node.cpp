@@ -77,7 +77,7 @@ void RangeTriggerNode::onRemove()
 {
 	CoordinateNode::onRemove();
 
-	// 既然自己都要删除了，通知pRangeTrigger_卸载
+	// 鏃㈢劧鑷繁閮借鍒犻櫎浜嗭紝閫氱煡pRangeTrigger_鍗歌浇
 	if (pRangeTrigger_)
 		pRangeTrigger_->uninstall();
 }
@@ -85,7 +85,7 @@ void RangeTriggerNode::onRemove()
 //-------------------------------------------------------------------------------------
 void RangeTriggerNode::onParentRemove(CoordinateNode* pParentNode)
 {
-	// 既然自己都要删除了，通知pRangeTrigger_卸载
+	// 鏃㈢劧鑷繁閮借鍒犻櫎浜嗭紝閫氱煡pRangeTrigger_鍗歌浇
 	if (pRangeTrigger_)
 		pRangeTrigger_->uninstall();
 }

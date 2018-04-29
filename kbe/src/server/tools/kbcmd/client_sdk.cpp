@@ -78,7 +78,7 @@ int CreatDir(const char *pDir)
 	pszDir = strdup(pDir);
 	iLen = strlen(pszDir);
 
-	// ´´½¨ÖÐ¼äÄ¿Â¼  
+	// åˆ›å»ºä¸­é—´ç›®å½•  
 	for (i = 0; i < iLen; i++)
 	{
 		if (pszDir[i] == '\\' || pszDir[i] == '/')
@@ -88,7 +88,7 @@ int CreatDir(const char *pDir)
 
 			pszDir[i] = '\0';
 
-			//Èç¹û²»´æÔÚ,´´½¨  
+			//å¦‚æžœä¸å­˜åœ¨,åˆ›å»º  
 			iRet = KBE_ACCESS(pszDir, 0);
 			if (iRet != 0)
 			{
@@ -103,7 +103,7 @@ int CreatDir(const char *pDir)
 				}
 			}
 
-			//Ö§³Ölinux,½«ËùÓÐ\»»³É/  
+			//æ”¯æŒlinux,å°†æ‰€æœ‰\æ¢æˆ/  
 			pszDir[i] = '/';
 		}
 	}
@@ -924,7 +924,7 @@ bool ClientSDK::writeEntityCall(ScriptDefModule* pScriptDefModule)
 
 	std::string newModuleName;
 
-	// ÏÈÐ´BaseEntityCall
+	// å…ˆå†™BaseEntityCall
 	if(!writeBaseEntityCallBegin(pScriptDefModule))
 		return false;
 
@@ -1023,7 +1023,7 @@ bool ClientSDK::writeEntityCall(ScriptDefModule* pScriptDefModule)
 	headerfileBody_ += fmt::format("\n");
 	sourcefileBody_ += fmt::format("\n");
 
-	// ÔÙÐ´CellEntityCall
+	// å†å†™CellEntityCall
 	if (!writeCellEntityCallBegin(pScriptDefModule))
 		return false;
 

@@ -95,7 +95,7 @@ Space::~Space()
 //-------------------------------------------------------------------------------------
 void Space::_clearGhosts()
 {
-	// ÒòÎªspaceÔÚdestroyÊ±×ö¹ıÒ»´ÎÇåÀí£¬Òò´ËÕâÀïÀíÂÛÉÏÊ£ÏÂµÄÊÇghostsÊµÌå
+	// å› ä¸ºspaceåœ¨destroyæ—¶åšè¿‡ä¸€æ¬¡æ¸…ç†ï¼Œå› æ­¤è¿™é‡Œç†è®ºä¸Šå‰©ä¸‹çš„æ˜¯ghostså®ä½“
 	if(entities_.size() == 0)
 		return;
 	
@@ -326,7 +326,7 @@ void Space::onLoadedSpaceGeometryMapping(NavigationHandlePtr pNavHandle)
 	INFO_MSG(fmt::format("KBEngine::onLoadedSpaceGeometryMapping: spaceID={}, respath={}!\n",
 			id(), getGeometryPath()));
 
-	// Í¨Öª½Å±¾
+	// é€šçŸ¥è„šæœ¬
 	{
 		SCOPED_PROFILE(SCRIPTCALL_PROFILE);
 		SCRIPT_OBJECT_CALL_ARGS2(Cellapp::getSingleton().getEntryScript().get(), const_cast<char*>("onSpaceGeometryLoaded"), 
@@ -356,7 +356,7 @@ void Space::onAllSpaceGeometryLoaded()
 {
 	SCOPED_PROFILE(SCRIPTCALL_PROFILE);
 
-	// Í¨Öª½Å±¾
+	// é€šçŸ¥è„šæœ¬
 	SCRIPT_OBJECT_CALL_ARGS3(Cellapp::getSingleton().getEntryScript().get(), const_cast<char*>("onAllSpaceGeometryLoaded"), 
 		const_cast<char*>("Iis"), this->id(), true, getGeometryPath().c_str(), false);
 }
@@ -412,13 +412,13 @@ void Space::removeEntity(Entity* pEntity)
 
 	pEntity->spaceID(0);
 	
-	// ÏÈ»ñÈ¡µ½ËùÔÚÎ»ÖÃ
+	// å…ˆè·å–åˆ°æ‰€åœ¨ä½ç½®
 	SPACE_ENTITIES::size_type idx = pEntity->spaceEntityIdx();
 
 	KBE_ASSERT(idx < entities_.size());
 	KBE_ASSERT(entities_[ idx ] == pEntity);
 
-	// Èç¹ûÓĞ2¸ö»òÒÔÉÏµÄentityÔò½«×îºóÒ»¸öentityÒÆÖÁÉ¾³ıµÄÕâ¸öentityËùÔÚÎ»ÖÃ
+	// å¦‚æœæœ‰2ä¸ªæˆ–ä»¥ä¸Šçš„entityåˆ™å°†æœ€åä¸€ä¸ªentityç§»è‡³åˆ é™¤çš„è¿™ä¸ªentityæ‰€åœ¨ä½ç½®
 	Entity* pBack = entities_.back().get();
 	pBack->spaceEntityIdx(idx);
 	entities_[idx] = pBack;
@@ -427,11 +427,11 @@ void Space::removeEntity(Entity* pEntity)
 
 	onLeaveWorld(pEntity);
 
-	// Õâ¾ä±ØĞëÔÚonLeaveWorldÖ®ºó£¬ ÒòÎª¿ÉÄÜrangeTriggerĞèÒª²Î¿¼pEntityCoordinateNode
+	// è¿™å¥å¿…é¡»åœ¨onLeaveWorldä¹‹åï¼Œ å› ä¸ºå¯èƒ½rangeTriggeréœ€è¦å‚è€ƒpEntityCoordinateNode
 	pEntity->uninstallCoordinateNodes(&coordinateSystem_);
 	pEntity->onLeaveSpace(this);
 
-	// Èç¹ûÃ»ÓĞentityÁËÔòĞèÒªÏú»Ùspace, ÒòÎªspace×îÉÙ´æÔÚÒ»¸öentity
+	// å¦‚æœæ²¡æœ‰entityäº†åˆ™éœ€è¦é”€æ¯space, å› ä¸ºspaceæœ€å°‘å­˜åœ¨ä¸€ä¸ªentity
 	if(entities_.empty() && state_ == STATE_NORMAL)
 	{
 		Spaces::destroySpace(this->id(), 0);
@@ -456,8 +456,8 @@ void Space::onEnterWorld(Entity* pEntity)
 {
 	KBE_ASSERT(pEntity != NULL);
 	
-	// Èç¹ûÊÇÒ»¸öÓĞWitness(Í¨³£ÊÇÍæ¼Ò)ÔòĞèÒª½«µ±Ç°³¡¾°ÒÑ¾­´´½¨µÄÓĞclient²¿·ÖµÄentity¹ã²¥¸øËû
-	// ·ñÔòÊÇÒ»¸öÆÕÍ¨µÄentity½øÈëÊÀ½ç£¬ ÄÇÃ´ĞèÒª½«Õâ¸öentity¹ã²¥¸øËùÓĞ¿´¼ûËûµÄÓĞWitnessµÄentity¡£
+	// å¦‚æœæ˜¯ä¸€ä¸ªæœ‰Witness(é€šå¸¸æ˜¯ç©å®¶)åˆ™éœ€è¦å°†å½“å‰åœºæ™¯å·²ç»åˆ›å»ºçš„æœ‰clientéƒ¨åˆ†çš„entityå¹¿æ’­ç»™ä»–
+	// å¦åˆ™æ˜¯ä¸€ä¸ªæ™®é€šçš„entityè¿›å…¥ä¸–ç•Œï¼Œ é‚£ä¹ˆéœ€è¦å°†è¿™ä¸ªentityå¹¿æ’­ç»™æ‰€æœ‰çœ‹è§ä»–çš„æœ‰Witnessçš„entityã€‚
 	if(pEntity->hasWitness())
 	{
 		_onEnterWorld(pEntity);
@@ -477,8 +477,8 @@ void Space::onLeaveWorld(Entity* pEntity)
 	if(!pEntity->isReal() || !pEntity->pScriptModule()->hasClient())
 		return;
 	
-	// ÏòÆäËûÈË¿Í»§¶Ë¹ã²¥×Ô¼ºµÄÀë¿ª
-	// Ïò¿Í»§¶Ë·¢ËÍonLeaveWorldÏûÏ¢
+	// å‘å…¶ä»–äººå®¢æˆ·ç«¯å¹¿æ’­è‡ªå·±çš„ç¦»å¼€
+	// å‘å®¢æˆ·ç«¯å‘é€onLeaveWorldæ¶ˆæ¯
 	if(pEntity->hasWitness())
 	{
 		pEntity->pWitness()->onLeaveSpace(this);
@@ -626,7 +626,7 @@ void Space::delSpaceData(const std::string& key)
 //-------------------------------------------------------------------------------------
 void Space::onSpaceDataChanged(const std::string& key, const std::string& value, bool isdel)
 {
-	// Í¨Öª½Å±¾
+	// é€šçŸ¥è„šæœ¬
 	if(!isdel)
 	{
 		SCOPED_PROFILE(SCRIPTCALL_PROFILE);

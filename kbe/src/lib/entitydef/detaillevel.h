@@ -28,9 +28,9 @@ along with KBEngine.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace KBEngine{
 
-/** entity ÏêÇé¼¶±ðÀàÐÍ¶¨Òå 
-	Ä¬ÈÏÓÐ3¸ö¼¶±ð·Ö±ðÎª:
-	 ½ü£¬ ÖÐ£¬ Ô¶
+/** entity è¯¦æƒ…çº§åˆ«ç±»åž‹å®šä¹‰ 
+	é»˜è®¤æœ‰3ä¸ªçº§åˆ«åˆ†åˆ«ä¸º:
+	 è¿‘ï¼Œ ä¸­ï¼Œ è¿œ
 */
 struct DetailLevel
 {
@@ -57,7 +57,7 @@ struct DetailLevel
 	{
 	}
 
-	Level level[3]; // ½ü£¬ ÖÐ£¬ Ô¶
+	Level level[3]; // è¿‘ï¼Œ ä¸­ï¼Œ è¿œ
 };
 
 }

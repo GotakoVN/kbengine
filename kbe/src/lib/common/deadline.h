@@ -27,7 +27,7 @@ namespace KBEngine
 {
 
 /**
- *	ÆÚÏŞ
+ *	æœŸé™
  */
 class Deadline
 {

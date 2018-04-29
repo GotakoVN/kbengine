@@ -76,7 +76,7 @@ namespace KBEngine{
 																				\
 
 /**
-	InterfacesÏûÏ¢ºê£¬  Ö»ÓĞÁã¸ö²ÎÊıµÄÏûÏ¢
+	Interfacesæ¶ˆæ¯å®ï¼Œ  åªæœ‰é›¶ä¸ªå‚æ•°çš„æ¶ˆæ¯
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef INTERFACES_MESSAGE_HANDLER_ARGS0
@@ -118,7 +118,7 @@ namespace KBEngine{
 
 
 /**
-	InterfacesÏûÏ¢ºê£¬  Ö»ÓĞÒ»¸ö²ÎÊıµÄÏûÏ¢
+	Interfacesæ¶ˆæ¯å®ï¼Œ  åªæœ‰ä¸€ä¸ªå‚æ•°çš„æ¶ˆæ¯
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef INTERFACES_MESSAGE_HANDLER_ARGS1
@@ -161,7 +161,7 @@ namespace KBEngine{
 																				\
 	
 /**
-	InterfacesÏûÏ¢ºê£¬  Ö»ÓĞ¶ş¸ö²ÎÊıµÄÏûÏ¢
+	Interfacesæ¶ˆæ¯å®ï¼Œ  åªæœ‰äºŒä¸ªå‚æ•°çš„æ¶ˆæ¯
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef INTERFACES_MESSAGE_HANDLER_ARGS2
@@ -213,7 +213,7 @@ namespace KBEngine{
 
 
 /**
-	InterfacesÏûÏ¢ºê£¬  Ö»ÓĞÈı¸ö²ÎÊıµÄÏûÏ¢
+	Interfacesæ¶ˆæ¯å®ï¼Œ  åªæœ‰ä¸‰ä¸ªå‚æ•°çš„æ¶ˆæ¯
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef INTERFACES_MESSAGE_HANDLER_ARGS3
@@ -274,7 +274,7 @@ namespace KBEngine{
 
 
 /**
-	InterfacesÏûÏ¢ºê£¬  Ö»ÓĞËÄ¸ö²ÎÊıµÄÏûÏ¢
+	Interfacesæ¶ˆæ¯å®ï¼Œ  åªæœ‰å››ä¸ªå‚æ•°çš„æ¶ˆæ¯
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef INTERFACES_MESSAGE_HANDLER_ARGS4
@@ -342,7 +342,7 @@ namespace KBEngine{
 											ARG_TYPE4, ARG_NAME4)				\
 
 /**
-	InterfacesÏûÏ¢ºê£¬  Ö»ÓĞÎå¸ö²ÎÊıµÄÏûÏ¢
+	Interfacesæ¶ˆæ¯å®ï¼Œ  åªæœ‰äº”ä¸ªå‚æ•°çš„æ¶ˆæ¯
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef INTERFACES_MESSAGE_HANDLER_ARGS5
@@ -419,7 +419,7 @@ namespace KBEngine{
 
 
 /**
-	InterfacesÏûÏ¢ºê£¬  Ö»ÓĞÁù¸ö²ÎÊıµÄÏûÏ¢
+	Interfacesæ¶ˆæ¯å®ï¼Œ  åªæœ‰å…­ä¸ªå‚æ•°çš„æ¶ˆæ¯
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef INTERFACES_MESSAGE_HANDLER_ARGS6
@@ -503,7 +503,7 @@ namespace KBEngine{
 											ARG_TYPE6, ARG_NAME6)				\
 
 /**
-	InterfacesÏûÏ¢ºê£¬  Ö»ÓĞ°Ë¸ö²ÎÊıµÄÏûÏ¢
+	Interfacesæ¶ˆæ¯å®ï¼Œ  åªæœ‰å…«ä¸ªå‚æ•°çš„æ¶ˆæ¯
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef INTERFACES_MESSAGE_HANDLER_ARGS8
@@ -605,7 +605,7 @@ namespace KBEngine{
 
 
 /**
-	InterfacesÏûÏ¢ºê£¬  Ö»ÓĞ¾Å¸ö²ÎÊıµÄÏûÏ¢
+	Interfacesæ¶ˆæ¯å®ï¼Œ  åªæœ‰ä¹ä¸ªå‚æ•°çš„æ¶ˆæ¯
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef INTERFACES_MESSAGE_HANDLER_ARGS9
@@ -715,7 +715,7 @@ namespace KBEngine{
 
 
 /**
-	InterfacesÏûÏ¢ºê£¬  Ö»ÓĞÊ®¸ö²ÎÊıµÄÏûÏ¢
+	Interfacesæ¶ˆæ¯å®ï¼Œ  åªæœ‰åä¸ªå‚æ•°çš„æ¶ˆæ¯
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef INTERFACES_MESSAGE_HANDLER_ARGS10
@@ -834,7 +834,7 @@ namespace KBEngine{
 
 
 /**
-	InterfacesÏûÏ¢ºê£¬  Ö»ÓĞÊ®Ò»¸ö²ÎÊıµÄÏûÏ¢
+	Interfacesæ¶ˆæ¯å®ï¼Œ  åªæœ‰åä¸€ä¸ªå‚æ•°çš„æ¶ˆæ¯
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef INTERFACES_MESSAGE_HANDLER_ARGS11

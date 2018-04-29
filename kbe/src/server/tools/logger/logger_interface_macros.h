@@ -38,7 +38,7 @@ along with KBEngine.  If not, see <http://www.gnu.org/licenses/>.
 namespace KBEngine{
 
 /**
-	Logger��Ϣ�꣬  ����Ϊ���� ��Ҫ�Լ��⿪
+	Logger消息宏，  参数为流， 需要自己解开
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef LOGGER_MESSAGE_HANDLER_STREAM
@@ -79,7 +79,7 @@ namespace KBEngine{
 																				\
 
 /**
-	Logger��Ϣ�꣬  ֻ�������������Ϣ
+	Logger消息宏，  只有零个参数的消息
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef LOGGER_MESSAGE_HANDLER_ARGS0
@@ -121,7 +121,7 @@ namespace KBEngine{
 
 
 /**
-	Logger��Ϣ�꣬  ֻ��һ����������Ϣ
+	Logger消息宏，  只有一个参数的消息
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef LOGGER_MESSAGE_HANDLER_ARGS1
@@ -164,7 +164,7 @@ namespace KBEngine{
 																				\
 
 /**
-	Logger��Ϣ�꣬  ֻ�ж�����������Ϣ
+	Logger消息宏，  只有二个参数的消息
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef LOGGER_MESSAGE_HANDLER_ARGS2
@@ -216,7 +216,7 @@ namespace KBEngine{
 
 
 /**
-	Logger��Ϣ�꣬  ֻ��������������Ϣ
+	Logger消息宏，  只有三个参数的消息
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef LOGGER_MESSAGE_HANDLER_ARGS3
@@ -277,7 +277,7 @@ namespace KBEngine{
 
 
 /**
-	Logger��Ϣ�꣬  ֻ���ĸ���������Ϣ
+	Logger消息宏，  只有四个参数的消息
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef LOGGER_MESSAGE_HANDLER_ARGS4
@@ -345,7 +345,7 @@ namespace KBEngine{
 											ARG_TYPE4, ARG_NAME4)				\
 
 /**
-	Logger��Ϣ�꣬  ֻ�������������Ϣ
+	Logger消息宏，  只有五个参数的消息
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef LOGGER_MESSAGE_HANDLER_ARGS5
@@ -422,7 +422,7 @@ namespace KBEngine{
 
 
 /**
-	Logger��Ϣ�꣬  ֻ��������������Ϣ
+	Logger消息宏，  只有六个参数的消息
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef LOGGER_MESSAGE_HANDLER_ARGS6
@@ -506,7 +506,7 @@ namespace KBEngine{
 											ARG_TYPE6, ARG_NAME6)				\
 
 /**
-	Logger��Ϣ�꣬  ֻ�а˸���������Ϣ
+	Logger消息宏，  只有八个参数的消息
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef LOGGER_MESSAGE_HANDLER_ARGS8
@@ -608,7 +608,7 @@ namespace KBEngine{
 
 
 /**
-	Logger��Ϣ�꣬  ֻ�оŸ���������Ϣ
+	Logger消息宏，  只有九个参数的消息
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef LOGGER_MESSAGE_HANDLER_ARGS9
@@ -717,7 +717,7 @@ namespace KBEngine{
 											ARG_TYPE9, ARG_NAME9)				\
 
 /**
-	Logger��Ϣ�꣬  ֻ��ʮ����������Ϣ
+	Logger消息宏，  只有十个参数的消息
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef LOGGER_MESSAGE_HANDLER_ARGS10
@@ -836,7 +836,7 @@ namespace KBEngine{
 
 
 /**
-	Logger��Ϣ�꣬  ֻ��ʮһ����������Ϣ
+	Logger消息宏，  只有十一个参数的消息
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef LOGGER_MESSAGE_HANDLER_ARGS11

@@ -66,7 +66,7 @@ bool GlobalDataClient::write(PyObject* pyKey, PyObject* pyValue)
 		{
 			ret = true;
 
-			// 此处不能减引用，因为需要被pyDict_引用
+			// 姝ゅ涓嶈兘鍑忓紩鐢紝鍥犱负闇�瑕佽pyDict_寮曠敤
 			// Py_XDECREF(pyKey);
 			// Py_XDECREF(pyValue);
 		}
@@ -100,7 +100,7 @@ bool GlobalDataClient::del(PyObject* pyKey)
 			ret = true;
 		}
 
-		// PyDict_GetItem为弱引用
+		// PyDict_GetItem涓哄急寮曠敤
 		// Py_XDECREF(pyVal);
 	}
 	else

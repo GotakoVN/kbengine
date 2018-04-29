@@ -49,7 +49,7 @@ namespace HttpUtility
             {      
                 buf[0] = sIn[ix];
             }
-            //else if ( isspace( (uint8)sIn[ix] ) ) //Ã²ËÆ°Ñ¿Õ¸ñ±àÂë³É%20»òÕß+¶¼¿ÉÒÔ
+            //else if ( isspace( (uint8)sIn[ix] ) ) //è²Œä¼¼æŠŠç©ºæ ¼ç¼–ç æˆ%20æˆ–è€…+éƒ½å¯ä»¥
             //{
             //    buf[0] = '+';
             //}

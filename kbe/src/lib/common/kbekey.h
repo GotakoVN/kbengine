@@ -29,7 +29,7 @@ namespace KBEngine
 
 
 /**
- *	引擎的key管理
+ *	寮曟搸鐨刱ey绠＄悊
  */
 class KBEKey : public KBE_RSA, public Singleton<KBEKey>
 {

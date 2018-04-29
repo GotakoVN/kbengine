@@ -33,7 +33,7 @@ class ScriptDefModule;
 class EntityTableRedis;
 
 /*
-	Î¬»¤entityÔÚÊı¾İ¿â±íÖĞµÄÒ»¸ö×Ö¶Î
+	ç»´æŠ¤entityåœ¨æ•°æ®åº“è¡¨ä¸­çš„ä¸€ä¸ªå­—æ®µ
 */
 class EntityTableItemRedisBase : public EntityTableItem
 {
@@ -51,33 +51,33 @@ public:
 	uint8 type() const{ return TABLE_ITEM_TYPE_UNKONWN; }
 
 	/**
-		³õÊ¼»¯
+		åˆå§‹åŒ–
 	*/
 	virtual bool initialize(const PropertyDescription* pPropertyDescription, 
 		const DataType* pDataType, std::string name);
 
 	/**
-		Í¬²½entity±íµ½Êı¾İ¿âÖĞ
+		åŒæ­¥entityè¡¨åˆ°æ•°æ®åº“ä¸­
 	*/
 	virtual bool syncToDB(DBInterface* pdbi, void* pData = NULL) = 0;
 
 	/**
-		¸üĞÂÊı¾İ
+		æ›´æ–°æ•°æ®
 	*/
 	virtual bool writeItem(DBInterface* pdbi, DBID dbid, MemoryStream* s, ScriptDefModule* pModule){ return true; }
 
 	/**
-		²éÑ¯±í
+		æŸ¥è¯¢è¡¨
 	*/
 	virtual bool queryTable(DBInterface* pdbi, DBID dbid, MemoryStream* s, ScriptDefModule* pModule){ return true; }
 
 	/**
-		»ñÈ¡Ä³¸ö±íËùÓĞµÄÊı¾İ·Åµ½Á÷ÖĞ
+		è·å–æŸä¸ªè¡¨æ‰€æœ‰çš„æ•°æ®æ”¾åˆ°æµä¸­
 	*/
 	virtual void addToStream(MemoryStream* s, redis::DBContext& context, DBID resultDBID){};
 
 	/**
-		»ñÈ¡ĞèÒª´æ´¢µÄ±íÃû£¬ ×Ö¶ÎÃûºÍ×ª»»Îªsql´æ´¢Ê±µÄ×Ö·û´®Öµ
+		è·å–éœ€è¦å­˜å‚¨çš„è¡¨åï¼Œ å­—æ®µåå’Œè½¬æ¢ä¸ºsqlå­˜å‚¨æ—¶çš„å­—ç¬¦ä¸²å€¼
 	*/
 	virtual void getWriteSqlItem(DBInterface* pdbi, MemoryStream* s, redis::DBContext& context) = 0;
 	virtual void getReadSqlItem(redis::DBContext& context) = 0;
@@ -105,17 +105,17 @@ public:
 	uint8 type() const{ return TABLE_ITEM_TYPE_DIGIT; }
 
 	/**
-		Í¬²½entity±íµ½Êı¾İ¿âÖĞ
+		åŒæ­¥entityè¡¨åˆ°æ•°æ®åº“ä¸­
 	*/
 	virtual bool syncToDB(DBInterface* pdbi, void* pData = NULL);
 
 	/**
-		»ñÈ¡Ä³¸ö±íËùÓĞµÄÊı¾İ·Åµ½Á÷ÖĞ
+		è·å–æŸä¸ªè¡¨æ‰€æœ‰çš„æ•°æ®æ”¾åˆ°æµä¸­
 	*/
 	void addToStream(MemoryStream* s, redis::DBContext& context, DBID resultDBID);
 
 	/**
-		»ñÈ¡ĞèÒª´æ´¢µÄ±íÃû£¬ ×Ö¶ÎÃûºÍ×ª»»Îªsql´æ´¢Ê±µÄ×Ö·û´®Öµ
+		è·å–éœ€è¦å­˜å‚¨çš„è¡¨åï¼Œ å­—æ®µåå’Œè½¬æ¢ä¸ºsqlå­˜å‚¨æ—¶çš„å­—ç¬¦ä¸²å€¼
 	*/
 	virtual void getWriteSqlItem(DBInterface* pdbi, MemoryStream* s, redis::DBContext& context);
 	virtual void getReadSqlItem(redis::DBContext& context);
@@ -137,17 +137,17 @@ public:
 	uint8 type() const{ return TABLE_ITEM_TYPE_STRING; }
 
 	/**
-		Í¬²½entity±íµ½Êı¾İ¿âÖĞ
+		åŒæ­¥entityè¡¨åˆ°æ•°æ®åº“ä¸­
 	*/
 	virtual bool syncToDB(DBInterface* pdbi, void* pData = NULL);
 
 	/**
-		»ñÈ¡Ä³¸ö±íËùÓĞµÄÊı¾İ·Åµ½Á÷ÖĞ
+		è·å–æŸä¸ªè¡¨æ‰€æœ‰çš„æ•°æ®æ”¾åˆ°æµä¸­
 	*/
 	void addToStream(MemoryStream* s, redis::DBContext& context, DBID resultDBID);
 
 	/**
-		»ñÈ¡ĞèÒª´æ´¢µÄ±íÃû£¬ ×Ö¶ÎÃûºÍ×ª»»Îªsql´æ´¢Ê±µÄ×Ö·û´®Öµ
+		è·å–éœ€è¦å­˜å‚¨çš„è¡¨åï¼Œ å­—æ®µåå’Œè½¬æ¢ä¸ºsqlå­˜å‚¨æ—¶çš„å­—ç¬¦ä¸²å€¼
 	*/
 	virtual void getWriteSqlItem(DBInterface* pdbi, MemoryStream* s, redis::DBContext& context);
 	virtual void getReadSqlItem(redis::DBContext& context);
@@ -167,17 +167,17 @@ public:
 	uint8 type() const{ return TABLE_ITEM_TYPE_UNICODE; }
 
 	/**
-		Í¬²½entity±íµ½Êı¾İ¿âÖĞ
+		åŒæ­¥entityè¡¨åˆ°æ•°æ®åº“ä¸­
 	*/
 	virtual bool syncToDB(DBInterface* pdbi, void* pData = NULL);
 
 	/**
-		»ñÈ¡Ä³¸ö±íËùÓĞµÄÊı¾İ·Åµ½Á÷ÖĞ
+		è·å–æŸä¸ªè¡¨æ‰€æœ‰çš„æ•°æ®æ”¾åˆ°æµä¸­
 	*/
 	void addToStream(MemoryStream* s, redis::DBContext& context, DBID resultDBID);
 
 	/**
-		»ñÈ¡ĞèÒª´æ´¢µÄ±íÃû£¬ ×Ö¶ÎÃûºÍ×ª»»Îªsql´æ´¢Ê±µÄ×Ö·û´®Öµ
+		è·å–éœ€è¦å­˜å‚¨çš„è¡¨åï¼Œ å­—æ®µåå’Œè½¬æ¢ä¸ºsqlå­˜å‚¨æ—¶çš„å­—ç¬¦ä¸²å€¼
 	*/
 	virtual void getWriteSqlItem(DBInterface* pdbi, MemoryStream* s, redis::DBContext& context);
 	virtual void getReadSqlItem(redis::DBContext& context);
@@ -197,17 +197,17 @@ public:
 	uint8 type() const{ return TABLE_ITEM_TYPE_PYTHON; }
 
 	/**
-		Í¬²½entity±íµ½Êı¾İ¿âÖĞ
+		åŒæ­¥entityè¡¨åˆ°æ•°æ®åº“ä¸­
 	*/
 	virtual bool syncToDB(DBInterface* pdbi, void* pData = NULL);
 
 	/**
-		»ñÈ¡Ä³¸ö±íËùÓĞµÄÊı¾İ·Åµ½Á÷ÖĞ
+		è·å–æŸä¸ªè¡¨æ‰€æœ‰çš„æ•°æ®æ”¾åˆ°æµä¸­
 	*/
 	void addToStream(MemoryStream* s, redis::DBContext& context, DBID resultDBID);
 
 	/**
-		»ñÈ¡ĞèÒª´æ´¢µÄ±íÃû£¬ ×Ö¶ÎÃûºÍ×ª»»Îªsql´æ´¢Ê±µÄ×Ö·û´®Öµ
+		è·å–éœ€è¦å­˜å‚¨çš„è¡¨åï¼Œ å­—æ®µåå’Œè½¬æ¢ä¸ºsqlå­˜å‚¨æ—¶çš„å­—ç¬¦ä¸²å€¼
 	*/
 	virtual void getWriteSqlItem(DBInterface* pdbi, MemoryStream* s, redis::DBContext& context);
 	virtual void getReadSqlItem(redis::DBContext& context);
@@ -227,17 +227,17 @@ public:
 	uint8 type() const{ return TABLE_ITEM_TYPE_BLOB; }
 
 	/**
-		Í¬²½entity±íµ½Êı¾İ¿âÖĞ
+		åŒæ­¥entityè¡¨åˆ°æ•°æ®åº“ä¸­
 	*/
 	virtual bool syncToDB(DBInterface* pdbi, void* pData = NULL);
 
 	/**
-		»ñÈ¡Ä³¸ö±íËùÓĞµÄÊı¾İ·Åµ½Á÷ÖĞ
+		è·å–æŸä¸ªè¡¨æ‰€æœ‰çš„æ•°æ®æ”¾åˆ°æµä¸­
 	*/
 	void addToStream(MemoryStream* s, redis::DBContext& context, DBID resultDBID);
 
 	/**
-		»ñÈ¡ĞèÒª´æ´¢µÄ±íÃû£¬ ×Ö¶ÎÃûºÍ×ª»»Îªsql´æ´¢Ê±µÄ×Ö·û´®Öµ
+		è·å–éœ€è¦å­˜å‚¨çš„è¡¨åï¼Œ å­—æ®µåå’Œè½¬æ¢ä¸ºsqlå­˜å‚¨æ—¶çš„å­—ç¬¦ä¸²å€¼
 	*/
 	virtual void getWriteSqlItem(DBInterface* pdbi, MemoryStream* s, redis::DBContext& context);
 	virtual void getReadSqlItem(redis::DBContext& context);
@@ -259,17 +259,17 @@ public:
 	virtual bool isSameKey(std::string key);
 
 	/**
-		Í¬²½entity±íµ½Êı¾İ¿âÖĞ
+		åŒæ­¥entityè¡¨åˆ°æ•°æ®åº“ä¸­
 	*/
 	virtual bool syncToDB(DBInterface* pdbi, void* pData = NULL);
 
 	/**
-		»ñÈ¡Ä³¸ö±íËùÓĞµÄÊı¾İ·Åµ½Á÷ÖĞ
+		è·å–æŸä¸ªè¡¨æ‰€æœ‰çš„æ•°æ®æ”¾åˆ°æµä¸­
 	*/
 	void addToStream(MemoryStream* s, redis::DBContext& context, DBID resultDBID);
 
 	/**
-		»ñÈ¡ĞèÒª´æ´¢µÄ±íÃû£¬ ×Ö¶ÎÃûºÍ×ª»»Îªsql´æ´¢Ê±µÄ×Ö·û´®Öµ
+		è·å–éœ€è¦å­˜å‚¨çš„è¡¨åï¼Œ å­—æ®µåå’Œè½¬æ¢ä¸ºsqlå­˜å‚¨æ—¶çš„å­—ç¬¦ä¸²å€¼
 	*/
 	virtual void getWriteSqlItem(DBInterface* pdbi, MemoryStream* s, redis::DBContext& context);
 	virtual void getReadSqlItem(redis::DBContext& context);
@@ -300,17 +300,17 @@ public:
 	virtual bool isSameKey(std::string key);
 
 	/**
-		Í¬²½entity±íµ½Êı¾İ¿âÖĞ
+		åŒæ­¥entityè¡¨åˆ°æ•°æ®åº“ä¸­
 	*/
 	virtual bool syncToDB(DBInterface* pdbi, void* pData = NULL);
 
 	/**
-		»ñÈ¡Ä³¸ö±íËùÓĞµÄÊı¾İ·Åµ½Á÷ÖĞ
+		è·å–æŸä¸ªè¡¨æ‰€æœ‰çš„æ•°æ®æ”¾åˆ°æµä¸­
 	*/
 	void addToStream(MemoryStream* s, redis::DBContext& context, DBID resultDBID);
 
 	/**
-		»ñÈ¡ĞèÒª´æ´¢µÄ±íÃû£¬ ×Ö¶ÎÃûºÍ×ª»»Îªsql´æ´¢Ê±µÄ×Ö·û´®Öµ
+		è·å–éœ€è¦å­˜å‚¨çš„è¡¨åï¼Œ å­—æ®µåå’Œè½¬æ¢ä¸ºsqlå­˜å‚¨æ—¶çš„å­—ç¬¦ä¸²å€¼
 	*/
 	virtual void getWriteSqlItem(DBInterface* pdbi, MemoryStream* s, redis::DBContext& context);
 	virtual void getReadSqlItem(redis::DBContext& context);
@@ -341,17 +341,17 @@ public:
 	virtual bool isSameKey(std::string key);
 
 	/**
-		Í¬²½entity±íµ½Êı¾İ¿âÖĞ
+		åŒæ­¥entityè¡¨åˆ°æ•°æ®åº“ä¸­
 	*/
 	virtual bool syncToDB(DBInterface* pdbi, void* pData = NULL);
 
 	/**
-		»ñÈ¡Ä³¸ö±íËùÓĞµÄÊı¾İ·Åµ½Á÷ÖĞ
+		è·å–æŸä¸ªè¡¨æ‰€æœ‰çš„æ•°æ®æ”¾åˆ°æµä¸­
 	*/
 	void addToStream(MemoryStream* s, redis::DBContext& context, DBID resultDBID);
 
 	/**
-		»ñÈ¡ĞèÒª´æ´¢µÄ±íÃû£¬ ×Ö¶ÎÃûºÍ×ª»»Îªsql´æ´¢Ê±µÄ×Ö·û´®Öµ
+		è·å–éœ€è¦å­˜å‚¨çš„è¡¨åï¼Œ å­—æ®µåå’Œè½¬æ¢ä¸ºsqlå­˜å‚¨æ—¶çš„å­—ç¬¦ä¸²å€¼
 	*/
 	virtual void getWriteSqlItem(DBInterface* pdbi, MemoryStream* s, redis::DBContext& context);
 	virtual void getReadSqlItem(redis::DBContext& context);
@@ -380,17 +380,17 @@ public:
 	uint8 type() const{ return TABLE_ITEM_TYPE_ENTITYCALL; }
 
 	/**
-		Í¬²½entity±íµ½Êı¾İ¿âÖĞ
+		åŒæ­¥entityè¡¨åˆ°æ•°æ®åº“ä¸­
 	*/
 	virtual bool syncToDB(DBInterface* pdbi, void* pData = NULL);
 
 	/**
-		»ñÈ¡Ä³¸ö±íËùÓĞµÄÊı¾İ·Åµ½Á÷ÖĞ
+		è·å–æŸä¸ªè¡¨æ‰€æœ‰çš„æ•°æ®æ”¾åˆ°æµä¸­
 	*/
 	void addToStream(MemoryStream* s, redis::DBContext& context, DBID resultDBID);
 
 	/**
-		»ñÈ¡ĞèÒª´æ´¢µÄ±íÃû£¬ ×Ö¶ÎÃûºÍ×ª»»Îªsql´æ´¢Ê±µÄ×Ö·û´®Öµ
+		è·å–éœ€è¦å­˜å‚¨çš„è¡¨åï¼Œ å­—æ®µåå’Œè½¬æ¢ä¸ºsqlå­˜å‚¨æ—¶çš„å­—ç¬¦ä¸²å€¼
 	*/
 	virtual void getWriteSqlItem(DBInterface* pdbi, MemoryStream* s, redis::DBContext& context);
 	virtual void getReadSqlItem(redis::DBContext& context);
@@ -411,7 +411,7 @@ public:
 	virtual bool isSameKey(std::string key);
 
 	/**
-		³õÊ¼»¯
+		åˆå§‹åŒ–
 	*/
 	virtual bool initialize(const PropertyDescription* pPropertyDescription, 
 		const DataType* pDataType, std::string name);
@@ -419,17 +419,17 @@ public:
 	uint8 type() const{ return TABLE_ITEM_TYPE_FIXEDARRAY; }
 
 	/**
-		Í¬²½entity±íµ½Êı¾İ¿âÖĞ
+		åŒæ­¥entityè¡¨åˆ°æ•°æ®åº“ä¸­
 	*/
 	virtual bool syncToDB(DBInterface* pdbi, void* pData = NULL);
 
 	/**
-		»ñÈ¡Ä³¸ö±íËùÓĞµÄÊı¾İ·Åµ½Á÷ÖĞ
+		è·å–æŸä¸ªè¡¨æ‰€æœ‰çš„æ•°æ®æ”¾åˆ°æµä¸­
 	*/
 	void addToStream(MemoryStream* s, redis::DBContext& context, DBID resultDBID);
 
 	/**
-		»ñÈ¡ĞèÒª´æ´¢µÄ±íÃû£¬ ×Ö¶ÎÃûºÍ×ª»»Îªsql´æ´¢Ê±µÄ×Ö·û´®Öµ
+		è·å–éœ€è¦å­˜å‚¨çš„è¡¨åï¼Œ å­—æ®µåå’Œè½¬æ¢ä¸ºsqlå­˜å‚¨æ—¶çš„å­—ç¬¦ä¸²å€¼
 	*/
 	virtual void getWriteSqlItem(DBInterface* pdbi, MemoryStream* s, redis::DBContext& context);
 	virtual void getReadSqlItem(redis::DBContext& context);
@@ -458,23 +458,23 @@ public:
 	virtual bool isSameKey(std::string key);
 
 	/**
-		³õÊ¼»¯
+		åˆå§‹åŒ–
 	*/
 	virtual bool initialize(const PropertyDescription* pPropertyDescription, 
 		const DataType* pDataType, std::string name);
 
 	/**
-		Í¬²½entity±íµ½Êı¾İ¿âÖĞ
+		åŒæ­¥entityè¡¨åˆ°æ•°æ®åº“ä¸­
 	*/
 	virtual bool syncToDB(DBInterface* pdbi, void* pData = NULL);
 
 	/**
-		»ñÈ¡Ä³¸ö±íËùÓĞµÄÊı¾İ·Åµ½Á÷ÖĞ
+		è·å–æŸä¸ªè¡¨æ‰€æœ‰çš„æ•°æ®æ”¾åˆ°æµä¸­
 	*/
 	void addToStream(MemoryStream* s, redis::DBContext& context, DBID resultDBID);
 
 	/**
-		»ñÈ¡ĞèÒª´æ´¢µÄ±íÃû£¬ ×Ö¶ÎÃûºÍ×ª»»Îªsql´æ´¢Ê±µÄ×Ö·û´®Öµ
+		è·å–éœ€è¦å­˜å‚¨çš„è¡¨åï¼Œ å­—æ®µåå’Œè½¬æ¢ä¸ºsqlå­˜å‚¨æ—¶çš„å­—ç¬¦ä¸²å€¼
 	*/
 	virtual void getWriteSqlItem(DBInterface* pdbi, MemoryStream* s, redis::DBContext& context);
 	virtual void getReadSqlItem(redis::DBContext& context);
@@ -482,12 +482,12 @@ public:
 	virtual void init_db_item_name(const char* exstrFlag = "");
 
 protected:
-	EntityTableItemRedis_FIXED_DICT::FIXEDDICT_KEYTYPES			keyTypes_;		// Õâ¸ö¹Ì¶¨×ÖµäÀïµÄ¸÷¸ökeyµÄÀàĞÍ
+	EntityTableItemRedis_FIXED_DICT::FIXEDDICT_KEYTYPES			keyTypes_;		// è¿™ä¸ªå›ºå®šå­—å…¸é‡Œçš„å„ä¸ªkeyçš„ç±»å‹
 };
 
 
 /*
-	Î¬»¤entityÔÚÊı¾İ¿âÖĞµÄ±í
+	ç»´æŠ¤entityåœ¨æ•°æ®åº“ä¸­çš„è¡¨
 */
 class EntityTableRedis : public EntityTable
 {
@@ -496,55 +496,55 @@ public:
 	virtual ~EntityTableRedis();
 	
 	/**
-		³õÊ¼»¯
+		åˆå§‹åŒ–
 	*/
 	virtual bool initialize(ScriptDefModule* sm, std::string name);
 
 	/**
-		Í¬²½entity±íµ½Êı¾İ¿âÖĞ
+		åŒæ­¥entityè¡¨åˆ°æ•°æ®åº“ä¸­
 	*/
 	virtual bool syncToDB(DBInterface* pdbi);
 
 	/**
-		Í¬²½±íË÷Òı
+		åŒæ­¥è¡¨ç´¢å¼•
 	*/
 	virtual bool syncIndexToDB(DBInterface* pdbi);
 
 	/** 
-		´´½¨Ò»¸ö±íitem
+		åˆ›å»ºä¸€ä¸ªè¡¨item
 	*/
 	virtual EntityTableItem* createItem(std::string type, std::string defaultVal);
 
 	DBID writeTable(DBInterface* pdbi, DBID dbid, int8 shouldAutoLoad, MemoryStream* s, ScriptDefModule* pModule);
 
 	/**
-		´ÓÊı¾İ¿âÉ¾³ıentity
+		ä»æ•°æ®åº“åˆ é™¤entity
 	*/
 	bool removeEntity(DBInterface* pdbi, DBID dbid, ScriptDefModule* pModule);
 
 	/**
-		»ñÈ¡ËùÓĞµÄÊı¾İ·Åµ½Á÷ÖĞ
+		è·å–æ‰€æœ‰çš„æ•°æ®æ”¾åˆ°æµä¸­
 	*/
 	virtual bool queryTable(DBInterface* pdbi, DBID dbid, MemoryStream* s, ScriptDefModule* pModule);
 
 	/**
-		ÉèÖÃÊÇ·ñ×Ô¶¯¼ÓÔØ
+		è®¾ç½®æ˜¯å¦è‡ªåŠ¨åŠ è½½
 	*/
 	virtual void entityShouldAutoLoad(DBInterface* pdbi, DBID dbid, bool shouldAutoLoad);
 
 	/**
-		²éÑ¯×Ô¶¯¼ÓÔØµÄÊµÌå
+		æŸ¥è¯¢è‡ªåŠ¨åŠ è½½çš„å®ä½“
 	*/
 	virtual void queryAutoLoadEntities(DBInterface* pdbi, ScriptDefModule* pModule, 
 		ENTITY_ID start, ENTITY_ID end, std::vector<DBID>& outs);
 
 	/**
-		»ñÈ¡Ä³¸ö±íËùÓĞµÄÊı¾İ·Åµ½Á÷ÖĞ
+		è·å–æŸä¸ªè¡¨æ‰€æœ‰çš„æ•°æ®æ”¾åˆ°æµä¸­
 	*/
 	void addToStream(MemoryStream* s, redis::DBContext& context, DBID resultDBID);
 
 	/**
-		»ñÈ¡ĞèÒª´æ´¢µÄ±íÃû£¬ ×Ö¶ÎÃûºÍ×ª»»Îªsql´æ´¢Ê±µÄ×Ö·û´®Öµ
+		è·å–éœ€è¦å­˜å‚¨çš„è¡¨åï¼Œ å­—æ®µåå’Œè½¬æ¢ä¸ºsqlå­˜å‚¨æ—¶çš„å­—ç¬¦ä¸²å€¼
 	*/
 	virtual void getWriteSqlItem(DBInterface* pdbi, MemoryStream* s, redis::DBContext& context);
 	virtual void getReadSqlItem(redis::DBContext& context);

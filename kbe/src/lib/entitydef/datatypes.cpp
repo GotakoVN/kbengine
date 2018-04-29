@@ -55,7 +55,7 @@ void DataTypes::finalise(void)
 //-------------------------------------------------------------------------------------
 bool DataTypes::initialize(std::string file)
 {
-	// ³õÊ¼»¯Ò»Ğ©»ù´¡Àà±ğ
+	// åˆå§‹åŒ–ä¸€äº›åŸºç¡€ç±»åˆ«
 	addDataType("UINT8",		new IntType<uint8>);
 	addDataType("UINT16",		new IntType<uint16>);
 	addDataType("UINT64",		new UInt64Type);
@@ -96,7 +96,7 @@ bool DataTypes::loadTypes(std::string& file)
 
 	if(node == NULL)
 	{
-		// root½ÚµãÏÂÃ»ÓĞ×Ó½ÚµãÁË
+		// rootèŠ‚ç‚¹ä¸‹æ²¡æœ‰å­èŠ‚ç‚¹äº†
 		return true;
 	}
 
@@ -106,7 +106,7 @@ bool DataTypes::loadTypes(std::string& file)
 		std::string aliasName = xml->getKey(node);
 		TiXmlNode* childNode = node->FirstChild();
 
-		// ²»ÔÊĞíÇ°Ãæ¼Ó_, ÒòÎªÄÚ²¿²úÉúµÄÒ»Ğ©ÁÙÊ±½á¹¹Ç°ÃæÊ¹ÓÃÁË_, ±ÜÃâÎóÅĞ
+		// ä¸å…è®¸å‰é¢åŠ _, å› ä¸ºå†…éƒ¨äº§ç”Ÿçš„ä¸€äº›ä¸´æ—¶ç»“æ„å‰é¢ä½¿ç”¨äº†_, é¿å…è¯¯åˆ¤
 		if (aliasName[0] == '_')
 		{
 			ERROR_MSG(fmt::format("DataTypes::loadTypes: Not allowed to use the prefix \"_\"! aliasName={}\n",

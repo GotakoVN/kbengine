@@ -35,7 +35,7 @@ along with KBEngine.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace KBEngine { 
 
-// Í¬²½³É¹¦Ê±»Øµ÷
+// åŒæ­¥æˆåŠŸæ—¶å›è°ƒ
 typedef void (*onSyncItemToDBSuccessPtr)(DBInterface*, const char*, const char*);
 
 bool sync_item_to_db(DBInterface* pdbi, 
@@ -56,7 +56,7 @@ bool sync_item_to_db(DBInterface* pdbi,
 			MYSQL_TABLE_FIELD& tf = iter->second;
 			if (tf.type == sqlitemtype && ((tf.flags & ALL_MYSQL_SET_FLAGS) == itemflags))
 			{
-				if ((length == 0) || (sqlitemtype == FIELD_TYPE_VAR_STRING ? (int32)length == tf.length / SYSTEM_CHARSET_MBMAXLEN/*Mysql½«length·Å´óÁËN±¶*/ : 
+				if ((length == 0) || (sqlitemtype == FIELD_TYPE_VAR_STRING ? (int32)length == tf.length / SYSTEM_CHARSET_MBMAXLEN/*Mysqlå°†lengthæ”¾å¤§äº†Nå€*/ : 
 					(int32)length == tf.length))
 					return true;
 			}
@@ -119,7 +119,7 @@ bool sync_item_to_db(DBInterface* pdbi,
 
 void sync_autoload_item_index(DBInterface* pdbi, const char* tableName, const char* itemName)
 {
-	// ´´½¨sm_autoLoadµÄË÷Òı
+	// åˆ›å»ºsm_autoLoadçš„ç´¢å¼•
 	std::string sql = fmt::format("ALTER TABLE " ENTITY_TABLE_PERFIX "_{} ADD INDEX ({})", tableName, itemName);
 
 	try
@@ -145,10 +145,10 @@ EntityTableMysql::~EntityTableMysql()
 //-------------------------------------------------------------------------------------
 bool EntityTableMysql::initialize(ScriptDefModule* sm, std::string name)
 {
-	// »ñÈ¡±íÃû
+	// è·å–è¡¨å
 	tableName(name);
 
-	// ÕÒµ½ËùÓĞ´æ´¢ÊôĞÔ²¢ÇÒ´´½¨³öËùÓĞµÄ×Ö¶Î
+	// æ‰¾åˆ°æ‰€æœ‰å­˜å‚¨å±æ€§å¹¶ä¸”åˆ›å»ºå‡ºæ‰€æœ‰çš„å­—æ®µ
 	ScriptDefModule::PROPERTYDESCRIPTION_MAP& pdescrsMap = sm->getPersistentPropertyDescriptions();
 	ScriptDefModule::PROPERTYDESCRIPTION_MAP::const_iterator iter = pdescrsMap.begin();
 
@@ -173,7 +173,7 @@ bool EntityTableMysql::initialize(ScriptDefModule* sm, std::string name)
 		addItem(pETItem);
 	}
 
-	// ÌØÊâ´¦Àí£¬ Êı¾İ¿â±£´æ·½ÏòºÍÎ»ÖÃ
+	// ç‰¹æ®Šå¤„ç†ï¼Œ æ•°æ®åº“ä¿å­˜æ–¹å‘å’Œä½ç½®
 	if(sm->hasCell())
 	{
 		ENTITY_PROPERTY_UID posuid = ENTITY_BASE_PROPERTY_UTYPE_POSITION_XYZ;
@@ -220,7 +220,7 @@ void EntityTableMysql::init_db_item_name()
 	EntityTable::TABLEITEM_MAP::iterator iter = tableItems_.begin();
 	for(; iter != tableItems_.end(); ++iter)
 	{
-		// ´¦ÀífixedDict×Ö¶ÎÃû³ÆµÄÌØÀıÇé¿ö
+		// å¤„ç†fixedDictå­—æ®µåç§°çš„ç‰¹ä¾‹æƒ…å†µ
 		std::string exstrFlag = "";
 		if(iter->second->type() == TABLE_ITEM_TYPE_FIXEDDICT)
 		{
@@ -304,7 +304,7 @@ bool EntityTableMysql::syncIndexToDB(DBInterface* pdbi)
 		{
 			bool deleteIndex = fiter->second != (*iiter)->indexType();
 			
-			// É¾³ıÒÑ¾­´¦ÀíµÄ£¬Ê£ÏÂµÄ¾ÍÊÇÒª´ÓÊı¾İ¿âÉ¾³ıµÄindex
+			// åˆ é™¤å·²ç»å¤„ç†çš„ï¼Œå‰©ä¸‹çš„å°±æ˜¯è¦ä»æ•°æ®åº“åˆ é™¤çš„index
 			currDBKeys.erase(fiter);
 			
 			if(deleteIndex)
@@ -341,7 +341,7 @@ bool EntityTableMysql::syncIndexToDB(DBInterface* pdbi)
 		done = true;
 	}
 
-	// Ê£ÏÂµÄ¾ÍÊÇÒª´ÓÊı¾İ¿âÉ¾³ıµÄindex
+	// å‰©ä¸‹çš„å°±æ˜¯è¦ä»æ•°æ®åº“åˆ é™¤çš„index
 	KBEUnordered_map<std::string, std::string>::iterator dbkey_iter = currDBKeys.begin();
 	for(; dbkey_iter != currDBKeys.end(); ++dbkey_iter)
 	{
@@ -349,7 +349,7 @@ bool EntityTableMysql::syncIndexToDB(DBInterface* pdbi)
 		done = true;		
 	}
 	
-	// Ã»ÓĞĞèÒªĞŞ¸Ä»òÕßÌí¼ÓµÄ
+	// æ²¡æœ‰éœ€è¦ä¿®æ”¹æˆ–è€…æ·»åŠ çš„
 	if(!done)
 		return true;
 	
@@ -427,7 +427,7 @@ bool EntityTableMysql::syncToDB(DBInterface* pdbi)
 
 	pdbi->getTableItemNames(ttablename.c_str(), dbTableItemNames);
 
-	// ¼ì²éÊÇ·ñÓĞĞèÒªÉ¾³ıµÄ±í×Ö¶Î
+	// æ£€æŸ¥æ˜¯å¦æœ‰éœ€è¦åˆ é™¤çš„è¡¨å­—æ®µ
 	std::vector<std::string>::iterator iter0 = dbTableItemNames.begin();
 	for(; iter0 != dbTableItemNames.end(); ++iter0)
 	{
@@ -459,7 +459,7 @@ bool EntityTableMysql::syncToDB(DBInterface* pdbi)
 		}
 	}
 
-	// Í¬²½±íË÷Òı
+	// åŒæ­¥è¡¨ç´¢å¼•
 	if(!syncIndexToDB(pdbi))
 		return false;
 
@@ -802,11 +802,11 @@ DBID EntityTableMysql::writeTable(DBInterface* pdbi, DBID dbid, int8 shouldAutoL
 
 	dbid = context.dbid;
 
-	// Èç¹ûdbidÎª0Ôò´æ´¢Ê§°Ü·µ»Ø
+	// å¦‚æœdbidä¸º0åˆ™å­˜å‚¨å¤±è´¥è¿”å›
 	if(dbid <= 0)
 		return dbid;
 
-	// ÉèÖÃÊµÌåÊÇ·ñ×Ô¶¯¼ÓÔØ
+	// è®¾ç½®å®ä½“æ˜¯å¦è‡ªåŠ¨åŠ è½½
 	if(shouldAutoLoad > -1)
 		entityShouldAutoLoad(pdbi, dbid, shouldAutoLoad > 0);
 
@@ -1218,7 +1218,7 @@ bool EntityTableItemMysql_ARRAY::initialize(const PropertyDescription* pProperty
 	if(!ret)
 		return false;
 
-	// ´´½¨×Ó±í
+	// åˆ›å»ºå­è¡¨
 	EntityTableMysql* pTable = new EntityTableMysql(this->pParentTable()->pEntityTables());
 
 	std::string tname = this->pParentTable()->tableName();
@@ -1287,7 +1287,7 @@ bool EntityTableItemMysql_ARRAY::initialize(const PropertyDescription* pProperty
 //-------------------------------------------------------------------------------------
 bool EntityTableItemMysql_ARRAY::syncToDB(DBInterface* pdbi, void* pData)
 {
-	// ËùÓĞµÄ±í¶¼»áÔÚbool EntityTables::syncToDB(DBInterface* pdbi)ÖĞ±»Í¬²½£¨°üÀ¨×Ó±í£©£¬Òò´ËÎŞĞèÔÙ×öÒ»´ÎÍ¬²½
+	// æ‰€æœ‰çš„è¡¨éƒ½ä¼šåœ¨bool EntityTables::syncToDB(DBInterface* pdbi)ä¸­è¢«åŒæ­¥ï¼ˆåŒ…æ‹¬å­è¡¨ï¼‰ï¼Œå› æ­¤æ— éœ€å†åšä¸€æ¬¡åŒæ­¥
 	//if(pChildTable_)
 	//	return pChildTable_->syncToDB(pdbi);
 
@@ -1551,7 +1551,7 @@ bool EntityTableItemMysql_Component::initialize(const PropertyDescription* pProp
 //-------------------------------------------------------------------------------------
 bool EntityTableItemMysql_Component::syncToDB(DBInterface* pdbi, void* pData)
 {
-	// ËùÓĞµÄ±í¶¼»áÔÚbool EntityTables::syncToDB(DBInterface* pdbi)ÖĞ±»Í¬²½£¨°üÀ¨×Ó±í£©£¬Òò´ËÎŞĞèÔÙ×öÒ»´ÎÍ¬²½
+	// æ‰€æœ‰çš„è¡¨éƒ½ä¼šåœ¨bool EntityTables::syncToDB(DBInterface* pdbi)ä¸­è¢«åŒæ­¥ï¼ˆåŒ…æ‹¬å­è¡¨ï¼‰ï¼Œå› æ­¤æ— éœ€å†åšä¸€æ¬¡åŒæ­¥
 	//if(pChildTable_)
 	//	return pChildTable_->syncToDB(pdbi);
 	return true;
@@ -1571,7 +1571,7 @@ void EntityTableItemMysql_Component::addToStream(MemoryStream* s, mysql::DBConte
 
 				if (dbids.size() > 0)
 				{
-					// ÀíÂÛÉÏÒ»¶¨ÊÇ²»»á´óÓÚ1¸öµÄ
+					// ç†è®ºä¸Šä¸€å®šæ˜¯ä¸ä¼šå¤§äº1ä¸ªçš„
 					KBE_ASSERT(dbids.size() == 1);
 					static_cast<EntityTableMysql*>(pChildTable_)->addToStream(s, *iter->second.get(), dbids[0]);
 				}
@@ -1808,7 +1808,7 @@ bool EntityTableItemMysql_STRING::syncToDB(DBInterface* pdbi, void* pData)
 	uint32 length = pPropertyDescription_->getDatabaseLength();
 	char sql_str[SQL_BUF];
 
-	// Èç¹û¸¸±íItemÊÇ¸ö¹Ì¶¨×Öµä£¬ÄÇÃ´ĞèÒªÅĞ¶Ïµ±Ç°itemÓĞÎŞÔÚ¹Ì¶¨×ÖµäÖĞÉèÖÃDatabaseLength
+	// å¦‚æœçˆ¶è¡¨Itemæ˜¯ä¸ªå›ºå®šå­—å…¸ï¼Œé‚£ä¹ˆéœ€è¦åˆ¤æ–­å½“å‰itemæœ‰æ— åœ¨å›ºå®šå­—å…¸ä¸­è®¾ç½®DatabaseLength
 	if (this->pParentTableItem() && this->pParentTableItem()->type() == TABLE_ITEM_TYPE_FIXEDDICT)
 	{
 		length = static_cast<KBEngine::EntityTableItemMysql_FIXED_DICT*>(pParentTableItem())->getItemDatabaseLength(this->itemName());
@@ -1816,7 +1816,7 @@ bool EntityTableItemMysql_STRING::syncToDB(DBInterface* pdbi, void* pData)
 
 	if (length <= 0)
 	{
-		// Ä¬ÈÏ³¤¶È255
+		// é»˜è®¤é•¿åº¦255
 		length = 255;
 	}
 
@@ -1880,7 +1880,7 @@ bool EntityTableItemMysql_UNICODE::syncToDB(DBInterface* pdbi, void* pData)
 	uint32 length = pPropertyDescription_->getDatabaseLength();
 	char sql_str[SQL_BUF];
 
-	// Èç¹û¸¸±íItemÊÇ¸ö¹Ì¶¨×Öµä£¬ÄÇÃ´ĞèÒªÅĞ¶Ïµ±Ç°itemÓĞÎŞÔÚ¹Ì¶¨×ÖµäÖĞÉèÖÃDatabaseLength
+	// å¦‚æœçˆ¶è¡¨Itemæ˜¯ä¸ªå›ºå®šå­—å…¸ï¼Œé‚£ä¹ˆéœ€è¦åˆ¤æ–­å½“å‰itemæœ‰æ— åœ¨å›ºå®šå­—å…¸ä¸­è®¾ç½®DatabaseLength
 	if (this->pParentTableItem() && this->pParentTableItem()->type() == TABLE_ITEM_TYPE_FIXEDDICT)
 	{
 		length = static_cast<KBEngine::EntityTableItemMysql_FIXED_DICT*>(pParentTableItem())->getItemDatabaseLength(this->itemName());
@@ -1888,7 +1888,7 @@ bool EntityTableItemMysql_UNICODE::syncToDB(DBInterface* pdbi, void* pData)
 
 	if (length <= 0)
 	{
-		// Ä¬ÈÏ³¤¶È255
+		// é»˜è®¤é•¿åº¦255
 		length = 255;
 	}
 

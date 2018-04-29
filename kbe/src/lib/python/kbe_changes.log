@@ -65,7 +65,7 @@ setup.py
 
 
 
-_pickle.c: ²¹¶¡°ü»¹´æÔÚÒ»Ğ©ÎÊÌâ£¬µÈÕıÊ½°æ·¢²¼ÔÙ¿´ÈçºÎ£¬ÁÙÊ±ÕâÑù½â¾ö¡£
+_pickle.c: è¡¥ä¸åŒ…è¿˜å­˜åœ¨ä¸€äº›é—®é¢˜ï¼Œç­‰æ­£å¼ç‰ˆå‘å¸ƒå†çœ‹å¦‚ä½•ï¼Œä¸´æ—¶è¿™æ ·è§£å†³ã€‚
 	http://bugs.python.org/issue22676
 	getattribute(PyObject *obj, PyObject *name, int allow_qualname) {
                 PyErr_Format(PyExc_AttributeError,

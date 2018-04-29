@@ -110,7 +110,7 @@ PyObject* RealEntityMethod::callmethod(PyObject* args, PyObject* kwds)
 				DebugHelper::getSingleton().changeLogger(COMPONENT_NAME_EX(g_componentType));
 		}
 
-		// 记录这个事件产生的数据量大小
+		// 璁板綍杩欎釜浜嬩欢浜х敓鐨勬暟鎹噺澶у皬
 		g_publicCellEventHistoryStats.trackEvent(scriptName_, 
 			methodDescription->getName(), 
 			pForwardBundle->currMsgLength(), 

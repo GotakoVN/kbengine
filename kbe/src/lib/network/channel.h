@@ -70,10 +70,10 @@ public:
 	
 	enum ChannelTypes
 	{
-		/// ÆÕÍ¨Í¨µÀ
+		/// æ™®é€šé€šé“
 		CHANNEL_NORMAL = 0,
 
-		// ä¯ÀÀÆ÷webÍ¨µÀ
+		// æµè§ˆå™¨webé€šé“
 		CHANNEL_WEB = 1,
 	};
 
@@ -120,8 +120,8 @@ public:
 	Bundles & bundles();
 	
 	/**
-		´´½¨·¢ËÍbundle£¬¸Ãbundle¿ÉÄÜÊÇ´Ósend·ÅÈë·¢ËÍ¶ÓÁĞÖĞ»ñÈ¡µÄ£¬Èç¹û¶ÓÁĞÎª¿Õ
-		Ôò´´½¨Ò»¸öĞÂµÄ
+		åˆ›å»ºå‘é€bundleï¼Œè¯¥bundleå¯èƒ½æ˜¯ä»sendæ”¾å…¥å‘é€é˜Ÿåˆ—ä¸­è·å–çš„ï¼Œå¦‚æœé˜Ÿåˆ—ä¸ºç©º
+		åˆ™åˆ›å»ºä¸€ä¸ªæ–°çš„
 	*/
 	Bundle* createSendBundle();
 	
@@ -206,10 +206,10 @@ private:
 
 	enum Flags
 	{
-		FLAG_SENDING	= 0x00000001,	// ·¢ËÍĞÅÏ¢ÖĞ
-		FLAG_DESTROYED	= 0x00000002,	// Í¨µÀÒÑ¾­Ïú»Ù
-		FLAG_HANDSHAKE	= 0x00000004,	// ÒÑ¾­ÎÕÊÖ¹ı
-		FLAG_CONDEMN	= 0x00000008,	// ¸ÃÆµµÀÒÑ¾­±äµÃ²»ºÏ·¨
+		FLAG_SENDING	= 0x00000001,	// å‘é€ä¿¡æ¯ä¸­
+		FLAG_DESTROYED	= 0x00000002,	// é€šé“å·²ç»é”€æ¯
+		FLAG_HANDSHAKE	= 0x00000004,	// å·²ç»æ¡æ‰‹è¿‡
+		FLAG_CONDEMN	= 0x00000008,	// è¯¥é¢‘é“å·²ç»å˜å¾—ä¸åˆæ³•
 	};
 
 	enum TimeOutType
@@ -254,18 +254,18 @@ private:
 	PacketReceiver*				pPacketReceiver_;
 	PacketSender*				pPacketSender_;
 
-	// Èç¹ûÊÇÍâ²¿Í¨µÀÇÒ´úÀíÁËÒ»¸öÇ°¶ËÔò»á°ó¶¨Ç°¶Ë´úÀíID
+	// å¦‚æœæ˜¯å¤–éƒ¨é€šé“ä¸”ä»£ç†äº†ä¸€ä¸ªå‰ç«¯åˆ™ä¼šç»‘å®šå‰ç«¯ä»£ç†ID
 	ENTITY_ID					proxyID_;
 
-	// À©Õ¹ÓÃ
+	// æ‰©å±•ç”¨
 	std::string					strextra_;
 
-	// Í¨µÀÀà±ğ
+	// é€šé“ç±»åˆ«
 	ChannelTypes				channelType_;
 
 	COMPONENT_ID				componentID_;
 
-	// Ö§³ÖÖ¸¶¨Ä³¸öÍ¨µÀÊ¹ÓÃÄ³¸öÏûÏ¢handlers
+	// æ”¯æŒæŒ‡å®šæŸä¸ªé€šé“ä½¿ç”¨æŸä¸ªæ¶ˆæ¯handlers
 	KBEngine::Network::MessageHandlers* pMsgHandlers_;
 
 	uint32						flags_;

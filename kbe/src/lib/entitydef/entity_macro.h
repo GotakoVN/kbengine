@@ -286,7 +286,7 @@ namespace KBEngine{
 }																											\
 
 
-// ÊµÌåµÄ±êÖ¾
+// å®ä½“çš„æ ‡å¿—
 #define ENTITY_FLAGS_UNKNOWN			0x00000000
 #define ENTITY_FLAGS_DESTROYING			0x00000001
 #define ENTITY_FLAGS_INITING			0x00000002
@@ -449,7 +449,7 @@ public:																										\
 																											\
 				if (pCompPropertyDescription)																\
 				{																							\
-					if(PyDict_Check(value) /* createDictDataFromPersistentStream Á÷³Ìµ¼ÖÂ·Ç×Öµä */)			\
+					if(PyDict_Check(value) /* createDictDataFromPersistentStream æµç¨‹å¯¼è‡´éå­—å…¸ */)			\
 					{																						\
 						EntityComponent* pEntityComponent = (EntityComponent*)PyObject_GetAttr(this, key);	\
 						pEntityComponent->updateFromDict(value);											\
@@ -515,7 +515,7 @@ public:																										\
 																											\
 		while(mstream->length() > 0 && count < propertyDescrs.size())										\
 		{																									\
-			(*mstream) >> uid /* ¸¸ÊôĞÔ */ >> uid;															\
+			(*mstream) >> uid /* çˆ¶å±æ€§ */ >> uid;															\
 			ScriptDefModule::PROPERTYDESCRIPTION_UIDMAP::iterator iter = propertyDescrs.find(uid);			\
 			if(iter == propertyDescrs.end())																\
 			{																								\
@@ -790,7 +790,7 @@ public:																										\
 					Py_ssize_t ob_refcnt = value->ob_refcnt;												\
 					PyObject* pySetObj = propertyDescription->onSetValue(this, value);						\
 																											\
-					/* Èç¹ûdefÊôĞÔÊı¾İÓĞ¸Ä±ä£¬ ÄÇÃ´¿ÉÄÜĞèÒª¹ã²¥ */												\
+					/* å¦‚æœdefå±æ€§æ•°æ®æœ‰æ”¹å˜ï¼Œ é‚£ä¹ˆå¯èƒ½éœ€è¦å¹¿æ’­ */												\
 					if(pySetObj != NULL)																	\
 					{																						\
 						onDefDataChanged(NULL, propertyDescription, pySetObj);								\
@@ -846,7 +846,7 @@ public:																										\
 		}																									\
 		else if(g_componentType == BASEAPP_TYPE)															\
 		{																									\
-			extra = -1;	/* shouldAutoLoad -1Ä¬ÈÏ²»¸Ä±äÉèÖÃ */												\
+			extra = -1;	/* shouldAutoLoad -1é»˜è®¤ä¸æ”¹å˜è®¾ç½® */												\
 		}																									\
 																											\
 		if(currargsSize == 1)																				\
@@ -1497,12 +1497,12 @@ public:																										\
 			}																								\
 			else																							\
 			{																								\
-				ERROR_MSG(fmt::format("{}::initProperty: {} dataType is NULL£¡ entityID={}\n",				\
+				ERROR_MSG(fmt::format("{}::initProperty: {} dataType is NULLï¼ entityID={}\n",				\
 					scriptName(), propertyDescription->getName(), id()));									\
 			}																								\
 		}																									\
 																											\
-		/* ÓÉÓÚ×é¼ş³õÊ¼»¯Ê±»á×Ô¶¯initProperty£¬ËùÒÔÖ»ÓĞÖØ¼ÓÔØÊ±ĞèÒªÏÔÊ¾µÄÈ¥µ÷ÓÃ×é¼şµÄinitProperty */				\
+		/* ç”±äºç»„ä»¶åˆå§‹åŒ–æ—¶ä¼šè‡ªåŠ¨initPropertyï¼Œæ‰€ä»¥åªæœ‰é‡åŠ è½½æ—¶éœ€è¦æ˜¾ç¤ºçš„å»è°ƒç”¨ç»„ä»¶çš„initProperty */				\
 		if(isReload)																						\
 		{																									\
 			const ScriptDefModule::COMPONENTDESCRIPTION_MAP* pComponentDescrs =								\

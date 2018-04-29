@@ -513,7 +513,7 @@ bool NavMeshHandle::_create(int layer, const std::string& resPath, const std::st
 
 	dtNavMesh* mesh = tryReadNavmesh<NavMeshSetHeader>(data, readsize, res, false);
 	
-	// Èç¹û¼ÓÔØÊ§°ÜÔò³¢ÊÔ¼ÓÔØÀ©Õ¹¸ñÊ½
+	// å¦‚æœåŠ è½½å¤±è´¥åˆ™å°è¯•åŠ è½½æ‰©å±•æ ¼å¼
 	if(!mesh)
 		mesh = tryReadNavmesh<NavMeshSetHeaderEx>(data, readsize, res, true);
 

@@ -46,7 +46,7 @@ class AppForwardItem : public ForwardItem
 public:
 	virtual bool isOK()
 	{
-		// ±ØĞë´æÔÚÒ»¸ö×¼±¸ºÃµÄ½ø³Ì
+		// å¿…é¡»å­˜åœ¨ä¸€ä¸ªå‡†å¤‡å¥½çš„è¿›ç¨‹
 		Components::COMPONENTS& cts = Components::getSingleton().getComponents(BASEAPP_TYPE);
 		Components::COMPONENTS::iterator ctiter = cts.begin();
 		for (; ctiter != cts.end(); ++ctiter)
@@ -138,7 +138,7 @@ void Baseappmgr::handleGameTick()
 //-------------------------------------------------------------------------------------
 void Baseappmgr::onChannelDeregister(Network::Channel * pChannel)
 {
-	// Èç¹ûÊÇappËÀÍöÁË
+	// å¦‚æœæ˜¯appæ­»äº¡äº†
 	if(pChannel->isInternal())
 	{
 		Components::ComponentInfos* cinfo = Components::getSingleton().findComponent(pChannel);
@@ -302,14 +302,14 @@ COMPONENT_ID Baseappmgr::findFreeBaseapp()
 		if ((iter->second.flags() & APP_FLAGS_NOT_PARTCIPATING_LOAD_BALANCING) > 0)
 			continue;
 		
-		// Ê×ÏÈ½ø³Ì±ØĞë»î×ÅÇÒ³õÊ¼»¯Íê±Ï
+		// é¦–å…ˆè¿›ç¨‹å¿…é¡»æ´»ç€ä¸”åˆå§‹åŒ–å®Œæ¯•
 		if(!iter->second.isDestroyed() && iter->second.initProgress() > 1.f)
 		{
-			// Èç¹ûÃ»ÓĞÈÎºÎÊµÌåÔòÎŞÌõ¼ş·ÖÅä
+			// å¦‚æœæ²¡æœ‰ä»»ä½•å®ä½“åˆ™æ— æ¡ä»¶åˆ†é…
 			if(iter->second.numEntities() == 0)
 				return iter->first;
 
-			// ±È½Ï²¢¼ÇÂ¼¸ºÔØ×îĞ¡µÄ½ø³Ì×îÖÕ±»·ÖÅä
+			// æ¯”è¾ƒå¹¶è®°å½•è´Ÿè½½æœ€å°çš„è¿›ç¨‹æœ€ç»ˆè¢«åˆ†é…
 			if(minload > iter->second.load() || 
 				(minload == iter->second.load() && numEntities > iter->second.numEntities()))
 			{
@@ -336,9 +336,9 @@ void Baseappmgr::reqCreateEntityAnywhere(Network::Channel* pChannel, MemoryStrea
 	Components::ComponentInfos* cinfos = 
 		Components::getSingleton().findComponent(pChannel);
 
-	// ´ËÊ±¿Ï¶¨ÊÇÔÚÔËĞĞ×´Ì¬ÖĞ£¬µ«ÓĞ¿ÉÄÜÔÚµÈ´ı´´½¨space
-	// ËùÒÔ³õÊ¼»¯½ø¶ÈÃ»ÓĞÍê³É, ÔÚÖ»ÓĞÒ»¸öbaseappµÄÇé¿öÏÂÈç¹ûÕâ
-	// Àï²»½øĞĞÉèÖÃ½«ÊÇÒ»¸öÏà»¥µÈ´ıµÄ×´Ì¬
+	// æ­¤æ—¶è‚¯å®šæ˜¯åœ¨è¿è¡ŒçŠ¶æ€ä¸­ï¼Œä½†æœ‰å¯èƒ½åœ¨ç­‰å¾…åˆ›å»ºspace
+	// æ‰€ä»¥åˆå§‹åŒ–è¿›åº¦æ²¡æœ‰å®Œæˆ, åœ¨åªæœ‰ä¸€ä¸ªbaseappçš„æƒ…å†µä¸‹å¦‚æœè¿™
+	// é‡Œä¸è¿›è¡Œè®¾ç½®å°†æ˜¯ä¸€ä¸ªç›¸äº’ç­‰å¾…çš„çŠ¶æ€
 	if(cinfos)
 		cinfos->state = COMPONENT_STATE_RUN;
 
@@ -382,7 +382,7 @@ void Baseappmgr::reqCreateEntityAnywhere(Network::Channel* pChannel, MemoryStrea
 	cinfos->pChannel->send(pBundle);
 	s.done();
 
-	// Ô¤ÏÈ½«ÊµÌåÊıÁ¿Ôö¼Ó
+	// é¢„å…ˆå°†å®ä½“æ•°é‡å¢åŠ 
 	std::map< COMPONENT_ID, Baseapp >::iterator baseapps_iter = baseapps_.find(bestBaseappID_);
 	if (baseapps_iter != baseapps_.end())
 	{
@@ -396,9 +396,9 @@ void Baseappmgr::reqCreateEntityRemotely(Network::Channel* pChannel, MemoryStrea
 	Components::ComponentInfos* cinfos =
 		Components::getSingleton().findComponent(pChannel);
 
-	// ´ËÊ±¿Ï¶¨ÊÇÔÚÔËĞĞ×´Ì¬ÖĞ£¬µ«ÓĞ¿ÉÄÜÔÚµÈ´ı´´½¨space
-	// ËùÒÔ³õÊ¼»¯½ø¶ÈÃ»ÓĞÍê³É, ÔÚÖ»ÓĞÒ»¸öbaseappµÄÇé¿öÏÂÈç¹ûÕâ
-	// Àï²»½øĞĞÉèÖÃ½«ÊÇÒ»¸öÏà»¥µÈ´ıµÄ×´Ì¬
+	// æ­¤æ—¶è‚¯å®šæ˜¯åœ¨è¿è¡ŒçŠ¶æ€ä¸­ï¼Œä½†æœ‰å¯èƒ½åœ¨ç­‰å¾…åˆ›å»ºspace
+	// æ‰€ä»¥åˆå§‹åŒ–è¿›åº¦æ²¡æœ‰å®Œæˆ, åœ¨åªæœ‰ä¸€ä¸ªbaseappçš„æƒ…å†µä¸‹å¦‚æœè¿™
+	// é‡Œä¸è¿›è¡Œè®¾ç½®å°†æ˜¯ä¸€ä¸ªç›¸äº’ç­‰å¾…çš„çŠ¶æ€
 	if (cinfos)
 		cinfos->state = COMPONENT_STATE_RUN;
 
@@ -437,7 +437,7 @@ void Baseappmgr::reqCreateEntityRemotely(Network::Channel* pChannel, MemoryStrea
 	cinfos->pChannel->send(pBundle);
 	s.done();
 
-	// Ô¤ÏÈ½«ÊµÌåÊıÁ¿Ôö¼Ó
+	// é¢„å…ˆå°†å®ä½“æ•°é‡å¢åŠ 
 	std::map< COMPONENT_ID, Baseapp >::iterator baseapps_iter = baseapps_.find(createToComponentID);
 	if (baseapps_iter != baseapps_.end())
 	{
@@ -451,9 +451,9 @@ void Baseappmgr::reqCreateEntityAnywhereFromDBIDQueryBestBaseappID(Network::Chan
 	Components::ComponentInfos* cinfos =
 		Components::getSingleton().findComponent(pChannel);
 
-	// ´ËÊ±¿Ï¶¨ÊÇÔÚÔËĞĞ×´Ì¬ÖĞ£¬µ«ÓĞ¿ÉÄÜÔÚµÈ´ı´´½¨space
-	// ËùÒÔ³õÊ¼»¯½ø¶ÈÃ»ÓĞÍê³É, ÔÚÖ»ÓĞÒ»¸öbaseappµÄÇé¿öÏÂÈç¹ûÕâ
-	// Àï²»½øĞĞÉèÖÃ½«ÊÇÒ»¸öÏà»¥µÈ´ıµÄ×´Ì¬
+	// æ­¤æ—¶è‚¯å®šæ˜¯åœ¨è¿è¡ŒçŠ¶æ€ä¸­ï¼Œä½†æœ‰å¯èƒ½åœ¨ç­‰å¾…åˆ›å»ºspace
+	// æ‰€ä»¥åˆå§‹åŒ–è¿›åº¦æ²¡æœ‰å®Œæˆ, åœ¨åªæœ‰ä¸€ä¸ªbaseappçš„æƒ…å†µä¸‹å¦‚æœè¿™
+	// é‡Œä¸è¿›è¡Œè®¾ç½®å°†æ˜¯ä¸€ä¸ªç›¸äº’ç­‰å¾…çš„çŠ¶æ€
 	if (cinfos)
 		cinfos->state = COMPONENT_STATE_RUN;
 
@@ -480,9 +480,9 @@ void Baseappmgr::reqCreateEntityAnywhereFromDBID(Network::Channel* pChannel, Mem
 	Components::ComponentInfos* cinfos = 
 		Components::getSingleton().findComponent(pChannel);
 
-	// ´ËÊ±¿Ï¶¨ÊÇÔÚÔËĞĞ×´Ì¬ÖĞ£¬µ«ÓĞ¿ÉÄÜÔÚµÈ´ı´´½¨space
-	// ËùÒÔ³õÊ¼»¯½ø¶ÈÃ»ÓĞÍê³É, ÔÚÖ»ÓĞÒ»¸öbaseappµÄÇé¿öÏÂÈç¹ûÕâ
-	// Àï²»½øĞĞÉèÖÃ½«ÊÇÒ»¸öÏà»¥µÈ´ıµÄ×´Ì¬
+	// æ­¤æ—¶è‚¯å®šæ˜¯åœ¨è¿è¡ŒçŠ¶æ€ä¸­ï¼Œä½†æœ‰å¯èƒ½åœ¨ç­‰å¾…åˆ›å»ºspace
+	// æ‰€ä»¥åˆå§‹åŒ–è¿›åº¦æ²¡æœ‰å®Œæˆ, åœ¨åªæœ‰ä¸€ä¸ªbaseappçš„æƒ…å†µä¸‹å¦‚æœè¿™
+	// é‡Œä¸è¿›è¡Œè®¾ç½®å°†æ˜¯ä¸€ä¸ªç›¸äº’ç­‰å¾…çš„çŠ¶æ€
 	if(cinfos)
 		cinfos->state = COMPONENT_STATE_RUN;
 
@@ -521,7 +521,7 @@ void Baseappmgr::reqCreateEntityAnywhereFromDBID(Network::Channel* pChannel, Mem
 	cinfos->pChannel->send(pBundle);
 	s.done();
 
-	// Ô¤ÏÈ½«ÊµÌåÊıÁ¿Ôö¼Ó
+	// é¢„å…ˆå°†å®ä½“æ•°é‡å¢åŠ 
 	std::map< COMPONENT_ID, Baseapp >::iterator baseapps_iter = baseapps_.find(targetComponentID);
 	if (baseapps_iter != baseapps_.end())
 	{
@@ -535,9 +535,9 @@ void Baseappmgr::reqCreateEntityRemotelyFromDBID(Network::Channel* pChannel, Mem
 	Components::ComponentInfos* cinfos =
 		Components::getSingleton().findComponent(pChannel);
 
-	// ´ËÊ±¿Ï¶¨ÊÇÔÚÔËĞĞ×´Ì¬ÖĞ£¬µ«ÓĞ¿ÉÄÜÔÚµÈ´ı´´½¨space
-	// ËùÒÔ³õÊ¼»¯½ø¶ÈÃ»ÓĞÍê³É, ÔÚÖ»ÓĞÒ»¸öbaseappµÄÇé¿öÏÂÈç¹ûÕâ
-	// Àï²»½øĞĞÉèÖÃ½«ÊÇÒ»¸öÏà»¥µÈ´ıµÄ×´Ì¬
+	// æ­¤æ—¶è‚¯å®šæ˜¯åœ¨è¿è¡ŒçŠ¶æ€ä¸­ï¼Œä½†æœ‰å¯èƒ½åœ¨ç­‰å¾…åˆ›å»ºspace
+	// æ‰€ä»¥åˆå§‹åŒ–è¿›åº¦æ²¡æœ‰å®Œæˆ, åœ¨åªæœ‰ä¸€ä¸ªbaseappçš„æƒ…å†µä¸‹å¦‚æœè¿™
+	// é‡Œä¸è¿›è¡Œè®¾ç½®å°†æ˜¯ä¸€ä¸ªç›¸äº’ç­‰å¾…çš„çŠ¶æ€
 	if (cinfos)
 		cinfos->state = COMPONENT_STATE_RUN;
 
@@ -576,7 +576,7 @@ void Baseappmgr::reqCreateEntityRemotelyFromDBID(Network::Channel* pChannel, Mem
 	cinfos->pChannel->send(pBundle);
 	s.done();
 
-	// Ô¤ÏÈ½«ÊµÌåÊıÁ¿Ôö¼Ó
+	// é¢„å…ˆå°†å®ä½“æ•°é‡å¢åŠ 
 	std::map< COMPONENT_ID, Baseapp >::iterator baseapps_iter = baseapps_.find(targetComponentID);
 	if (baseapps_iter != baseapps_.end())
 	{
@@ -654,7 +654,7 @@ void Baseappmgr::registerPendingAccountToBaseapp(Network::Channel* pChannel, Mem
 	pBundle->appendBlob(datas);
 	cinfos->pChannel->send(pBundle);
 
-	// Ô¤ÏÈ½«ÊµÌåÊıÁ¿Ôö¼Ó
+	// é¢„å…ˆå°†å®ä½“æ•°é‡å¢åŠ 
 	if (baseapps_iter != baseapps_.end())
 	{
 		baseapps_iter->second.incNumProxices();

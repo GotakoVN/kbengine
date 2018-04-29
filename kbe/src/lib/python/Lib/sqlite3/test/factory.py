@@ -1,7 +1,7 @@
 #-*- coding: iso-8859-1 -*-
 # pysqlite2/test/factory.py: tests for the various factories in pysqlite
 #
-# Copyright (C) 2005-2007 Gerhard Häring <gh@ghaering.de>
+# Copyright (C) 2005-2007 Gerhard Hé‹œing <gh@ghaering.de>
 #
 # This file is part of pysqlite.
 #
@@ -170,20 +170,20 @@ class TextFactoryTests(unittest.TestCase):
         self.con = sqlite.connect(":memory:")
 
     def CheckUnicode(self):
-        austria = "Österreich"
+        austria = "è¬˜terreich"
         row = self.con.execute("select ?", (austria,)).fetchone()
         self.assertEqual(type(row[0]), str, "type of row[0] must be unicode")
 
     def CheckString(self):
         self.con.text_factory = bytes
-        austria = "Österreich"
+        austria = "è¬˜terreich"
         row = self.con.execute("select ?", (austria,)).fetchone()
         self.assertEqual(type(row[0]), bytes, "type of row[0] must be bytes")
         self.assertEqual(row[0], austria.encode("utf-8"), "column must equal original data in UTF-8")
 
     def CheckCustom(self):
         self.con.text_factory = lambda x: str(x, "utf-8", "ignore")
-        austria = "Österreich"
+        austria = "è¬˜terreich"
         row = self.con.execute("select ?", (austria,)).fetchone()
         self.assertEqual(type(row[0]), str, "type of row[0] must be unicode")
         self.assertTrue(row[0].endswith("reich"), "column must contain original data")
@@ -192,7 +192,7 @@ class TextFactoryTests(unittest.TestCase):
         # In py3k, str objects are always returned when text_factory
         # is OptimizedUnicode
         self.con.text_factory = sqlite.OptimizedUnicode
-        austria = "Österreich"
+        austria = "è¬˜terreich"
         germany = "Deutchland"
         a_row = self.con.execute("select ?", (austria,)).fetchone()
         d_row = self.con.execute("select ?", (germany,)).fetchone()

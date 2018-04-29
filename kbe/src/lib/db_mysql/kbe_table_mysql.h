@@ -31,7 +31,7 @@ along with KBEngine.  If not, see <http://www.gnu.org/licenses/>.
 namespace KBEngine { 
 
 /*
-	kbeÏµÍ³±í
+	kbeç³»ç»Ÿè¡¨
 */
 class KBEEntityLogTableMysql : public KBEEntityLogTable
 {
@@ -40,7 +40,7 @@ public:
 	virtual ~KBEEntityLogTableMysql(){}
 	
 	/**
-		Í¬²½±íµ½Êı¾İ¿âÖĞ
+		åŒæ­¥è¡¨åˆ°æ•°æ®åº“ä¸­
 	*/
 	virtual bool syncToDB(DBInterface* pdbi);
 	virtual bool syncIndexToDB(DBInterface* pdbi){ return true; }
@@ -63,7 +63,7 @@ public:
 	virtual ~KBEServerLogTableMysql(){}
 	
 	/**
-		Í¬²½±íµ½Êı¾İ¿âÖĞ
+		åŒæ­¥è¡¨åˆ°æ•°æ®åº“ä¸­
 	*/
 	virtual bool syncToDB(DBInterface* pdbi);
 	virtual bool syncIndexToDB(DBInterface* pdbi){ return true; }
@@ -87,7 +87,7 @@ public:
 	virtual ~KBEAccountTableMysql(){}
 	
 	/**
-		Í¬²½±íµ½Êı¾İ¿âÖĞ
+		åŒæ­¥è¡¨åˆ°æ•°æ®åº“ä¸­
 	*/
 	virtual bool syncToDB(DBInterface* pdbi);
 	virtual bool syncIndexToDB(DBInterface* pdbi){ return true; }
@@ -109,7 +109,7 @@ public:
 	virtual ~KBEEmailVerificationTableMysql();
 
 	/**
-		Í¬²½±íµ½Êı¾İ¿âÖĞ
+		åŒæ­¥è¡¨åˆ°æ•°æ®åº“ä¸­
 	*/
 	virtual bool syncToDB(DBInterface* pdbi);
 	virtual bool syncIndexToDB(DBInterface* pdbi){ return true; }

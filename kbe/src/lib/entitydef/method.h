@@ -66,23 +66,23 @@ public:
 	size_t getArgSize(void);
 	
 	/** 
-		¼ì²éÒ»¸öcallÊÇ·ñºÏ·¨ 
+		æ£€æŸ¥ä¸€ä¸ªcallæ˜¯å¦åˆæ³• 
 	*/
 	bool checkArgs(PyObject* args);		
 	
 	/** 
-		½«Ã¿¸ö²ÎÊý´ò°üÌí¼Óµ½Á÷£¬ 
-		Õâ¸öÁ÷Àï°üº¬µÄÐÅÏ¢ÊÇÕâ¸ö·½·¨ÔÚ½Å±¾±»µ÷ÓÃÊ±Àï´«ÈëµÄ²ÎÊý 
+		å°†æ¯ä¸ªå‚æ•°æ‰“åŒ…æ·»åŠ åˆ°æµï¼Œ 
+		è¿™ä¸ªæµé‡ŒåŒ…å«çš„ä¿¡æ¯æ˜¯è¿™ä¸ªæ–¹æ³•åœ¨è„šæœ¬è¢«è°ƒç”¨æ—¶é‡Œä¼ å…¥çš„å‚æ•° 
 	*/
 	void addToStream(MemoryStream* mstream, PyObject* args);
 
 	/** 
-		½«Ò»¸öcallÁ÷½â°ü ²¢·µ»ØÒ»¸öPyObjectÀàÐÍµÄargs 
+		å°†ä¸€ä¸ªcallæµè§£åŒ… å¹¶è¿”å›žä¸€ä¸ªPyObjectç±»åž‹çš„args 
 	*/
 	PyObject* createFromStream(MemoryStream* mstream);
 	
 	/** 
-		ºô½ÐÒ»¸ö·½·¨ 
+		å‘¼å«ä¸€ä¸ªæ–¹æ³• 
 	*/
 	PyObject* call(PyObject* func, PyObject* args);	
 
@@ -93,26 +93,26 @@ public:
 	INLINE bool isBase() const;
 
 	/** 
-		±ðÃûid£¬ µ±±©Â¶µÄ·½·¨»òÕß¹ã²¥µÄÊôÐÔ×Ü¸öÊýÐ¡ÓÚ255Ê±
-		ÎÒÃÇ²»Ê¹ÓÃutype¶øÊ¹ÓÃ1×Ö½ÚµÄaliasIDÀ´´«Êä
+		åˆ«åidï¼Œ å½“æš´éœ²çš„æ–¹æ³•æˆ–è€…å¹¿æ’­çš„å±žæ€§æ€»ä¸ªæ•°å°äºŽ255æ—¶
+		æˆ‘ä»¬ä¸ä½¿ç”¨utypeè€Œä½¿ç”¨1å­—èŠ‚çš„aliasIDæ¥ä¼ è¾“
 	*/
 	INLINE int16 aliasID() const;
 	INLINE uint8 aliasIDAsUint8() const;
 	INLINE void aliasID(int16 v);
 	
 protected:
-	static uint32							methodDescriptionCount_;					// ËùÓÐµÄÊôÐÔÃèÊöµÄÊýÁ¿
+	static uint32							methodDescriptionCount_;					// æ‰€æœ‰çš„å±žæ€§æè¿°çš„æ•°é‡
 
 	COMPONENT_ID							methodDomain_;
 
-	std::string								name_;										// Õâ¸ö·½·¨µÄÃû³Æ
-	ENTITY_METHOD_UID						utype_;										// Õâ¸ö·½·¨µÄÊý×ÖÀà±ð£¬ ÓÃÓÚÍøÂçÉÏ´«ÊäÊ¶±ð
+	std::string								name_;										// è¿™ä¸ªæ–¹æ³•çš„åç§°
+	ENTITY_METHOD_UID						utype_;										// è¿™ä¸ªæ–¹æ³•çš„æ•°å­—ç±»åˆ«ï¼Œ ç”¨äºŽç½‘ç»œä¸Šä¼ è¾“è¯†åˆ«
 
-	std::vector<DataType*>					argTypes_;									// Õâ¸öÊôÐÔµÄ²ÎÊýÀà±ðÁÐ±í
+	std::vector<DataType*>					argTypes_;									// è¿™ä¸ªå±žæ€§çš„å‚æ•°ç±»åˆ«åˆ—è¡¨
 
-	bool									isExposed_;									// ÊÇ·ñÊÇÒ»¸ö±©Â¶·½·¨
+	bool									isExposed_;									// æ˜¯å¦æ˜¯ä¸€ä¸ªæš´éœ²æ–¹æ³•
 
-	int16									aliasID_;									// ±ðÃûid£¬ µ±±©Â¶µÄ·½·¨»òÕß¹ã²¥µÄÊôÐÔ×Ü¸öÊýÐ¡ÓÚ255Ê±£¬ ÎÒÃÇ²»Ê¹ÓÃutype¶øÊ¹ÓÃ1×Ö½ÚµÄaliasIDÀ´´«Êä
+	int16									aliasID_;									// åˆ«åidï¼Œ å½“æš´éœ²çš„æ–¹æ³•æˆ–è€…å¹¿æ’­çš„å±žæ€§æ€»ä¸ªæ•°å°äºŽ255æ—¶ï¼Œ æˆ‘ä»¬ä¸ä½¿ç”¨utypeè€Œä½¿ç”¨1å­—èŠ‚çš„aliasIDæ¥ä¼ è¾“
 };
 
 }

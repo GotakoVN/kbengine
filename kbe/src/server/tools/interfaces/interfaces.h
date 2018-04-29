@@ -59,7 +59,7 @@ public:
 	void handleTimeout(TimerHandle handle, void * arg);
 	void handleMainTick();
 
-	/* ³õÊ¼»¯Ïà¹Ø½Ó¿Ú */
+	/* åˆå§‹åŒ–ç›¸å…³æ¥å£ */
 	bool initializeBegin();
 	bool inInitialize();
 	bool initializeEnd();
@@ -71,41 +71,41 @@ public:
 	virtual void onShutdownBegin();
 	virtual void onShutdownEnd();
 
-	/** ÍøÂç½Ó¿Ú
-		ÇëÇó´´½¨ÕËºÅ
+	/** ç½‘ç»œæ¥å£
+		è¯·æ±‚åˆ›å»ºè´¦å·
 	*/
 	void reqCreateAccount(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	/** ÍøÂç½Ó¿Ú
-		Ò»¸öĞÂÓÃ»§µÇÂ¼£¬ ĞèÒª¼ì²éºÏ·¨ĞÔ
+	/** ç½‘ç»œæ¥å£
+		ä¸€ä¸ªæ–°ç”¨æˆ·ç™»å½•ï¼Œ éœ€è¦æ£€æŸ¥åˆæ³•æ€§
 	*/
 	void onAccountLogin(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	/** ÍøÂç½Ó¿Ú
-		ÇëÇó²Á³ı¿Í»§¶ËÇëÇóÈÎÎñ
+	/** ç½‘ç»œæ¥å£
+		è¯·æ±‚æ“¦é™¤å®¢æˆ·ç«¯è¯·æ±‚ä»»åŠ¡
 	*/
 	void eraseClientReq(Network::Channel* pChannel, std::string& logkey);
 
-	/** ÍøÂç½Ó¿Ú
-		ÇëÇó³äÖµ
+	/** ç½‘ç»œæ¥å£
+		è¯·æ±‚å……å€¼
 	*/
 	void charge(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	/** Python»Øµ÷½Ó¿Ú
-	    ³äÖµÏìÓ¦
+	/** Pythonå›è°ƒæ¥å£
+	    å……å€¼å“åº”
 	*/
 	void chargeResponse(std::string orderID, std::string extraDatas, KBEngine::SERVER_ERROR_CODE errorCode);
 	static PyObject* __py_chargeResponse(PyObject* self, PyObject* args);
 
-	/** Python»Øµ÷½Ó¿Ú
-	    ÇëÇóµÇÂ¼ÕËºÅµÄÏìÓ¦
+	/** Pythonå›è°ƒæ¥å£
+	    è¯·æ±‚ç™»å½•è´¦å·çš„å“åº”
 	*/
 	void accountLoginResponse(std::string commitName, std::string realAccountName, 
 		std::string extraDatas, KBEngine::SERVER_ERROR_CODE errorCode);
 	static PyObject* __py_accountLoginResponse(PyObject* self, PyObject* args);
 
-	/** Python»Øµ÷½Ó¿Ú
-	    ÇëÇó´´½¨ÕËºÅµÄÏìÓ¦
+	/** Pythonå›è°ƒæ¥å£
+	    è¯·æ±‚åˆ›å»ºè´¦å·çš„å“åº”
 	*/
 	void createAccountResponse(std::string commitName, std::string realAccountName, 
 		std::string extraDatas, KBEngine::SERVER_ERROR_CODE errorCode);
@@ -125,10 +125,10 @@ public:
 protected:
 	TimerHandle																mainProcessTimer_;
 
-	// ¶©µ¥
+	// è®¢å•
 	ORDERS																	orders_;
 
-	// ËùÓĞµÄÇëÇó¼ÇÂ¼£¬ ±ÜÃâÄ³ÀàÖØ¸´ĞÔÇëÇó¡£
+	// æ‰€æœ‰çš„è¯·æ±‚è®°å½•ï¼Œ é¿å…æŸç±»é‡å¤æ€§è¯·æ±‚ã€‚
 	REQCREATE_MAP															reqCreateAccount_requests_;
 	REQLOGIN_MAP															reqAccountLogin_requests_;
 

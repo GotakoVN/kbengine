@@ -139,7 +139,7 @@ bool DBInterfaceRedis::attach(const char* databaseName)
 	
 	redisReply* pRedisReply = NULL;
 	
-	// ÃÜÂëÑéÖ¤
+	// å¯†ç éªŒè¯
 	if(!ping())
 	{
 		pRedisReply = (redisReply*)redisCommand(c, fmt::format("auth {}", db_password_).c_str());  
@@ -170,7 +170,7 @@ bool DBInterfaceRedis::attach(const char* databaseName)
 		pRedisReply = NULL;
 	}
 	
-	// Ñ¡ÔñÊı¾İ¿â
+	// é€‰æ‹©æ•°æ®åº“
 	int db_index = atoi(db_name_);
 	if(db_index <= 0)
 	{
@@ -464,7 +464,7 @@ void DBInterfaceRedis::write_query_result_element(redisReply* pRedisReply, Memor
 {
 	if(pRedisReply->type == REDIS_REPLY_ARRAY)
 	{
-		// ²»Ö§³ÖÔªËØÖĞ°üº¬Êı×é
+		// ä¸æ”¯æŒå…ƒç´ ä¸­åŒ…å«æ•°ç»„
 		KBE_ASSERT(false);
 	}
 	else if(pRedisReply->type == REDIS_REPLY_INTEGER)

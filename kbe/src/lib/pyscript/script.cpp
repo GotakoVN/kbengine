@@ -154,7 +154,7 @@ bool Script::install(const wchar_t* pythonHomeDir, std::wstring pyPaths,
 	pyPaths += pySysPaths;
 	free(pwpySysResPath);
 
-	// ÏÈÉèÖÃpythonµÄ»·¾³±äÁ¿
+	// å…ˆè®¾ç½®pythonçš„ç¯å¢ƒå˜é‡
 	Py_SetPythonHome(const_cast<wchar_t*>(pythonHomeDir));								
 
 #if KBE_PLATFORM != PLATFORM_WIN32
@@ -185,7 +185,7 @@ bool Script::install(const wchar_t* pythonHomeDir, std::wstring pyPaths,
 
 	Py_SetPath(pyPaths.c_str());
 
-	// python½âÊÍÆ÷µÄ³õÊ¼»¯  
+	// pythonè§£é‡Šå™¨çš„åˆå§‹åŒ–  
 	Py_Initialize();
     if (!Py_IsInitialized())
     {
@@ -195,7 +195,7 @@ bool Script::install(const wchar_t* pythonHomeDir, std::wstring pyPaths,
 
 	PyObject *m = PyImport_AddModule("__main__");
 
-	// Ìí¼ÓÒ»¸ö½Å±¾»ù´¡Ä£¿é
+	// æ·»åŠ ä¸€ä¸ªè„šæœ¬åŸºç¡€æ¨¡å—
 	module_ = PyImport_AddModule(moduleName);
 	if (module_ == NULL)
 		return false;
@@ -208,7 +208,7 @@ bool Script::install(const wchar_t* pythonHomeDir, std::wstring pyPaths,
 		return false;
 	}
 	
-	// ×¢²á²úÉúuuid·½·¨µ½py
+	// æ³¨å†Œäº§ç”Ÿuuidæ–¹æ³•åˆ°py
 	APPEND_SCRIPT_MODULE_METHOD(module_,		genUUID64,			__py_genUUID64,					METH_VARARGS,			0);
 
 	if(!install_py_dlls())
@@ -217,7 +217,7 @@ bool Script::install(const wchar_t* pythonHomeDir, std::wstring pyPaths,
 		return false;
 	}
 
-	// °²×°pyÖØ¶¨ÏòÄ£¿é
+	// å®‰è£…pyé‡å®šå‘æ¨¡å—
 	ScriptStdOut::installScript(NULL);
 	ScriptStdErr::installScript(NULL);
 
@@ -231,18 +231,18 @@ bool Script::install(const wchar_t* pythonHomeDir, std::wstring pyPaths,
 			 NULL  
 	};  
 
-	// ³õÊ¼»¯»ù´¡Ä£¿é
+	// åˆå§‹åŒ–åŸºç¡€æ¨¡å—
 	PyModule_Create(&moduleDesc);
 	*/
 
-	// ½«Ä£¿é¶ÔÏó¼ÓÈëmain
+	// å°†æ¨¡å—å¯¹è±¡åŠ å…¥main
 	PyObject_SetAttrString(m, moduleName, module_);	
 	PyObject_SetAttrString(module_, "__doc__", PyUnicode_FromString("This module is created by KBEngine!"));
 
-	// ÖØ¶¨ÏòpythonÊä³ö
+	// é‡å®šå‘pythonè¾“å‡º
 	pyStdouterr_ = new ScriptStdOutErr();
 	
-	// °²×°pyÖØ¶¨Ïò½Å±¾Ä£¿é
+	// å®‰è£…pyé‡å®šå‘è„šæœ¬æ¨¡å—
 	if(!pyStdouterr_->install()){
 		ERROR_MSG("Script::install::pyStdouterr_->install() is failed!\n");
 		delete pyStdouterr_;
@@ -292,7 +292,7 @@ bool Script::uninstall()
 
 	PyGC::initialize();
 
-	// Ğ¶ÔØpython½âÊÍÆ÷
+	// å¸è½½pythonè§£é‡Šå™¨
 	Py_Finalize();
 
 	INFO_MSG("Script::uninstall(): is successfully!\n");
@@ -304,17 +304,17 @@ bool Script::installExtraModule(const char* moduleName)
 {
 	PyObject *m = PyImport_AddModule("__main__");
 
-	// Ìí¼ÓÒ»¸ö½Å±¾À©Õ¹Ä£¿é
+	// æ·»åŠ ä¸€ä¸ªè„šæœ¬æ‰©å±•æ¨¡å—
 	extraModule_ = PyImport_AddModule(moduleName);
 	if (extraModule_ == NULL)
 		return false;
 	
-	// ³õÊ¼»¯À©Õ¹Ä£¿é
+	// åˆå§‹åŒ–æ‰©å±•æ¨¡å—
 	PyObject *module = PyImport_AddModule(moduleName);
 	if (module == NULL)
 		return false;
 
-	// ½«À©Õ¹Ä£¿é¶ÔÏó¼ÓÈëmain
+	// å°†æ‰©å±•æ¨¡å—å¯¹è±¡åŠ å…¥main
 	PyObject_SetAttrString(m, moduleName, extraModule_);
 
 	INFO_MSG(fmt::format("Script::install(): {} is successfully!\n", moduleName));

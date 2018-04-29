@@ -48,7 +48,7 @@ bool KBEEntityLogTableMysql::syncToDB(DBInterface* pdbi)
 	if(!pdbi->query(sqlstr.c_str(), sqlstr.size(), true))
 		return false;
 	
-	// Çå³ı¹ıÆÚµÄÈÕÖ¾
+	// æ¸…é™¤è¿‡æœŸçš„æ—¥å¿—
 	KBEServerLogTableMysql serverLogTable(NULL);
 	
 	std::vector<COMPONENT_ID> cids = serverLogTable.queryTimeOutServers(pdbi);
@@ -431,7 +431,7 @@ bool KBEAccountTableMysql::setFlagsDeadline(DBInterface * pdbi, const std::strin
 
 	SAFE_RELEASE_ARRAY(tbuf);
 
-	// Èç¹û²éÑ¯Ê§°ÜÔò·µ»Ø´æÔÚ£¬ ±ÜÃâ¿ÉÄÜ²úÉúµÄ´íÎó
+	// å¦‚æœæŸ¥è¯¢å¤±è´¥åˆ™è¿”å›å­˜åœ¨ï¼Œ é¿å…å¯èƒ½äº§ç”Ÿçš„é”™è¯¯
 	if(pdbi->query(sqlstr.c_str(), sqlstr.size(), false))
 		return true;
 
@@ -454,7 +454,7 @@ bool KBEAccountTableMysql::queryAccount(DBInterface * pdbi, const std::string& n
 	sqlstr += "\" LIMIT 1";
 	SAFE_RELEASE_ARRAY(tbuf);
 
-	// Èç¹û²éÑ¯Ê§°ÜÔò·µ»Ø´æÔÚ£¬ ±ÜÃâ¿ÉÄÜ²úÉúµÄ´íÎó
+	// å¦‚æœæŸ¥è¯¢å¤±è´¥åˆ™è¿”å›å­˜åœ¨ï¼Œ é¿å…å¯èƒ½äº§ç”Ÿçš„é”™è¯¯
 	if(!pdbi->query(sqlstr.c_str(), sqlstr.size(), false))
 		return true;
 
@@ -499,7 +499,7 @@ bool KBEAccountTableMysql::queryAccountAllInfos(DBInterface * pdbi, const std::s
 	sqlstr += "\" LIMIT 1";
 	SAFE_RELEASE_ARRAY(tbuf);
 
-	// Èç¹û²éÑ¯Ê§°ÜÔò·µ»Ø´æÔÚ£¬ ±ÜÃâ¿ÉÄÜ²úÉúµÄ´íÎó
+	// å¦‚æœæŸ¥è¯¢å¤±è´¥åˆ™è¿”å›å­˜åœ¨ï¼Œ é¿å…å¯èƒ½äº§ç”Ÿçš„é”™è¯¯
 	if(!pdbi->query(sqlstr.c_str(), sqlstr.size(), false))
 		return true;
 
@@ -527,7 +527,7 @@ bool KBEAccountTableMysql::queryAccountAllInfos(DBInterface * pdbi, const std::s
 //-------------------------------------------------------------------------------------
 bool KBEAccountTableMysql::updateCount(DBInterface * pdbi, const std::string& name, DBID dbid)
 {
-	// Èç¹û²éÑ¯Ê§°ÜÔò·µ»Ø´æÔÚ£¬ ±ÜÃâ¿ÉÄÜ²úÉúµÄ´íÎó
+	// å¦‚æœæŸ¥è¯¢å¤±è´¥åˆ™è¿”å›å­˜åœ¨ï¼Œ é¿å…å¯èƒ½äº§ç”Ÿçš„é”™è¯¯
 	if(!pdbi->query(fmt::format("update " KBE_TABLE_PERFIX "_accountinfos set lasttime={}, numlogin=numlogin+1 where entityDBID={}",
 		time(NULL), dbid), false))
 		return false;
@@ -547,7 +547,7 @@ bool KBEAccountTableMysql::updatePassword(DBInterface * pdbi, const std::string&
 	mysql_real_escape_string(static_cast<DBInterfaceMysql*>(pdbi)->mysql(), 
 		tbuf1, name.c_str(), name.size());
 
-	// Èç¹û²éÑ¯Ê§°ÜÔò·µ»Ø´æÔÚ£¬ ±ÜÃâ¿ÉÄÜ²úÉúµÄ´íÎó
+	// å¦‚æœæŸ¥è¯¢å¤±è´¥åˆ™è¿”å›å­˜åœ¨ï¼Œ é¿å…å¯èƒ½äº§ç”Ÿçš„é”™è¯¯
 	if(!pdbi->query(fmt::format("update " KBE_TABLE_PERFIX "_accountinfos set password=\"{}\" where accountName like \"{}\"", 
 		password, tbuf1), false))
 	{
@@ -618,7 +618,7 @@ bool KBEAccountTableMysql::logAccount(DBInterface * pdbi, ACCOUNT_INFOS& info)
 
 	SAFE_RELEASE_ARRAY(tbuf);
 
-	// Èç¹û²éÑ¯Ê§°ÜÔò·µ»Ø´æÔÚ£¬ ±ÜÃâ¿ÉÄÜ²úÉúµÄ´íÎó
+	// å¦‚æœæŸ¥è¯¢å¤±è´¥åˆ™è¿”å›å­˜åœ¨ï¼Œ é¿å…å¯èƒ½äº§ç”Ÿçš„é”™è¯¯
 	if(!pdbi->query(sqlstr.c_str(), sqlstr.size(), false))
 	{
 		ERROR_MSG(fmt::format("KBEAccountTableMysql::logAccount({}): sql({}) is failed({})!\n", 
@@ -797,7 +797,7 @@ bool KBEEmailVerificationTableMysql::activateAccount(DBInterface * pdbi, const s
 	
 	std::string password = info.password;
 
-	// Ñ°ÕÒdblogÊÇ·ñÓĞ´ËÕËºÅ
+	// å¯»æ‰¾dblogæ˜¯å¦æœ‰æ­¤è´¦å·
 	KBEAccountTable* pTable = static_cast<KBEAccountTable*>(EntityTables::findByInterfaceName(pdbi->name()).findKBETable(KBE_TABLE_PERFIX "_accountinfos"));
 	KBE_ASSERT(pTable);
 	
@@ -836,7 +836,7 @@ bool KBEEmailVerificationTableMysql::activateAccount(DBInterface * pdbi, const s
 
 	ScriptDefModule* pModule = EntityDef::findScriptModule(DBUtil::accountScriptName());
 
-	// ·ÀÖ¹¶àÏß³ÌÎÊÌâ£¬ ÕâÀï×öÒ»¸ö¿½±´¡£
+	// é˜²æ­¢å¤šçº¿ç¨‹é—®é¢˜ï¼Œ è¿™é‡Œåšä¸€ä¸ªæ‹·è´ã€‚
 	MemoryStream copyAccountDefMemoryStream(pTable->accountDefMemoryStream());
 
 	info.dbid = EntityTables::findByInterfaceName(pdbi->name()).writeEntity(pdbi, 0, -1,
@@ -844,7 +844,7 @@ bool KBEEmailVerificationTableMysql::activateAccount(DBInterface * pdbi, const s
 
 	KBE_ASSERT(info.dbid > 0);
 
-	// Èç¹û²éÑ¯Ê§°ÜÔò·µ»Ø´æÔÚ£¬ ±ÜÃâ¿ÉÄÜ²úÉúµÄ´íÎó
+	// å¦‚æœæŸ¥è¯¢å¤±è´¥åˆ™è¿”å›å­˜åœ¨ï¼Œ é¿å…å¯èƒ½äº§ç”Ÿçš„é”™è¯¯
 	tbuf = new char[MAX_BUF * 3];
 
 	mysql_real_escape_string(static_cast<DBInterfaceMysql*>(pdbi)->mysql(), 
@@ -1047,7 +1047,7 @@ bool KBEEmailVerificationTableMysql::resetpassword(DBInterface * pdbi, const std
 		return false;
 	}
 
-	// Ñ°ÕÒdblogÊÇ·ñÓĞ´ËÕËºÅ
+	// å¯»æ‰¾dblogæ˜¯å¦æœ‰æ­¤è´¦å·
 	KBEAccountTable* pTable = static_cast<KBEAccountTable*>(EntityTables::findByInterfaceName(pdbi->name()).findKBETable(KBE_TABLE_PERFIX "_accountinfos"));
 	KBE_ASSERT(pTable);
 
@@ -1117,7 +1117,7 @@ bool KBEEmailVerificationTableMysql::syncToDB(DBInterface* pdbi)
 	ret = pdbi->query(sqlstr.c_str(), sqlstr.size(), true);
 	KBE_ASSERT(ret);
 
-	// É¾³ıxxĞ¡Ê±Ö®Ç°µÄ¼ÇÂ¼
+	// åˆ é™¤xxå°æ—¶ä¹‹å‰çš„è®°å½•
 	sqlstr = fmt::format("delete from " KBE_TABLE_PERFIX "_email_verification where logtime<{} and type={}", 
 		KBEngine::StringConv::val2str(time(NULL) - g_kbeSrvConfig.emailAtivationInfo_.deadline), 
 		((int)KBEEmailVerificationTable::V_TYPE_CREATEACCOUNT));

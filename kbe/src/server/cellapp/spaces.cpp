@@ -82,7 +82,7 @@ bool Spaces::destroySpace(SPACE_ID spaceID, ENTITY_ID entityID)
 		return false;
 	}
 
-	// ÑÓÊ±Ò»¶ÎÊ±¼äÔÙÏú»Ù
+	// å»¶æ—¶ä¸€æ®µæ—¶é—´å†é”€æ¯
 	//spaces_.erase(spaceID);
 	return true;
 }

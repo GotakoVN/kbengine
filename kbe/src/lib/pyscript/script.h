@@ -30,7 +30,7 @@ along with KBEngine.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace KBEngine{ namespace script{
 
-/** ½Å±¾ÏµÍ³Â·¾¶ */
+/** è„šæœ¬ç³»ç»Ÿè·¯å¾„ */
 #ifdef _LP64
 #define SCRIPT_PATH													\
 					L"../../res/scripts;"							\
@@ -102,7 +102,7 @@ public:
 	virtual ~Script();
 	
 	/** 
-		°²×°ºÍĞ¶ÔØ½Å±¾Ä£¿é 
+		å®‰è£…å’Œå¸è½½è„šæœ¬æ¨¡å— 
 	*/
 	virtual bool install(const wchar_t* pythonHomeDir, std::wstring pyPaths, 
 		const char* moduleName, COMPONENT_TYPE componentType);
@@ -112,22 +112,22 @@ public:
 	bool installExtraModule(const char* moduleName);
 
 	/** 
-		Ìí¼ÓÒ»¸öÀ©Õ¹½Ó¿Úµ½ÒıÇæÀ©Õ¹Ä£¿é 
+		æ·»åŠ ä¸€ä¸ªæ‰©å±•æ¥å£åˆ°å¼•æ“æ‰©å±•æ¨¡å— 
 	*/
 	bool registerExtraMethod(const char* attrName, PyMethodDef* pyFunc);
 
 	/** 
-		Ìí¼ÓÒ»¸öÀ©Õ¹ÊôĞÔµ½ÒıÇæÀ©Õ¹Ä£¿é 
+		æ·»åŠ ä¸€ä¸ªæ‰©å±•å±æ€§åˆ°å¼•æ“æ‰©å±•æ¨¡å— 
 	*/
 	bool registerExtraObject(const char* attrName, PyObject* pyObj);
 
 	/** 
-		»ñÈ¡½Å±¾»ù´¡Ä£¿é 
+		è·å–è„šæœ¬åŸºç¡€æ¨¡å— 
 	*/
 	INLINE PyObject* getModule(void) const;
 
 	/** 
-		»ñÈ¡½Å±¾À©Õ¹Ä£¿é 
+		è·å–è„šæœ¬æ‰©å±•æ¨¡å— 
 	*/
 	INLINE PyObject* getExtraModule(void) const;
 
@@ -145,7 +145,7 @@ public:
 
 protected:
 	PyObject* 					module_;
-	PyObject*					extraModule_;		// À©Õ¹½Å±¾Ä£¿é
+	PyObject*					extraModule_;		// æ‰©å±•è„šæœ¬æ¨¡å—
 
 	ScriptStdOutErr*			pyStdouterr_;
 } ;

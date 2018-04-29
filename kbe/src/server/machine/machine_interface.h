@@ -43,10 +43,10 @@ along with KBEngine.  If not, see <http://www.gnu.org/licenses/>.
 namespace KBEngine{
 
 /**
-	machineËùÓĞÏûÏ¢½Ó¿ÚÔÚ´Ë¶¨Òå
+	machineæ‰€æœ‰æ¶ˆæ¯æ¥å£åœ¨æ­¤å®šä¹‰
 */
 NETWORK_INTERFACE_DECLARE_BEGIN(MachineInterface)
-	// ÆäËû×é¼şÏòapp¹ã²¥×Ô¼ºµÄ½Ó¿ÚµØÖ·
+	// å…¶ä»–ç»„ä»¶å‘appå¹¿æ’­è‡ªå·±çš„æ¥å£åœ°å€
 	MACHINE_MESSAGE_DECLARE_ARGS25(onBroadcastInterface,			NETWORK_VARIABLE_MESSAGE,
 									int32,							uid, 
 									std::string,					username,
@@ -74,7 +74,7 @@ NETWORK_INTERFACE_DECLARE_BEGIN(MachineInterface)
 									uint32,							backRecvAddr,
 									uint16,							backRecvPort)
 	
-	// ÆäËû×é¼şÏòappÇëÇó»ñÈ¡Ä³¸ö×é¼şÀà±ğµÄµØÖ·
+	// å…¶ä»–ç»„ä»¶å‘appè¯·æ±‚è·å–æŸä¸ªç»„ä»¶ç±»åˆ«çš„åœ°å€
 	MACHINE_MESSAGE_DECLARE_ARGS7(onFindInterfaceAddr,				NETWORK_VARIABLE_MESSAGE,
 									int32,							uid, 
 									std::string,					username,
@@ -84,33 +84,33 @@ NETWORK_INTERFACE_DECLARE_BEGIN(MachineInterface)
 									uint32,							addr, 
 									uint16,							finderRecvPort)
 						
-	// ²éÑ¯ËùÓĞ½Ó¿ÚĞÅÏ¢
+	// æŸ¥è¯¢æ‰€æœ‰æ¥å£ä¿¡æ¯
 	MACHINE_MESSAGE_DECLARE_ARGS3(onQueryAllInterfaceInfos,			NETWORK_VARIABLE_MESSAGE,
 									int32,							uid, 
 									std::string,					username,
 									uint16,							finderRecvPort)
 		
-	// ²éÑ¯ËùÓĞmachine½ø³Ì
+	// æŸ¥è¯¢æ‰€æœ‰machineè¿›ç¨‹
 	MACHINE_MESSAGE_DECLARE_ARGS3(onQueryMachines,					NETWORK_VARIABLE_MESSAGE,
 									int32,							uid, 
 									std::string,					username,
 									uint16,							finderRecvPort)
-	// Ä³appÖ÷¶¯ÇëÇólook¡£
+	// æŸappä¸»åŠ¨è¯·æ±‚lookã€‚
 	MACHINE_MESSAGE_DECLARE_ARGS0(lookApp,							NETWORK_FIXED_MESSAGE)
 
-	// Ä³¸öappÇëÇó²é¿´¸Ãapp¸ºÔØ×´Ì¬¡£
+	// æŸä¸ªappè¯·æ±‚æŸ¥çœ‹è¯¥appè´Ÿè½½çŠ¶æ€ã€‚
 	MACHINE_MESSAGE_DECLARE_ARGS0(queryLoad,						NETWORK_FIXED_MESSAGE)
 
-	// Æô¶¯·şÎñÆ÷
+	// å¯åŠ¨æœåŠ¡å™¨
 	MACHINE_MESSAGE_DECLARE_STREAM(startserver,						NETWORK_VARIABLE_MESSAGE)
 
-	// ¹Ø±Õ·şÎñÆ÷
+	// å…³é—­æœåŠ¡å™¨
 	MACHINE_MESSAGE_DECLARE_STREAM(stopserver,						NETWORK_VARIABLE_MESSAGE)
 
-	// ¹Ø±Õ·şÎñÆ÷
+	// å…³é—­æœåŠ¡å™¨
 	MACHINE_MESSAGE_DECLARE_STREAM(killserver,						NETWORK_VARIABLE_MESSAGE)
 
-	// ÇëÇóÇ¿ÖÆÉ±ËÀµ±Ç°app
+	// è¯·æ±‚å¼ºåˆ¶æ€æ­»å½“å‰app
 	MACHINE_MESSAGE_DECLARE_STREAM(reqKillServer,					NETWORK_VARIABLE_MESSAGE)
 
 NETWORK_INTERFACE_DECLARE_END()

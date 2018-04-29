@@ -56,7 +56,7 @@ public:
 
 	virtual bool query(DBInterface* pdbi = NULL)
 	{
-		// 没有数据更新
+		// 娌℃湁鏁版嵁鏇存柊
 		if(sqlstr_ == "")
 			return true;
 
@@ -145,7 +145,7 @@ public:
 
 	virtual bool query(DBInterface* pdbi = NULL)
 	{
-		// 没有数据更新
+		// 娌℃湁鏁版嵁鏇存柊
 		if(sqlstr_ == "")
 			return true;
 
@@ -228,7 +228,7 @@ public:
 
 		// select id,xxx from tbl_SpawnPoint where id=123;
 		sqlstr_ = "select id,";
-		// 无论哪种情况都查询出ID字段
+		// 鏃犺鍝鎯呭喌閮芥煡璇㈠嚭ID瀛楁
 		sqlstr1_ += " from " ENTITY_TABLE_PERFIX "_";
 		sqlstr1_ += tableName;
 		

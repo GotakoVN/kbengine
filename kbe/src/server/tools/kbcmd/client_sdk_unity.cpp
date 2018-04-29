@@ -815,8 +815,8 @@ bool ClientSDKUnity::createArrayChildClass(DataType* pRootDataType, DataType* pD
 		sourcefileBody_ += fmt::format("{}\tprivate DATATYPE_{} itemType = new DATATYPE_{}();\n\n",
 			tabs, pDataType->aliasName(), pDataType->aliasName());
 
-		// Èç¹ûÊÇ·ÇÄäÃûµÄÊı×é£¬ÔòµÚÒ»²ã½âÎöÓ¦¸ÃÖ±½ÓÉèÖÃÎªÓĞÃû×ÖµÄÀà±ğ
-		// ·ñÔòÉèÖÃÎªÏµÍ³ListÀà±ğ
+		// å¦‚æœæ˜¯éåŒ¿åçš„æ•°ç»„ï¼Œåˆ™ç¬¬ä¸€å±‚è§£æåº”è¯¥ç›´æ¥è®¾ç½®ä¸ºæœ‰åå­—çš„ç±»åˆ«
+		// å¦åˆ™è®¾ç½®ä¸ºç³»ç»ŸListç±»åˆ«
 		if (numLayer == 1)
 		{
 			if (strlen(pRootDataType->aliasName()) == 0 || pRootDataType->aliasName()[0] == '_')
@@ -873,8 +873,8 @@ bool ClientSDKUnity::createArrayChildClass(DataType* pRootDataType, DataType* pD
 
 		std::string classNameStr = typeName;
 
-		// Èç¹ûÊÇ·ÇÄäÃûµÄÊı×é£¬ÔòµÚÒ»²ã½âÎöÓ¦¸ÃÖ±½ÓÉèÖÃÎªÓĞÃû×ÖµÄÀà±ğ
-		// ·ñÔòÉèÖÃÎªÏµÍ³ListÀà±ğ
+		// å¦‚æœæ˜¯éåŒ¿åçš„æ•°ç»„ï¼Œåˆ™ç¬¬ä¸€å±‚è§£æåº”è¯¥ç›´æ¥è®¾ç½®ä¸ºæœ‰åå­—çš„ç±»åˆ«
+		// å¦åˆ™è®¾ç½®ä¸ºç³»ç»ŸListç±»åˆ«
 		if (numLayer == 1)
 		{
 			if (strlen(pRootDataType->aliasName()) == 0 || pRootDataType->aliasName()[0] == '_')
@@ -1001,7 +1001,7 @@ bool ClientSDKUnity::writeCustomDataType(const DataType* pDataType)
 
 		FixedDictType* dictdatatype = const_cast<FixedDictType*>(static_cast<const FixedDictType*>(pDataType));
 
-		// ÏÈ´´½¨ÊôĞÔ
+		// å…ˆåˆ›å»ºå±æ€§
 		{
 			FixedDictType::FIXEDDICT_KEYTYPE_MAP& keys = dictdatatype->getKeyTypes();
 			FixedDictType::FIXEDDICT_KEYTYPE_MAP::const_iterator keyiter = keys.begin();
@@ -1030,7 +1030,7 @@ bool ClientSDKUnity::writeCustomDataType(const DataType* pDataType)
 			}
 		}
 
-		// ´´½¨createFromStreamEx·½·¨
+		// åˆ›å»ºcreateFromStreamExæ–¹æ³•
 		{
 			sourcefileBody_ += fmt::format("\t\tpublic {} createFromStreamEx(MemoryStream stream)\n\t\t{{\n", typeName);
 
@@ -1064,7 +1064,7 @@ bool ClientSDKUnity::writeCustomDataType(const DataType* pDataType)
 			sourcefileBody_ += fmt::format("\t\t}}\n\n");
 		}
 
-		// ´´½¨addToStreamEx·½·¨
+		// åˆ›å»ºaddToStreamExæ–¹æ³•
 		{
 			sourcefileBody_ += fmt::format("\t\tpublic void addToStreamEx(Bundle stream, {} v)\n\t\t{{\n", typeName);
 
@@ -1757,7 +1757,7 @@ bool ClientSDKUnity::writeEntityModuleBegin(ScriptDefModule* pEntityScriptDefMod
 		sourcefileBody_ += fmt::format("\t// Please inherit and implement \"class {} : {}\"\n", pEntityScriptDefModule->getName(), newModuleName);
 		sourcefileBody_ += fmt::format("\tpublic abstract class {} : Entity\n\t{{\n", newModuleName);
 
-		// Ğ´entityCallÊôĞÔ
+		// å†™entityCallå±æ€§
 		sourcefileBody_ += fmt::format("\t\tpublic EntityBaseEntityCall_{} baseEntityCall = null;\n", newModuleName);
 		sourcefileBody_ += fmt::format("\t\tpublic EntityCellEntityCall_{} cellEntityCall = null;\n\n", newModuleName);
 	}
@@ -1779,7 +1779,7 @@ bool ClientSDKUnity::getArrayType(DataType* pDataType, std::string& outstr)
 	{
 		FixedArrayType* pFixedArrayType = static_cast<FixedArrayType*>(pDataType);
 
-		// Èç¹ûÔªËØÓÖÊÇÊı×é
+		// å¦‚æœå…ƒç´ åˆæ˜¯æ•°ç»„
 		if (pFixedArrayType->getDataType()->type() == DATA_TYPE_FIXEDARRAY)
 		{
 			if (outstr.size() > 0)
@@ -1867,7 +1867,7 @@ bool ClientSDKUnity::writeEntityProcessMessagesMethod(ScriptDefModule* pEntitySc
 		sourcefileBody_ += "\t\t}\n";
 	}
 
-	// ´¦Àí·½·¨
+	// å¤„ç†æ–¹æ³•
 	if (!pEntityScriptDefModule->isComponentModule())
 		sourcefileBody_ += fmt::format("\n\t\tpublic override void onRemoteMethodCall(MemoryStream stream)\n\t\t{{\n");
 	else
@@ -2006,7 +2006,7 @@ bool ClientSDKUnity::writeEntityProcessMessagesMethod(ScriptDefModule* pEntitySc
 	sourcefileBody_ += fmt::format("\t\t\t}};\n");
 	sourcefileBody_ += "\t\t}\n";
 
-	// ´¦ÀíÊôĞÔ
+	// å¤„ç†å±æ€§
 	ENTITY_PROPERTY_UID posuid = 0;
 	if (posuid == 0)
 	{
@@ -2240,7 +2240,7 @@ bool ClientSDKUnity::writeEntityProcessMessagesMethod(ScriptDefModule* pEntitySc
 	sourcefileBody_ += fmt::format("\t\t\t}}\n");
 	sourcefileBody_ += "\t\t}\n";
 
-	// ´¦ÀíÊôĞÔcallPropertysSetMethods
+	// å¤„ç†å±æ€§callPropertysSetMethods
 	sourcefileBody_ += fmt::format("\n\t\tpublic override void callPropertysSetMethods()\n\t\t{{\n");
 	sourcefileBody_ += fmt::format("\t\t\tScriptModule sm = EntityDef.moduledefs[\"{}\"];\n", pEntityScriptDefModule->getName());
 	sourcefileBody_ += fmt::format("\t\t\tDictionary<UInt16, Property> pdatas = sm.idpropertys;\n\n");
@@ -2653,7 +2653,7 @@ bool ClientSDKUnity::writeEntityMethod(ScriptDefModule* pEntityScriptDefModule,
 //-------------------------------------------------------------------------------------
 bool ClientSDKUnity::writeEntityMethodArgs_ARRAY(FixedArrayType* pFixedArrayType, std::string& stackArgsTypeBody, const std::string& childItemName)
 {
-	// ¶ÔÓÚÄäÃûÊı×éĞèÒª½âÎö£¬·ñÔòÖ±½ÓÌîÀàĞÍÃû³Æ
+	// å¯¹äºåŒ¿åæ•°ç»„éœ€è¦è§£æï¼Œå¦åˆ™ç›´æ¥å¡«ç±»å‹åç§°
 	if (childItemName.size() == 0 || childItemName[0] == '_')
 	{
 		std::string typeStr;

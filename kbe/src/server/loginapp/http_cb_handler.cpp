@@ -236,7 +236,7 @@ int HTTPCBHandler::handleInputNotification(int fd)
 
 			if(type == 1)
 			{
-				// Ïòdbmgr¼¤»îÕËºÅ
+				// å‘dbmgræ¿€æ´»è´¦å·
 				Network::Bundle* pBundle = Network::Bundle::createPoolObject();
 				(*pBundle).newMessage(DbmgrInterface::accountActivate);
 				(*pBundle) << code;
@@ -283,7 +283,7 @@ int HTTPCBHandler::handleInputNotification(int fd)
 					username = HttpUtility::URLDecode(username);
 					password = HttpUtility::URLDecode(password);
 
-					// ÏòdbmgrÖØÖÃÕËºÅ
+					// å‘dbmgré‡ç½®è´¦å·
 					Network::Bundle* pBundle = Network::Bundle::createPoolObject();
 					(*pBundle).newMessage(DbmgrInterface::accountResetPassword);
 					(*pBundle) << KBEngine::strutil::kbe_trim(username);
@@ -314,7 +314,7 @@ int HTTPCBHandler::handleInputNotification(int fd)
 				{
 					username = HttpUtility::URLDecode(username);
 
-					// Ïòdbmgr°ó¶¨ÕËºÅÕËºÅ
+					// å‘dbmgrç»‘å®šè´¦å·è´¦å·
 					Network::Bundle* pBundle = Network::Bundle::createPoolObject();
 					(*pBundle).newMessage(DbmgrInterface::accountBindMail);
 					(*pBundle) << KBEngine::strutil::kbe_trim(username);

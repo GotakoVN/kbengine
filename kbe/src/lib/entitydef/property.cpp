@@ -62,7 +62,7 @@ PropertyDescription::PropertyDescription(ENTITY_PROPERTY_UID utype,
 {
 	dataType_->incRef();
 
-	// entityCall ÎÞ·¨±£´æ
+	// entityCall æ— æ³•ä¿å­˜
 	if(isPersistent && strcmp(dataType_->getName(), "ENTITYCALL") == 0)
 	{
 		isPersistent_ = false;
@@ -129,7 +129,7 @@ PyObject* PropertyDescription::parseDefaultStr(const std::string& defaultVal)
 //-------------------------------------------------------------------------------------
 void PropertyDescription::addPersistentToStream(MemoryStream* mstream, PyObject* pyValue)
 {
-	// ÔÊÐíÊ¹ÓÃÄ¬ÈÏÖµÀ´´´½¨Ò»¸öÁ÷
+	// å…è®¸ä½¿ç”¨é»˜è®¤å€¼æ¥åˆ›å»ºä¸€ä¸ªæµ
 	if(pyValue == NULL)
 	{
 		pyValue = newDefaultVal();
@@ -288,7 +288,7 @@ PyObject* FixedDictDescription::onSetValue(PyObject* parentObj, PyObject* value)
 //-------------------------------------------------------------------------------------
 void FixedDictDescription::addPersistentToStream(MemoryStream* mstream, PyObject* pyValue)
 {
-	// ÔÊÐíÊ¹ÓÃÄ¬ÈÏÖµÀ´´´½¨Ò»¸öÁ÷
+	// å…è®¸ä½¿ç”¨é»˜è®¤å€¼æ¥åˆ›å»ºä¸€ä¸ªæµ
 	if(pyValue == NULL)
 	{
 		pyValue = newDefaultVal();
@@ -347,7 +347,7 @@ PyObject* ArrayDescription::onSetValue(PyObject* parentObj, PyObject* value)
 //-------------------------------------------------------------------------------------
 void ArrayDescription::addPersistentToStream(MemoryStream* mstream, PyObject* pyValue)
 {
-	// ÔÊÐíÊ¹ÓÃÄ¬ÈÏÖµÀ´´´½¨Ò»¸öÁ÷
+	// å…è®¸ä½¿ç”¨é»˜è®¤å€¼æ¥åˆ›å»ºä¸€ä¸ªæµ
 	if(pyValue == NULL)
 	{
 		pyValue = newDefaultVal();
@@ -501,7 +501,7 @@ bool EntityComponentDescription::isSamePersistentType(PyObject* pyValue)
 //-------------------------------------------------------------------------------------
 void EntityComponentDescription::addPersistentToStream(MemoryStream* mstream, PyObject* pyValue)
 {
-	// ÔÊÐíÊ¹ÓÃÄ¬ÈÏÖµÀ´´´½¨Ò»¸öÁ÷
+	// å…è®¸ä½¿ç”¨é»˜è®¤å€¼æ¥åˆ›å»ºä¸€ä¸ªæµ
 	if (pyValue == NULL)
 	{
 		pyValue = newDefaultVal();

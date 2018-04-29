@@ -34,7 +34,7 @@ template<typename T>
 class EntityGarbages : public script::ScriptObject
 {
 	/** 
-		×ÓÀà»¯ ½«Ò»Ğ©py²Ù×÷Ìî³ä½øÅÉÉúÀà 
+		å­ç±»åŒ– å°†ä¸€äº›pyæ“ä½œå¡«å……è¿›æ´¾ç”Ÿç±» 
 	*/
 	INSTANCE_SCRIPT_HREADER(EntityGarbages, ScriptObject)	
 public:
@@ -76,7 +76,7 @@ public:
 	}
 
 	/** 
-		±©Â¶Ò»Ğ©×Öµä·½·¨¸øpython 
+		æš´éœ²ä¸€äº›å­—å…¸æ–¹æ³•ç»™python 
 	*/
 	DECLARE_PY_MOTHOD_ARG1(pyHas_key, ENTITY_ID);
 	DECLARE_PY_MOTHOD_ARG0(pyKeys);
@@ -87,7 +87,7 @@ public:
 		PyObject * args, PyObject* kwds);
 
 	/** 
-		map²Ù×÷º¯ÊıÏà¹Ø 
+		mapæ“ä½œå‡½æ•°ç›¸å…³ 
 	*/
 	static PyObject* mp_subscript(PyObject* self, PyObject* key);
 
@@ -112,7 +112,7 @@ private:
 };
 
 /** 
-	Python EntityGarbages²Ù×÷ËùĞèÒªµÄ·½·¨±í 
+	Python EntityGarbagesæ“ä½œæ‰€éœ€è¦çš„æ–¹æ³•è¡¨ 
 */
 template<typename T>
 PyMappingMethods EntityGarbages<T>::mappingMethods =
@@ -122,7 +122,7 @@ PyMappingMethods EntityGarbages<T>::mappingMethods =
 	NULL											// mp_ass_subscript
 };
 
-// ²Î¿¼ objects/dictobject.c
+// å‚è€ƒ objects/dictobject.c
 // Hack to implement "key in dict"
 template<typename T>
 PySequenceMethods EntityGarbages<T>::mappingSequenceMethods = 
@@ -303,10 +303,10 @@ void EntityGarbages<T>::add(ENTITY_ID id, T* entity)
 	}
 	else
 	{
-		// XÃëÄÚÃ»ÓĞÇå¿Õ¹ıgarbagesÔò´íÎó¾¯¸æ
+		// Xç§’å†…æ²¡æœ‰æ¸…ç©ºè¿‡garbagesåˆ™é”™è¯¯è­¦å‘Š
 		if(_lastTime > 0 && timestamp() - _lastTime > uint64(stampsPerSecond()) * 3600)
 		{
-			// ÔÙÎ´Çå¿ÕÇé¿öÏÂ£¬ÏÂ´Î²»ÌáÊ¾ÁË
+			// å†æœªæ¸…ç©ºæƒ…å†µä¸‹ï¼Œä¸‹æ¬¡ä¸æç¤ºäº†
 			_lastTime = 0;
 			
 			ERROR_MSG(fmt::format("For a long time(3600s) not to empty the garbages, there may be a leak of the entitys(size:{}), "

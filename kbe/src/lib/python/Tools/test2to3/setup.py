@@ -15,7 +15,7 @@ setup(
     name = "test2to3",
     version = "1.0",
     description = "2to3 distutils test package",
-    author = "Martin v. Löwis",
+    author = "Martin v. Lé°“is",
     author_email = "python-dev@python.org",
     license = "PSF license",
     packages = ["test2to3"],

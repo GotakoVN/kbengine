@@ -61,7 +61,7 @@ uint32						g_extSendWindowBytesOverflow = 65535;
 uint32						g_intSentWindowBytesOverflow = 0;
 uint32						g_extSentWindowBytesOverflow = 0;
 
-// Í¨µÀ·¢ËÍ³¬Ê±ÖØÊÔ
+// é€šé“å‘é€è¶…æ—¶é‡è¯•
 uint32						g_intReSendInterval = 10;
 uint32						g_intReSendRetries = 0;
 uint32						g_extReSendInterval = 10;

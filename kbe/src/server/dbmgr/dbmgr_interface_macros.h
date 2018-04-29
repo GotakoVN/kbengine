@@ -76,7 +76,7 @@ namespace KBEngine{
 																				\
 
 /**
-	Dbmgr��Ϣ�꣬  ֻ�������������Ϣ
+	Dbmgr消息宏，  只有零个参数的消息
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef DBMGR_MESSAGE_HANDLER_ARGS0
@@ -118,7 +118,7 @@ namespace KBEngine{
 
 
 /**
-	Dbmgr��Ϣ�꣬  ֻ��һ����������Ϣ
+	Dbmgr消息宏，  只有一个参数的消息
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef DBMGR_MESSAGE_HANDLER_ARGS1
@@ -161,7 +161,7 @@ namespace KBEngine{
 																				\
 	
 /**
-	Dbmgr��Ϣ�꣬  ֻ�ж�����������Ϣ
+	Dbmgr消息宏，  只有二个参数的消息
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef DBMGR_MESSAGE_HANDLER_ARGS2
@@ -213,7 +213,7 @@ namespace KBEngine{
 
 
 /**
-	Dbmgr��Ϣ�꣬  ֻ��������������Ϣ
+	Dbmgr消息宏，  只有三个参数的消息
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef DBMGR_MESSAGE_HANDLER_ARGS3
@@ -274,7 +274,7 @@ namespace KBEngine{
 
 
 /**
-	Dbmgr��Ϣ�꣬  ֻ���ĸ���������Ϣ
+	Dbmgr消息宏，  只有四个参数的消息
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef DBMGR_MESSAGE_HANDLER_ARGS4
@@ -342,7 +342,7 @@ namespace KBEngine{
 											ARG_TYPE4, ARG_NAME4)				\
 
 /**
-	Dbmgr��Ϣ�꣬  ֻ�������������Ϣ
+	Dbmgr消息宏，  只有五个参数的消息
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef DBMGR_MESSAGE_HANDLER_ARGS5
@@ -419,7 +419,7 @@ namespace KBEngine{
 
 
 /**
-	Dbmgr��Ϣ�꣬  ֻ��������������Ϣ
+	Dbmgr消息宏，  只有六个参数的消息
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef DBMGR_MESSAGE_HANDLER_ARGS6
@@ -503,7 +503,7 @@ namespace KBEngine{
 											ARG_TYPE6, ARG_NAME6)				\
 
 /**
-	Dbmgr��Ϣ�꣬  ֻ���߸���������Ϣ
+	Dbmgr消息宏，  只有七个参数的消息
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef DBMGR_MESSAGE_HANDLER_ARGS7
@@ -597,7 +597,7 @@ namespace KBEngine{
 
 
 /**
-	Dbmgr��Ϣ�꣬  ֻ�а˸���������Ϣ
+	Dbmgr消息宏，  只有八个参数的消息
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef DBMGR_MESSAGE_HANDLER_ARGS8
@@ -699,7 +699,7 @@ namespace KBEngine{
 
 
 /**
-	Dbmgr��Ϣ�꣬  ֻ�оŸ���������Ϣ
+	Dbmgr消息宏，  只有九个参数的消息
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef DBMGR_MESSAGE_HANDLER_ARGS9
@@ -809,7 +809,7 @@ namespace KBEngine{
 
 
 /**
-	Dbmgr��Ϣ�꣬  ֻ��ʮ����������Ϣ
+	Dbmgr消息宏，  只有十个参数的消息
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef DBMGR_MESSAGE_HANDLER_ARGS10
@@ -928,7 +928,7 @@ namespace KBEngine{
 
 
 /**
-	Dbmgr��Ϣ�꣬  ֻ��ʮһ����������Ϣ
+	Dbmgr消息宏，  只有十一个参数的消息
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef DBMGR_MESSAGE_HANDLER_ARGS11
