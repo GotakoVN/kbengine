@@ -459,58 +459,60 @@ public:
 	virtual void onReloadScript(bool fullReload);
 
 	/**
-		获取进程是否正在关闭中
+		Gets whether the process is closing
 	*/
 	static PyObject* __py_isShuttingDown(PyObject* self, PyObject* args);
 
 	/**
-		获取进程内部网络地址
+		Get internal network address for process
 	*/
 	static PyObject* __py_address(PyObject* self, PyObject* args);
 
 	/**
-		通过dbid从数据库中删除一个实体
-
-		从数据库删除实体， 如果实体不在线则可以直接删除回调返回true， 如果在线则回调返回的是entity的entityCall， 其他任何原因都返回false.
+		Delete an entity from the database by dbid
+		
+		If the entity is not checked out from the database, the callback returns true
+		 and it can be deleted. If it is checked out, the callback returns the EntityCall,
+		 otherwise the callback returns false
 	*/
 	static PyObject* __py_deleteEntityByDBID(PyObject* self, PyObject* args);
 
 	/** Network interface
-		通过dbid从数据库中删除一个实体的回调
+		If the entity is not checked out from the database, the callback returns true
+		 and it can be deleted. If it is checked out, the callback returns the EntityCall,
+		 otherwise the callback returns false
 	*/
 	void deleteEntityByDBIDCB(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
 	/**
-		通过dbid查询一个实体是否从数据库检出
-
-		如果实体在线回调返回baseentitycall，如果实体不在线则回调返回true，其他任何原因都返回false.
+		Check if an entity is checked out from the database by dbid
 	*/
 	static PyObject* __py_lookUpEntityByDBID(PyObject* self, PyObject* args);
 
 	/** Network interface
-		如果实体在线回调返回baseentitycall，如果实体不在线则回调返回true，其他任何原因都返回false.
+		The callback returns BASEENTITYCALL if it is checked out, returns true if the entity is not checked out, and any other reason returns false.
 	*/
 	void lookUpEntityByDBIDCB(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
 	/** Network interface
-		请求绑定email
+		Request to bind email to account
 	*/
 	void reqAccountBindEmail(Network::Channel* pChannel, ENTITY_ID entityID, std::string& password, std::string& email);
 
 	/** Network interface
-		请求绑定email, dbmgr返回结果
+		DBMgr callback, returns result after requesting to bind email
 	*/
 	void onReqAccountBindEmailCBFromDBMgr(Network::Channel* pChannel, ENTITY_ID entityID, std::string& accountName, std::string& email,
 		SERVER_ERROR_CODE failedcode, std::string& code);
 
 	/** Network interface
-		请求绑定email, baseappmgr返回需要找到loginapp的地址
+		Request to bind email callback, baseappmgr returns the address needed to find loginapp
 	*/
 	void onReqAccountBindEmailCBFromBaseappmgr(Network::Channel* pChannel, ENTITY_ID entityID, std::string& accountName, std::string& email,
 		SERVER_ERROR_CODE failedcode, std::string& code, std::string& loginappCBHost, uint16 loginappCBPort);
 
 	/** Network interface
-		请求绑定email
+		Request new password
 	*/
 	void reqAccountNewPassword(Network::Channel* pChannel, ENTITY_ID entityID, std::string& oldpassworld, std::string& newpassword);
 
@@ -528,12 +530,12 @@ protected:
 	// globalBases
 	GlobalDataClient*										pBaseAppData_;
 
-	// 记录登录到服务器但还未处理完毕的账号
+	// Records accounts that are logged onto the server but not yet processed
 	PendingLoginMgr											pendingLoginMgr_;
 
 	ForwardComponent_MessageBuffer							forward_messagebuffer_;
 
-	// 备份存档相关
+	// Backup archive related
 	KBEShared_ptr< Backuper >								pBackuper_;	
 	KBEShared_ptr< Archiver >								pArchiver_;	
 
@@ -547,10 +549,10 @@ protected:
 
 	InitProgressHandler*									pInitProgressHandler_;
 	
-	// APP的标志
+	// APP flags
 	uint32													flags_;
 
-	// 用于客户端动态导入entitydef协议
+	// Dynamic import of entitydef protocol for clients
 	Network::Bundle*										pBundleImportEntityDefDatas_;
 };
 

@@ -3874,7 +3874,7 @@ void Baseapp::loginBaseapp(Network::Channel* pChannel,
 		dbmgrinfos->pChannel->send(pBundle);
 	}
 
-	// Log client addresses
+	// Record client address
 	ptinfos->addr = pChannel->addr();
 }
 
