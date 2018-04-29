@@ -71,7 +71,7 @@ cellDataDict_(NULL),
 hasDB_(false),
 DBID_(0),
 isGetingCellData_(false),
-isArchiveing_(false),
+isArchiving_(false),
 shouldAutoArchive_(1),
 shouldAutoBackup_(1),
 creatingCell_(false),
@@ -552,7 +552,7 @@ bool Entity::destroyCellEntity(void)
 
 	if(cellEntityCall_  == NULL || cellEntityCall_->getChannel() == NULL)
 	{
-		isArchiveing_ = false;
+		isArchiving_ = false;
 		return false;
 	}
 
@@ -1031,7 +1031,7 @@ void Entity::onLoseCell(Network::Channel* pChannel, MemoryStream& s)
 
 	S_RELEASE(cellEntityCall_);
 
-	isArchiveing_ = false;
+	isArchiving_ = false;
 	isGetingCellData_ = false;
 	createdSpace_ = false;
 	
@@ -1048,7 +1048,7 @@ void Entity::onRestore()
 	CALL_ENTITY_AND_COMPONENTS_METHOD(this, SCRIPT_OBJECT_CALL_ARGS0(pyTempObj, const_cast<char*>("onRestore"), false));
 
 	inRestore_ = false;
-	isArchiveing_ = false;
+	isArchiving_ = false;
 	removeFlags(ENTITY_FLAGS_INITING);
 }
 
@@ -1144,19 +1144,19 @@ void Entity::writeToDB(void* data, void* extra1, void* extra2)
 		}
 	}
 
-	if(isArchiveing_)
+	if(isArchiving_)
 	{
 		// __py_pyWriteToDB没有增加引用
 		//if(pyCallback != NULL)
 		//	Py_DECREF(pyCallback);
 
-		WARNING_MSG(fmt::format("{}::writeToDB(): is archiveing! entityid={}, dbid={}.\n", 
+		WARNING_MSG(fmt::format("{}::writeToDB(): is archiving! entityid={}, dbid={}.\n", 
 			this->scriptName(), this->id(), this->dbid()));
 
 		return;
 	}
 
-	isArchiveing_ = true;
+	isArchiving_ = true;
 
 	if(isDestroyed())
 	{	
@@ -1202,7 +1202,7 @@ void Entity::onWriteToDBCallback(ENTITY_ID eid,
 								int8 shouldAutoLoad,
 								bool success)
 {
-	isArchiveing_ = false;
+	isArchiving_ = false;
 
 	PyObjectPtr pyCallback;
 
@@ -1265,7 +1265,7 @@ void Entity::onCellWriteToDBCompleted(CALLBACK_ID callbackID, int8 shouldAutoLoa
 	
 	// 如果在数据库中已经存在该entity则允许应用层多次调用写库进行数据及时覆盖需求
 	if(this->DBID_ > 0)
-		isArchiveing_ = false;
+		isArchiving_ = false;
 	else
 		setDirty();
 	
@@ -1339,7 +1339,7 @@ void Entity::onWriteToDB()
 //-------------------------------------------------------------------------------------
 void Entity::onCellAppDeath()
 {
-	isArchiveing_ = false;
+	isArchiving_ = false;
 	isGetingCellData_ = false;
 }
 
