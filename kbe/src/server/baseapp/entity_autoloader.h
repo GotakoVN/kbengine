@@ -37,8 +37,8 @@ public:
 	void pInitProgressHandler(InitProgressHandler* p)
 		{ pInitProgressHandler_ = p; }
 
-	/** 网络接口
-		数据库中查询的自动entity加载信息返回
+	/** Network interface
+		Automatic entity load information retrieved from the database returns
 	*/
 	void onEntityAutoLoadCBFromDBMgr(Network::Channel* pChannel, MemoryStream& s);
 

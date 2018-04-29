@@ -84,7 +84,7 @@ dbInterfaceIndex_(0)
 	script::PyGC::incTracing("Entity");
 	ENTITY_INIT_PROPERTYS(Entity);
 
-	// 创建并初始化cellData
+	// Create and initialize cellData
 	createCellData();
 }
 
@@ -126,7 +126,7 @@ void Entity::onDefDataChanged(EntityComponent* pEntityComponent, const PropertyD
 	if((flags & ED_FLAG_BASE_AND_CLIENT) <= 0 || clientEntityCall_ == NULL)
 		return;
 
-	// 创建一个需要广播的模板流
+	// Create a template stream that needs to be broadcast
 	MemoryStream* mstream = MemoryStream::createPoolObject();
 
 	propertyDescription->getDataType()->addToStream(mstream, pyData);

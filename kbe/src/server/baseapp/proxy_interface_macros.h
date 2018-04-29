@@ -38,7 +38,7 @@ along with KBEngine.  If not, see <http://www.gnu.org/licenses/>.
 namespace KBEngine{
 
 /**
-	PROXY消息宏，  参数为流， 需要自己解开
+	PROXY message macro, parameter is stream, need to unpack
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef PROXY_MESSAGE_HANDLER_STREAM
@@ -93,7 +93,7 @@ namespace KBEngine{
 																				\
 
 /**
-	Proxy消息宏，  只有零个参数的消息
+	Proxy message macros, 0 parameter messages
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef PROXY_MESSAGE_HANDLER_ARGS0
@@ -148,7 +148,7 @@ namespace KBEngine{
 																				\
 	
 /**
-	Proxy消息宏，  只有一个参数的消息
+	Proxy message macros, 1 parameter messages
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef PROXY_MESSAGE_HANDLER_ARGS1

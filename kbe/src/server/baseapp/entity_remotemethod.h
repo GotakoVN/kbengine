@@ -30,7 +30,7 @@ namespace KBEngine{
 
 class EntityRemoteMethod : public RemoteEntityMethod
 {
-	/** 子类化 将一些py操作填充进派生类 */
+	/** Subclasses populate a derived class with some py operations */
 	INSTANCE_SCRIPT_HREADER(EntityRemoteMethod, RemoteEntityMethod)	
 public:
 	EntityRemoteMethod(MethodDescription* methodDescription, 

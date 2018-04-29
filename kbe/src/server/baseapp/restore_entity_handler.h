@@ -49,13 +49,13 @@ public:
 	void pushEntity(ENTITY_ID id);
 
 	/** 
-		某个baseapp上的space恢复了cell， 判断当前baseapp是否有相关entity需要恢复cell
+		Space restored from Baseapp, determines whether the current baseapp has related entities and needs to restore their cells
 	*/
 	void onRestoreSpaceCellFromOtherBaseapp(COMPONENT_ID baseappID, COMPONENT_ID cellappID, 
 		SPACE_ID spaceID, ENTITY_ID spaceEntityID, ENTITY_SCRIPT_UID utype, bool destroyed);
 
 	/** 
-		是否允许进行恢复
+		Whether to allow recovery
 	*/
 	bool canRestore() const{ return canRestore_; }
 	void canRestore(bool v){ canRestore_ = v; }
@@ -69,7 +69,7 @@ private:
 	std::vector<RestoreData> restoreSpaces_;
 	std::vector<RestoreData> otherRestoredSpaces_;
 
-	// space创建好cell后广播给其他baseapp
+	// Space broadcasts to other baseapp after creating cell
 	bool broadcastOtherBaseapps_;
 
 	uint64 tickReport_;

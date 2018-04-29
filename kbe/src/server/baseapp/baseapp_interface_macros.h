@@ -38,7 +38,7 @@ along with KBEngine.  If not, see <http://www.gnu.org/licenses/>.
 namespace KBEngine{
 
 /**
-	Baseapp消息宏，  参数为流， 需要自己解开
+	Baseapp message macros, parameter is stream, need to unpack itself
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef BASEAPP_MESSAGE_HANDLER_STREAM
@@ -93,7 +93,7 @@ namespace KBEngine{
 																				\
 
 /**
-	Baseapp消息宏，  只有零个参数的消息
+	Baseapp message macros, only zero parameter messages
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef BASEAPP_MESSAGE_HANDLER_ARGS0
@@ -134,7 +134,7 @@ namespace KBEngine{
 																				\
 
 /**
-	Baseapp消息宏，  只有一个参数的消息
+	Baseapp macros, 1 parameter messages
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef BASEAPP_MESSAGE_HANDLER_ARGS1
@@ -177,7 +177,7 @@ namespace KBEngine{
 																				\
 
 /**
-	Baseapp消息宏，  只有二个参数的消息
+	Baseapp macros, 2 parameter messages
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef BASEAPP_MESSAGE_HANDLER_ARGS2
@@ -229,7 +229,7 @@ namespace KBEngine{
 
 
 /**
-	Baseapp消息宏，  只有三个参数的消息
+	Baseapp macros, 3 parameter messages
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef BASEAPP_MESSAGE_HANDLER_ARGS3
@@ -290,7 +290,7 @@ namespace KBEngine{
 
 
 /**
-	Baseapp消息宏，  只有四个参数的消息
+	Baseapp macros, 4 parameter messages
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef BASEAPP_MESSAGE_HANDLER_ARGS4
@@ -358,7 +358,7 @@ namespace KBEngine{
 											ARG_TYPE4, ARG_NAME4)				\
 
 /**
-	Baseapp消息宏，  只有五个参数的消息
+	Baseapp macros, 5 parameter messages
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef BASEAPP_MESSAGE_HANDLER_ARGS5
@@ -435,7 +435,7 @@ namespace KBEngine{
 
 
 /**
-	Baseapp消息宏，  只有六个参数的消息
+	Baseapp macros, 6 parameter messages
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef BASEAPP_MESSAGE_HANDLER_ARGS6
@@ -519,7 +519,7 @@ namespace KBEngine{
 											ARG_TYPE6, ARG_NAME6)				\
 
 /**
-	Baseapp消息宏，  只有七个参数的消息
+	Baseapp macros, 7 parameter messages
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef BASEAPP_MESSAGE_HANDLER_ARGS7
@@ -613,7 +613,7 @@ namespace KBEngine{
 
 
 /**
-	Baseapp消息宏，  只有八个参数的消息
+	Baseapp macros, 8 parameter messages
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef BASEAPP_MESSAGE_HANDLER_ARGS8
@@ -715,7 +715,7 @@ namespace KBEngine{
 
 
 /**
-	Baseapp消息宏，  只有九个参数的消息
+	Baseapp macros, 9 parameter messages
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef BASEAPP_MESSAGE_HANDLER_ARGS9
@@ -825,7 +825,7 @@ namespace KBEngine{
 
 
 /**
-	Baseapp消息宏，  只有十个参数的消息
+	Baseapp macros, 10 parameter messages
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef BASEAPP_MESSAGE_HANDLER_ARGS10
@@ -944,7 +944,7 @@ namespace KBEngine{
 
 
 /**
-	Baseapp消息宏，  只有十一个参数的消息
+	Baseapp macros, 11 parameter messages
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef BASEAPP_MESSAGE_HANDLER_ARGS11

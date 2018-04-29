@@ -38,8 +38,8 @@ public:
 
 	void setAutoLoadState(int8 state);
 
-	/** 网络接口
-		数据库中查询的自动entity加载信息返回
+	/** Network interface
+		Automatic entity load information returned from the database
 	*/
 	void onEntityAutoLoadCBFromDBMgr(Network::Channel* pChannel, MemoryStream& s);
 
