@@ -71,7 +71,7 @@ clientComponentType_(UNKNOWN_CLIENT_COMPONENT_TYPE),
 loginDatas_(),
 createDatas_()
 {
-	Baseapp::getSingleton().incProxicesCount();
+	Baseapp::getSingleton().incProxiesCount();
 
 	pProxyForwarder_ = new ProxyForwarder(this);
 }
@@ -79,7 +79,7 @@ createDatas_()
 //-------------------------------------------------------------------------------------
 Proxy::~Proxy()
 {
-	Baseapp::getSingleton().decProxicesCount();
+	Baseapp::getSingleton().decProxiesCount();
 	kick();
 	SAFE_RELEASE(pProxyForwarder_);
 }

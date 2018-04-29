@@ -36,9 +36,9 @@ public:
 	ENTITY_ID numEntitys() const { return numEntitys_; }
 	void numEntitys(ENTITY_ID num) { numEntitys_ = num; }
 	
-	ENTITY_ID numProxices() const { return numProxices_; }
-	void numProxices(ENTITY_ID num) { numProxices_ = num; }
-	void incNumProxices() { ++numProxices_; }
+	ENTITY_ID numProxies() const { return numProxies_; }
+	void numProxies(ENTITY_ID num) { numProxies_ = num; }
+	void incNumProxies() { ++numProxies_; }
 
 	float load() const { return load_; }
 	void load(float v) { load_ = v; }
@@ -49,7 +49,7 @@ public:
 	float initProgress() const{ return initProgress_; }
 	void initProgress(float v){ initProgress_ = v; }
 
-	ENTITY_ID numEntities() const { return numEntitys_ + numProxices_; }
+	ENTITY_ID numEntities() const { return numEntitys_ + numProxies_; }
 	void incNumEntities() { ++numEntitys_; }
 
 	uint32 flags() const { return flags_; }
@@ -57,7 +57,7 @@ public:
 	
 protected:
 	ENTITY_ID numEntitys_;
-	ENTITY_ID numProxices_;
+	ENTITY_ID numProxies_;
 	float load_;
 
 	bool isDestroyed_;

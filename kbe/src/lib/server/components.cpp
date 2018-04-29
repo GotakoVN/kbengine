@@ -811,7 +811,7 @@ bool Components::updateComponentInfos(const Components::ComponentInfos* info)
 		COMPONENT_ID cid;
 		int8 istate = 0;
 		ArraySize entitySize = 0, cellSize = 0;
-		int32 clientsSize = 0, proxicesSize = 0;
+		int32 clientsSize = 0, proxiesSize = 0;
 		uint32 telnet_port = 0;
 
 		Network::TCPPacket packet;
@@ -825,7 +825,7 @@ bool Components::updateComponentInfos(const Components::ComponentInfos* info)
 
 		if(info->componentType == BASEAPP_TYPE)
 		{
-			recvsize += sizeof(entitySize) + sizeof(clientsSize) + sizeof(proxicesSize) + sizeof(telnet_port);
+			recvsize += sizeof(entitySize) + sizeof(clientsSize) + sizeof(proxiesSize) + sizeof(telnet_port);
 		}
 
 		int len = epListen.recv(packet.data(), recvsize);
@@ -851,7 +851,7 @@ bool Components::updateComponentInfos(const Components::ComponentInfos* info)
 
 		if(ctype == BASEAPP_TYPE)
 		{
-			packet >> entitySize >> clientsSize >> proxicesSize >> telnet_port;
+			packet >> entitySize >> clientsSize >> proxiesSize >> telnet_port;
 		}
 
 		if(ctype != info->componentType || cid != info->cid)
@@ -877,7 +877,7 @@ bool Components::updateComponentInfos(const Components::ComponentInfos* info)
 			{
 				winfo->extradata = entitySize;
 				winfo->extradata1 = clientsSize;
-				winfo->extradata2 = proxicesSize;
+				winfo->extradata2 = proxiesSize;
 				winfo->extradata3 = telnet_port;
 			}
 		}

@@ -48,10 +48,10 @@ void Archiver::tick()
 		this->createArchiveTable();
 	}
 
-	// 算法如下:
-	// baseEntity的数量 * idx / tick周期 = 每次在vector中移动的一个区段
+	// The algorithm is as follows:
+	// baseEntity count * idx / period in ticks = 每次在vector中移动的一个区段
 	// 这个区段在每个gametick进行处理, 刚好平滑的在periodInTicks中处理完任务
-	// 如果archiveIndex_ >= periodInTicks则重新产生一次随机序列
+	// If archiveIndex_ >= periodInTicks then regenerate a random sequence
 	int size = (int)arEntityIDs_.size();
 	int startIndex = size * archiveIndex_ / periodInTicks;
 
@@ -97,7 +97,7 @@ void Archiver::createArchiveTable()
 		}
 	}
 
-	// 随机一下序列
+	// Random sequence
 	std::random_shuffle(arEntityIDs_.begin(), arEntityIDs_.end());
 }
 

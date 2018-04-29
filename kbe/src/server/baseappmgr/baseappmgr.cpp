@@ -276,12 +276,12 @@ uint32 Baseappmgr::numLoadBalancingApp()
 
 //-------------------------------------------------------------------------------------
 void Baseappmgr::updateBaseapp(Network::Channel* pChannel, COMPONENT_ID componentID,
-							ENTITY_ID numEntitys, ENTITY_ID numProxices, float load, uint32 flags)
+							ENTITY_ID numEntitys, ENTITY_ID numProxies, float load, uint32 flags)
 {
 	Baseapp& baseapp = baseapps_[componentID];
 	
 	baseapp.load(load);
-	baseapp.numProxices(numProxices);
+	baseapp.numProxies(numProxies);
 	baseapp.numEntitys(numEntitys);
 	baseapp.flags(flags);
 	
@@ -657,7 +657,7 @@ void Baseappmgr::registerPendingAccountToBaseapp(Network::Channel* pChannel, Mem
 	// 预先将实体数量增加
 	if (baseapps_iter != baseapps_.end())
 	{
-		baseapps_iter->second.incNumProxices();
+		baseapps_iter->second.incNumProxies();
 	}
 }
 
@@ -813,7 +813,7 @@ void Baseappmgr::queryAppsLoads(Network::Channel* pChannel, MemoryStream& s)
 		(*pBundle) << baseappref.load();
 		(*pBundle) << baseappref.numEntitys();
 		(*pBundle) << baseappref.numEntities();
-		(*pBundle) << baseappref.numProxices();
+		(*pBundle) << baseappref.numProxies();
 		(*pBundle) << baseappref.flags();
 	}
 

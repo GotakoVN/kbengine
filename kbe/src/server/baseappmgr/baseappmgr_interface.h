@@ -111,7 +111,7 @@ NETWORK_INTERFACE_DECLARE_BEGIN(BaseappmgrInterface)
 	BASEAPPMGR_MESSAGE_DECLARE_ARGS5(updateBaseapp,										NETWORK_FIXED_MESSAGE,
 									COMPONENT_ID,										componentID,
 									ENTITY_ID,											numBases,
-									ENTITY_ID,											numProxices,
+									ENTITY_ID,											numProxies,
 									float,												load,
 									uint32,												flags)
 

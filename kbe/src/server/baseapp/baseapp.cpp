@@ -190,7 +190,7 @@ Baseapp::Baseapp(Network::EventDispatcher& dispatcher,
 	pendingLoginMgr_(ninterface),
 	forward_messagebuffer_(ninterface),
 	pBackuper_(),
-	numProxices_(0),
+	numProxies_(0),
 	pTelnetServer_(NULL),
 	pRestoreEntityHandlers_(),
 	pResmgrTimerHandle_(),
@@ -359,7 +359,7 @@ bool Baseapp::initializeWatcher()
 {
 	ProfileVal::setWarningPeriod(stampsPerSecond() / g_kbeSrvConfig.gameUpdateHertz());
 
-	WATCH_OBJECT("numProxices", this, &Baseapp::numProxices);
+	WATCH_OBJECT("numProxies", this, &Baseapp::numProxies);
 	WATCH_OBJECT("numClients", this, &Baseapp::numClients);
 	WATCH_OBJECT("load", this, &Baseapp::_getLoad);
 	WATCH_OBJECT("stats/runningTime", &runningTime);
@@ -484,7 +484,7 @@ void Baseapp::onUpdateLoad()
 		Network::Bundle* pBundle = Network::Bundle::createPoolObject();
 		(*pBundle).newMessage(BaseappmgrInterface::updateBaseapp);
 		BaseappmgrInterface::updateBaseappArgs5::staticAddToBundle((*pBundle), 
-			componentID_, (ENTITY_ID)(pEntities_->getEntities().size() - numProxices()), (ENTITY_ID)numProxices(), getLoad(), flags_);
+			componentID_, (ENTITY_ID)(pEntities_->getEntities().size() - numProxies()), (ENTITY_ID)numProxies(), getLoad(), flags_);
 
 		pChannel->send(pBundle);
 	}
@@ -4715,7 +4715,7 @@ void Baseapp::lookApp(Network::Channel* pChannel)
 	(*pBundle) << istate;
 	(*pBundle) << this->entitiesSize();
 	(*pBundle) << numClients();
-	(*pBundle) << numProxices();
+	(*pBundle) << numProxies();
 
 	uint32 port = 0;
 	if(pTelnetServer_)

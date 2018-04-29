@@ -46,7 +46,7 @@ public:
 	bool backup(Entity& entity, MemoryStream& s);
 
 private:
-	// 在此列表中的entity将进行备份操作
+	// The entities in this list will be backed up
 	std::vector<ENTITY_ID>		backupEntityIDs_;
 
 	float						backupRemainder_;

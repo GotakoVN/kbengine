@@ -1421,16 +1421,16 @@ thread::TPTask::TPTaskState DBTaskAccountOnline::presentMainThread()
 	// 如果没有连接db则从log中查找账号是否还在线
 	if(!pDBInterface_)
 	{
-		PROXICES_ONLINE_LOG::iterator iter = proxicesOnlineLogs_.find(accountName_);
-		if(iter != proxicesOnlineLogs_.end())
+		PROXIES_ONLINE_LOG::iterator iter = proxiesOnlineLogs_.find(accountName_);
+		if(iter != proxiesOnlineLogs_.end())
 		{
 			iter->second.cid = componentID_;
 			iter->second.eid = entityID_;
 		}
 		else
 		{
-			proxicesOnlineLogs_[accountName].cid = componentID_;
-			proxicesOnlineLogs_[accountName].eid = entityID_;
+			proxiesOnlineLogs_[accountName].cid = componentID_;
+			proxiesOnlineLogs_[accountName].eid = entityID_;
 		}
 	}
 	*/

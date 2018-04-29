@@ -76,7 +76,7 @@ public:
 	bool run();
 	
 	/** 
-		相关处理接口 
+		Correlation Processing Interface
 	*/
 	virtual void handleTimeout(TimerHandle handle, void * arg);
 	virtual void handleGameTick();
@@ -85,7 +85,7 @@ public:
 	void handleArchive();
 
 	/** 
-		初始化相关接口 
+		Initialize related interfaces
 	*/
 	bool initializeBegin();
 	bool initializeEnd();
@@ -104,14 +104,11 @@ public:
 
 	virtual void onChannelDeregister(Network::Channel * pChannel);
 
-	/**
-		一个cellapp死亡
-	*/
 	void onCellAppDeath(Network::Channel * pChannel);
 
-	/** 网络接口
-		dbmgr告知已经启动的其他baseapp或者cellapp的地址
-		当前app需要主动的去与他们建立连接
+	/** Network interface
+		Dbmgr tells the address of other baseapp or cellapp that has been started
+		Current app needs to actively establish a connection with them
 	*/
 	virtual void onGetEntityAppFromDbmgr(Network::Channel* pChannel, 
 							int32 uid, 
@@ -119,23 +116,23 @@ public:
 							COMPONENT_TYPE componentType, COMPONENT_ID componentID, COMPONENT_ORDER globalorderID, COMPONENT_ORDER grouporderID,
 							uint32 intaddr, uint16 intport, uint32 extaddr, uint16 extport, std::string& extaddrEx);
 	
-	/** 网络接口
-		某个client向本app告知处于活动状态。
+	/** Network interface
+		A client informs the app that it is active.
 	*/
 	void onClientActiveTick(Network::Channel* pChannel);
 
-	/** 网络接口
-		数据库中查询的自动entity加载信息返回
+	/** Network interface
+		Automatic entity load information returned by the database
 	*/
 	void onEntityAutoLoadCBFromDBMgr(Network::Channel* pChannel, MemoryStream& s);
 
 	/** 
-		创建了一个entity回调
+		on Entity created callback
 	*/
 	virtual Entity* onCreateEntity(PyObject* pyEntity, ScriptDefModule* sm, ENTITY_ID eid);
 
 	/** 
-		创建一个entity 
+		Create an Entity
 	*/
 	static PyObject* __py_createEntity(PyObject* self, PyObject* args);
 	static PyObject* __py_createEntityAnywhere(PyObject* self, PyObject* args);
@@ -145,262 +142,264 @@ public:
 	static PyObject* __py_createEntityRemotelyFromDBID(PyObject* self, PyObject* args);
 	
 	/**
-		创建一个新的space 
+		Create a new space
 	*/
 	void createCellEntityInNewSpace(Entity* pEntity, PyObject* pyCellappIndex);
 
 	/**
-		恢复一个space 
+		Restore a space
 	*/
 	void restoreSpaceInCell(Entity* pEntity);
 
 	/** 
-		在一个负载较低的baseapp上创建一个baseEntity 
+		Create a base-Entity on a lower-load baseapp
 	*/
 	void createEntityAnywhere(const char* entityType, PyObject* params, PyObject* pyCallback);
 
-	/** 收到baseappmgr决定将某个baseapp要求createEntityAnywhere的请求在本baseapp上执行 
-		@param entityType	: entity的类别， entities.xml中的定义的。
-		@param strInitData	: 这个entity被创建后应该给他初始化的一些数据， 需要使用pickle.loads解包.
-		@param componentID	: 请求创建entity的baseapp的组件ID
+	/** Received Baseappmgr decision to execute a createEntityAnywhere request on this Baseapp from another Baseapp
+		@param entityType	: Entity type, defined in Entities.xml.
+		@param strInitData	: After the entity is created, some data that should be initialized for him which needs to be unwrapped using pickle.loads.
+		@param componentID	: The component ID of the baseapp requesting to create an entity
 	*/
 	void onCreateEntityAnywhere(Network::Channel* pChannel, MemoryStream& s);
 
 	/**
-	baseapp 的createEntityAnywhere的回调
+	baseapp createEntityAnywhere callbacks
 	*/
 	void onCreateEntityAnywhereCallback(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 	void _onCreateEntityAnywhereCallback(Network::Channel* pChannel, CALLBACK_ID callbackID,
 		std::string& entityType, ENTITY_ID eid, COMPONENT_ID componentID);
 
 	/**
-	在一个负载较低的baseapp上创建一个baseEntity
+	Create a base-Entity on a lower-load baseapp
 	*/
 	void createEntityRemotely(const char* entityType, COMPONENT_ID componentID, PyObject* params, PyObject* pyCallback);
 
-	/** 收到baseappmgr决定将某个baseapp要求createEntityAnywhere的请求在本baseapp上执行
-	@param entityType	: entity的类别， entities.xml中的定义的。
-	@param strInitData	: 这个entity被创建后应该给他初始化的一些数据， 需要使用pickle.loads解包.
-	@param componentID	: 请求创建entity的baseapp的组件ID
+	/** 收Received Baseappmgr decision to execute a createEntityAnywhere request on this Baseapp from another Baseapp
+	@param entityType	: Entity type, defined in Entities.xml.
+	@param strInitData	: After the entity is created, some data that should be initialized for him which needs to be unwrapped using pickle.loads.
+	@param componentID	: The component ID of the baseapp requesting to create an entity
 	*/
 	void onCreateEntityRemotely(Network::Channel* pChannel, MemoryStream& s);
 
 	/**
-	baseapp 的createEntityAnywhere的回调
+	baseapp createEntityAnywhere callbacks
 	*/
 	void onCreateEntityRemotelyCallback(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 	void _onCreateEntityRemotelyCallback(Network::Channel* pChannel, CALLBACK_ID callbackID,
 		std::string& entityType, ENTITY_ID eid, COMPONENT_ID componentID);
 
 	/** 
-		从db获取信息创建一个entity
+		Create an entity by obtaining information from db
 	*/
 	void createEntityFromDBID(const char* entityType, DBID dbid, PyObject* pyCallback, const std::string& dbInterfaceName);
 
-	/** 网络接口
-		createEntityFromDBID的回调。
+	/** Network interface
+		createEntityFromDBID callback
 	*/
 	void onCreateEntityFromDBIDCallback(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
 	/** 
-		从db获取信息创建一个entity
+		Create an entity by obtaining information from db
 	*/
 	void createEntityAnywhereFromDBID(const char* entityType, DBID dbid, PyObject* pyCallback, const std::string& dbInterfaceName);
 
-	/** 网络接口
-		createEntityAnywhereFromDBID的回调。
+	/** Network interface
+		createEntityAnywhereFromDBID callback
 	*/
-	// 从baseappmgr查询用于创建实体的组件id回调
+	// Component ID callback used to create an entity from a baseappmgr query
 	void onGetCreateEntityAnywhereFromDBIDBestBaseappID(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	/** 网络接口
-		createEntityAnywhereFromDBID的回调。
+	/** Network interface
+		createEntityAnywhereFromDBID callback
 	*/
-	// 从数据库来的回调
+	// Callback from the database
 	void onCreateEntityAnywhereFromDBIDCallback(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	// 请求在这个进程上创建这个entity
+	// Request to create an entity on this process
 	void createEntityAnywhereFromDBIDOtherBaseapp(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	// 创建完毕后的回调
+	// Callback after creation
 	void onCreateEntityAnywhereFromDBIDOtherBaseappCallback(Network::Channel* pChannel, COMPONENT_ID createByBaseappID, 
 							std::string entityType, ENTITY_ID createdEntityID, CALLBACK_ID callbackID, DBID dbid);
 	
 	/**
-	从db获取信息创建一个entity
+	Create an entity by obtaining information from db
 	*/
 	void createEntityRemotelyFromDBID(const char* entityType, DBID dbid, COMPONENT_ID createToComponentID, 
 		PyObject* pyCallback, const std::string& dbInterfaceName);
 
-	/** 网络接口
-	createEntityRemotelyFromDBID的回调。
+	/** Network interface
+	createEntityRemotelyFromDBID callback
 	*/
-	// 从数据库来的回调
+	// Callback from the database
 	void onCreateEntityRemotelyFromDBIDCallback(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	// 请求在这个进程上创建这个entity
+	// Request to create an entity on this process
 	void createEntityRemotelyFromDBIDOtherBaseapp(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	// 创建完毕后的回调
+	// Callback after creation
 	void onCreateEntityRemotelyFromDBIDOtherBaseappCallback(Network::Channel* pChannel, COMPONENT_ID createByBaseappID,
 		std::string entityType, ENTITY_ID createdEntityID, CALLBACK_ID callbackID, DBID dbid);
 
 	/** 
-		为一个baseEntity在指定的cell上创建一个cellEntity 
+		Create a cellEntity on a specified cell for a baseEntity
 	*/
 	void createCellEntity(EntityCallAbstract* createToCellEntityCall, Entity* pEntity);
 	
-	/** 网络接口
-		createCellEntity失败的回调。
+	/** Network interface
+		createCellEntity failed callback
 	*/
 	void onCreateCellFailure(Network::Channel* pChannel, ENTITY_ID entityID);
 
-	/** 网络接口
-		createCellEntity的cell实体创建成功回调。
+	/** Network interface
+		createCellEntity cell entity created successfully callback
 	*/
 	void onEntityGetCell(Network::Channel* pChannel, ENTITY_ID id, COMPONENT_ID componentID, SPACE_ID spaceID);
 
 	/** 
-		通知客户端创建一个proxy对应的实体 
+		Notifies the client to create a proxy-corresponding entity 
 	*/
 	bool createClientProxies(Proxy* pEntity, bool reload = false);
 
 	/** 
-		向dbmgr请求执行一个数据库命令
+		Execute a database command to the DBMGR request
 	*/
 	static PyObject* __py_executeRawDatabaseCommand(PyObject* self, PyObject* args);
 	void executeRawDatabaseCommand(const char* datas, uint32 size, PyObject* pycallback, ENTITY_ID eid, const std::string& dbInterfaceName);
 	void onExecuteRawDatabaseCommandCB(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	/** 网络接口
-		dbmgr发送初始信息
-		startID: 初始分配ENTITY_ID 段起始位置
-		endID: 初始分配ENTITY_ID 段结束位置
-		startGlobalOrder: 全局启动顺序 包括各种不同组件
-		startGroupOrder: 组内启动顺序， 比如在所有baseapp中第几个启动。
-		machineGroupOrder: 在machine中真实的组顺序, 提供底层在某些时候判断是否为第一个baseapp时使用
+	/** Network interface
+		Dbmgr sends initial information
+		startID: Initial allocation of ENTITY_ID segment starting position
+		endID: Initial allocation of ENTITY_ID segment end position
+		startGlobalOrder: Global boot order includes various components
+		startGroupOrder: The order in which the groups are started, such as the first few in all Baseapp.
+		machineGroupOrder: The real group order in the machine, providing the underlying layer to at some point determine whether the first Baseapp is used
 	*/
 	void onDbmgrInitCompleted(Network::Channel* pChannel, 
 		GAME_TIME gametime, ENTITY_ID startID, ENTITY_ID endID, COMPONENT_ORDER startGlobalOrder, 
 		COMPONENT_ORDER startGroupOrder, const std::string& digest);
 
-	/** 网络接口
-		dbmgr广播global数据的改变
+	/** Network interface
+		Dbmgr broadcast global data changes
 	*/
 	void onBroadcastBaseAppDataChanged(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	/** 网络接口
-		注册将要登录的账号, 注册后则允许登录到此网关
+	/** Network interface
+		Register the account to be logged in. After registering, login to this Baseapp is allowed.
 	*/
 	void registerPendingLogin(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	/** 网络接口
-		新用户请求登录到网关上
+	/** Network interface
+		New user requests to login to this Baseapp
 	*/
 	void loginBaseapp(Network::Channel* pChannel, std::string& accountName, std::string& password);
 
 	/**
-		踢出一个Channel
+		Kick a channel
 	*/
 	void kickChannel(Network::Channel* pChannel, SERVER_ERROR_CODE failedcode);
 
-	/** 网络接口
-		重新登录 快速与网关建立交互关系(前提是之前已经登录了， 
-		之后断开在服务器判定该前端的Entity未超时销毁的前提下可以快速与服务器建立连接并达到操控该entity的目的)
+	/** Network interface
+		Re-login to quickly establish a connection with the Baseapp
+		(The premise is that before login, the reconnection can be quickly established on the
+		 premise that the Entity of the front end has not timed out and been destroyed and the
+		 server can reestablish control of the entity.)
 	*/
 	void reloginBaseapp(Network::Channel* pChannel, std::string& accountName, 
 		std::string& password, uint64 key, ENTITY_ID entityID);
 
 	/**
-	   登录失败
-	   @failedcode: 失败返回码 NETWORK_ERR_SRV_NO_READY:服务器没有准备好, 
-									NETWORK_ERR_ILLEGAL_LOGIN:非法登录, 
-									NETWORK_ERR_NAME_PASSWORD:用户名或者密码不正确
+	   Login failed
+	   @failedcode:	NETWORK_ERR_SRV_NO_READY: The server is not ready
+					NETWORK_ERR_ILLEGAL_LOGIN: Illegal login
+					NETWORK_ERR_NAME_PASSWORD: Incorrect username or password
 	*/
 	void loginBaseappFailed(Network::Channel* pChannel, std::string& accountName, 
 		SERVER_ERROR_CODE failedcode, bool relogin = false);
 
-	/** 网络接口
-		从dbmgr获取到账号Entity信息
+	/** Network interface
+		Get account entity information from Dbmgr
 	*/
 	void onQueryAccountCBFromDbmgr(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 	
 	/**
-		客户端自身进入世界了
+		The client itself has entered the world.
 	*/
 	void onClientEntityEnterWorld(Proxy* pEntity, COMPONENT_ID componentID);
 
-	/** 网络接口
-		entity收到远程call请求, 由某个app上的entityCall发起(只限与服务器内部使用， 客户端的entitycall调用方法走
-		onRemoteCellMethodCallFromClient)
+	/** Network interface
+		The entity receives a remote call request, initiated by an entityCall on the app.
+		(only used internally by the server, the client's entitycall method calls onRemoteCellMethodCallFromClient)
 	*/
 	void onEntityCall(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 	
-	/** 网络接口
-		client访问entity的cell方法
+	/** Network interface
+		Client calls Entity's Cell method
 	*/
 	void onRemoteCallCellMethodFromClient(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	/** 网络接口
-		client更新数据
+	/** Network interface
+		Client updates data
 	*/
 	void onUpdateDataFromClient(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 	void onUpdateDataFromClientForControlledEntity(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
 
-	/** 网络接口
-		cellapp备份entity的cell数据
+	/** Network interface
+		cellapp backs up entity cell data
 	*/
 	void onBackupEntityCellData(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	/** 网络接口
-		cellapp writeToDB完成
+	/** Network interface
+		cellapp writeToDB complete
 	*/
 	void onCellWriteToDBCompleted(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	/** 网络接口
-		cellapp转发entity消息给client
+	/** Network interface
+		cellapp forwards entity message to client
 	*/
 	void forwardMessageToClientFromCellapp(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	/** 网络接口
-		cellapp转发entity消息给某个baseEntity的cellEntity
+	/** Network interface
+		Cellapp forwards the entity message to the cellEntity of a baseEntity
 	*/
 	void forwardMessageToCellappFromCellapp(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 	
 	/**
-		获取游戏时间
+		Get game time
 	*/
 	static PyObject* __py_gametime(PyObject* self, PyObject* args);
 
-	/** 网络接口
-		写entity到db回调
+	/** Network interface
+		Write entity to DB callback
 	*/
 	void onWriteToDBCallback(Network::Channel* pChannel, ENTITY_ID eid, DBID entityDBID, 
 		uint16 dbInterfaceIndex, CALLBACK_ID callbackID, bool success);
 
 	/**
-		增加proxices计数
+		Increase proxies count
 	*/
-	void incProxicesCount() { ++numProxices_; }
+	void incProxiesCount() { ++numProxies_; }
 
 	/**
-		减少proxices计数
+		Decrease proxies count
 	*/
-	void decProxicesCount() { --numProxices_; }
+	void decProxiesCount() { --numProxies_; }
 
 	/**
-		获得proxices计数
+		get proxies count
 	*/
-	int32 numProxices() const { return numProxices_; }
+	int32 numProxies() const { return numProxies_; }
 
 	/**
-		获得numClients计数
+		get numClients count
 	*/
 	int32 numClients() { return this->networkInterface().numExtChannels(); }
 	
 	/** 
-		请求充值
+		Request recharge
 	*/
 	static PyObject* __py_charge(PyObject* self, PyObject* args);
 	void charge(std::string chargeID, DBID dbid, const std::string& datas, PyObject* pycallback);
@@ -416,14 +415,14 @@ public:
 		const std::string& scriptVerInfo, 
 		const std::string& encryptedKey);
 
-	// 引擎版本不匹配
+	// Engine version does not match
 	virtual void onVersionNotMatch(Network::Channel* pChannel);
 
-	// 引擎脚本层版本不匹配
+	// Engine script layer version does not match
 	virtual void onScriptVersionNotMatch(Network::Channel* pChannel);
 
-	/** 网络接口
-		请求在其他APP灾难恢复返回结果
+	/** Network interface
+		Request return results from other app (disaster recovery)
 	*/
 	void onRequestRestoreCB(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
@@ -432,22 +431,22 @@ public:
 	*/
 	void onRestoreEntitiesOver(RestoreEntityHandler* pRestoreEntityHandler);
 
-	/** 网络接口
+	/** Network interface
 		某个baseapp上的space恢复了cell， 判断当前baseapp是否有相关entity需要恢复cell
 	*/
 	void onRestoreSpaceCellFromOtherBaseapp(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	/** 网络接口
+	/** Network interface
 		某个app请求查看该app
 	*/
 	virtual void lookApp(Network::Channel* pChannel);
 
-	/** 网络接口
+	/** Network interface
 		客户端协议导出
 	*/
 	void importClientMessages(Network::Channel* pChannel);
 
-	/** 网络接口
+	/** Network interface
 		客户端entitydef导出
 	*/
 	void importClientEntityDef(Network::Channel* pChannel);
@@ -476,7 +475,7 @@ public:
 	*/
 	static PyObject* __py_deleteEntityByDBID(PyObject* self, PyObject* args);
 
-	/** 网络接口
+	/** Network interface
 		通过dbid从数据库中删除一个实体的回调
 	*/
 	void deleteEntityByDBIDCB(Network::Channel* pChannel, KBEngine::MemoryStream& s);
@@ -488,29 +487,29 @@ public:
 	*/
 	static PyObject* __py_lookUpEntityByDBID(PyObject* self, PyObject* args);
 
-	/** 网络接口
+	/** Network interface
 		如果实体在线回调返回baseentitycall，如果实体不在线则回调返回true，其他任何原因都返回false.
 	*/
 	void lookUpEntityByDBIDCB(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	/** 网络接口
+	/** Network interface
 		请求绑定email
 	*/
 	void reqAccountBindEmail(Network::Channel* pChannel, ENTITY_ID entityID, std::string& password, std::string& email);
 
-	/** 网络接口
+	/** Network interface
 		请求绑定email, dbmgr返回结果
 	*/
 	void onReqAccountBindEmailCBFromDBMgr(Network::Channel* pChannel, ENTITY_ID entityID, std::string& accountName, std::string& email,
 		SERVER_ERROR_CODE failedcode, std::string& code);
 
-	/** 网络接口
+	/** Network interface
 		请求绑定email, baseappmgr返回需要找到loginapp的地址
 	*/
 	void onReqAccountBindEmailCBFromBaseappmgr(Network::Channel* pChannel, ENTITY_ID entityID, std::string& accountName, std::string& email,
 		SERVER_ERROR_CODE failedcode, std::string& code, std::string& loginappCBHost, uint16 loginappCBPort);
 
-	/** 网络接口
+	/** Network interface
 		请求绑定email
 	*/
 	void reqAccountNewPassword(Network::Channel* pChannel, ENTITY_ID entityID, std::string& oldpassworld, std::string& newpassword);
@@ -538,7 +537,7 @@ protected:
 	KBEShared_ptr< Backuper >								pBackuper_;	
 	KBEShared_ptr< Archiver >								pArchiver_;	
 
-	int32													numProxices_;
+	int32													numProxies_;
 
 	TelnetServer*											pTelnetServer_;
 

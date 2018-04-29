@@ -120,7 +120,7 @@ public:
 				COMPONENT_ID cid;
 				int8 istate = 0;
 				ArraySize entitySize = 0, cellSize = 0;
-				int32 clientsSize = 0, proxicesSize = 0;
+				int32 clientsSize = 0, proxiesSize = 0;
 				uint32 telnet_port = 0;
 
 				Network::TCPPacket packet;
@@ -134,7 +134,7 @@ public:
 
 				if(_componentType == BASEAPP_TYPE)
 				{
-					recvsize += sizeof(entitySize) + sizeof(clientsSize) + sizeof(proxicesSize) + sizeof(telnet_port);
+					recvsize += sizeof(entitySize) + sizeof(clientsSize) + sizeof(proxiesSize) + sizeof(telnet_port);
 				}
 
 				int len = epListen.recv(packet.data(), recvsize);
@@ -160,7 +160,7 @@ public:
 
 				if(ctype == BASEAPP_TYPE)
 				{
-					packet >> entitySize >> clientsSize >> proxicesSize >> telnet_port;
+					packet >> entitySize >> clientsSize >> proxiesSize >> telnet_port;
 				}
 
 				if(ctype != _componentType || cid != _cid)
@@ -191,7 +191,7 @@ public:
 				{
 					extradata = entitySize;
 					extradata1 = clientsSize;
-					extradata2 = proxicesSize;
+					extradata2 = proxiesSize;
 					extradata3 = telnet_port;
 				}
 			}
