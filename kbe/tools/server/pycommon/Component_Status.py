@@ -57,7 +57,7 @@ class ComponentStatus(ServerApp.ServerApp):
 		
 	def onComponentStatusMsg(self, streamReader):
 		if self.componentType == 3:
-			_d = {"componentID" : [], "load" : [], "numBases" : [], "numEntities" : [], "numProxices":[], "flags":[]}
+			_d = {"componentID" : [], "load" : [], "numBases" : [], "numEntities" : [], "numProxies":[], "flags":[]}
 			while not streamReader.EOF():
 				x1 = streamReader.readUint64()
 				x2 = streamReader.readFloat()
@@ -69,7 +69,7 @@ class ComponentStatus(ServerApp.ServerApp):
 				_d["load"].append(x2)
 				_d["numBases"].append(x3)
 				_d["numEntities"].append(x4)
-				_d["numProxices"].append(x5)
+				_d["numProxies"].append(x5)
 				_d["flags"].append(x6)
 			self.CSData = _d
 		else:

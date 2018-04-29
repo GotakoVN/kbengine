@@ -427,32 +427,32 @@ public:
 	void onRequestRestoreCB(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
 	/**
-		一个cell的entity都恢复完毕
+		A cell entity is restored
 	*/
 	void onRestoreEntitiesOver(RestoreEntityHandler* pRestoreEntityHandler);
 
 	/** Network interface
-		某个baseapp上的space恢复了cell， 判断当前baseapp是否有相关entity需要恢复cell
+		Space restored from Baseapp, determines whether the current baseapp has related entities and needs to restore their cells
 	*/
 	void onRestoreSpaceCellFromOtherBaseapp(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
 	/** Network interface
-		某个app请求查看该app
+		Another app requested to view this app
 	*/
 	virtual void lookApp(Network::Channel* pChannel);
 
 	/** Network interface
-		客户端协议导出
+		Client-side protocol export
 	*/
 	void importClientMessages(Network::Channel* pChannel);
 
 	/** Network interface
-		客户端entitydef导出
+		Client EntityDef export
 	*/
 	void importClientEntityDef(Network::Channel* pChannel);
 
 	/**
-		重新导入所有的脚本
+		Re-import all scripts
 	*/
 	static PyObject* __py_reloadScript(PyObject* self, PyObject* args);
 	virtual void reloadScript(bool fullReload);

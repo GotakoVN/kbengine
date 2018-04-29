@@ -96,7 +96,7 @@ class ClusterQueryHandler(ClusterControllerHandler):
 		numBases = 0
 		numEntities = 0
 		numClients = 0
-		numProxices = 0
+		numProxies = 0
 		numCells = 0
 		numComponent = 0
 		
@@ -114,13 +114,13 @@ class ClusterQueryHandler(ClusterControllerHandler):
 			print("      proc\t\tcid\t\tuid\tpid\tgid\t%CPU\t%MEM\tusedMem\textra1\t\textra2\t\textra3")
 			for info in infos:
 				if info.componentType == BASEAPP_TYPE:
-					print("|-%12s\t%i\t%i\t%i\t%i\t%.2f\t%.2f\t%.2fm\tbases=%i\t\tclients=%i\tproxices=%i" % \
+					print("|-%12s\t%i\t%i\t%i\t%i\t%.2f\t%.2f\t%.2fm\tbases=%i\t\tclients=%i\tproxies=%i" % \
 					((info.componentName + ("%.2i" % info.groupOrderID)), info.componentID, info.uid, info.pid, info.globalOrderID, 
 					 info.cpu, info.mem, info.usedmem / 1024.0 / 1024.0, info.extradata, info.extradata1, info.extradata2))
 
 					numBases += info.extradata
 					numClients += info.extradata1
-					numProxices += info.extradata2
+					numProxies += info.extradata2
 		
 				elif info.componentType == CELLAPP_TYPE:
 					print("|-%12s\t%i\t%i\t%i\t%i\t%.2f\t%.2f\t%.2fm\tentities=%i\tcells=%i\t\t%i" % \
@@ -140,8 +140,8 @@ class ClusterQueryHandler(ClusterControllerHandler):
 					
 			
 		print('-----------------------------------------------------')
-		print("machines: %i, components=%i, numBases=%i, numProxices=%i, numClients=%i, numEntities=%i, numCells=%i." % \
-			(len(self.interfaces_groups), numComponent, numBases, numProxices, numClients, numEntities, numCells))
+		print("machines: %i, components=%i, numBases=%i, numProxies=%i, numClients=%i, numEntities=%i, numCells=%i." % \
+			(len(self.interfaces_groups), numComponent, numBases, numProxies, numClients, numEntities, numCells))
 		
 class ClusterStartHandler(ClusterControllerHandler):
 	def __init__(self, uid, startTemplate, machineIP, cid, gus, kbe_root, kbe_res_path, kbe_bin_path):
