@@ -38,7 +38,7 @@ along with KBEngine.  If not, see <http://www.gnu.org/licenses/>.
 namespace KBEngine{
 
 /**
-	Entity消息宏，  参数为流， 需要自己解开
+	Entity message macro, parameter is stream, need to unpack
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef ENTITY_MESSAGE_HANDLER_STREAM
@@ -101,7 +101,7 @@ namespace KBEngine{
 																				\
 
 /**
-	Entity消息宏，  只有一个参数的消息
+	Entity message macro, 1 parameter message
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef ENTITY_MESSAGE_HANDLER_ARGS1
@@ -166,7 +166,7 @@ namespace KBEngine{
 																				\
 
 /**
-	Entity消息宏，  只有二个参数的消息
+	Entity message macro, 2 parameter message
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef ENTITY_MESSAGE_HANDLER_ARGS2
@@ -240,7 +240,7 @@ namespace KBEngine{
 
 
 /**
-	Entity消息宏，  只有零个参数的消息
+	Entity message macro, 0 parameter message
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef ENTITY_MESSAGE_HANDLER_ARGS0
@@ -304,7 +304,7 @@ namespace KBEngine{
 
 
 /**
-	Entity消息宏，  只有三个参数的消息
+	Entity message macro, 3 parameter message
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef ENTITY_MESSAGE_HANDLER_ARGS3
