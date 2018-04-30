@@ -140,8 +140,8 @@ void Cellapp::onShutdown(bool first)
 		}
 	}
 
-	// 如果count等于perSecsDestroyEntitySize说明上面已经没有可处理的东西了
-	// 剩下的应该都是space，可以开始销毁了
+	// If count equals perSecsDestroyEntitySize, there's nothing left to deal with.
+	// All that's left is space, so you can start destroying it.
 	if(count == g_serverConfig.getCellApp().perSecsDestroyEntitySize)
 		Spaces::finalise();
 }
@@ -167,7 +167,7 @@ bool Cellapp::installPyModules()
 	registerScript(Entity::getScriptType());
 	registerScript(EntityComponent::getScriptType());
 
-	// 将app标记注册到脚本
+	// Register APP flags with scripts
 	std::map<uint32, std::string> flagsmaps = createAppFlagsMaps();
 	std::map<uint32, std::string>::iterator fiter = flagsmaps.begin();
 	for (; fiter != flagsmaps.end(); ++fiter)
@@ -178,7 +178,7 @@ bool Cellapp::installPyModules()
 		}
 	}
 
-	// 注册创建entity的方法到py
+	// Register the method to create entity to py
 	APPEND_SCRIPT_MODULE_METHOD(getScript().getModule(),		time,							__py_gametime,											METH_VARARGS,			0);
 	APPEND_SCRIPT_MODULE_METHOD(getScript().getModule(),		createEntity,					__py_createEntity,										METH_VARARGS,			0);
 	APPEND_SCRIPT_MODULE_METHOD(getScript().getModule(), 		executeRawDatabaseCommand,		__py_executeRawDatabaseCommand,							METH_VARARGS,			0);
@@ -204,7 +204,7 @@ bool Cellapp::installPyModules()
 //-------------------------------------------------------------------------------------
 void Cellapp::onInstallPyModules()
 {
-	// 添加globalData, cellAppData支持
+	// Add globalData, cellAppData support
 	pCellAppData_ = new GlobalDataClient(DBMGR_TYPE, GlobalDataServer::CELLAPP_DATA);
 	registerPyObjectToScript("cellAppData", pCellAppData_);
 }
@@ -262,7 +262,7 @@ void Cellapp::handleGameTick()
 {
 	AUTO_SCOPED_PROFILE("gameTick");
 
-	// 一定要在最前面
+	// Must be done first
 	updateLoad();
 
 	EntityApp<Entity>::handleGameTick();
@@ -280,8 +280,8 @@ bool Cellapp::initializeBegin()
 //-------------------------------------------------------------------------------------
 bool Cellapp::initializeEnd()
 {
-	// 如果需要pyprofile则在此处安装
-	// 结束时卸载并输出结果
+	// If pyprofile is needed then install it here
+	// Unload and output results at the end
 	if(g_kbeSrvConfig.getCellApp().profiles.open_pyprofile)
 	{
 		script::PyProfile::start("kbengine");
@@ -289,7 +289,7 @@ bool Cellapp::initializeEnd()
 
 	pWitnessedTimeoutHandler_ = new WitnessedTimeoutHandler();
 
-	// 是否管理Y轴
+	// Whether to manage the Y-axis
 	CoordinateSystem::hasY = g_kbeSrvConfig.getCellApp().coordinateSystem_hasY;
 
 	dispatcher_.clearSpareTime();
@@ -483,7 +483,7 @@ PyObject* Cellapp::__py_createEntity(PyObject* self, PyObject* args)
 		return 0;
 	}
 	
-	// 创建entity
+	// Create entity
 	Entity* pEntity = Cellapp::getSingleton().createEntity(entityType, params, false, 0);
 
 	if(pEntity != NULL)
@@ -495,11 +495,11 @@ PyObject* Cellapp::__py_createEntity(PyObject* self, PyObject* args)
 		pEntity->pySetDirection(direction);	
 		pEntity->initializeScript();
 
-		// 添加到space
+		// Add to space
 		space->addEntityAndEnterWorld(pEntity);
 
-		// 有可能在addEntityAndEnterWorld中被销毁了
-		// 这里需要让实体返回给脚本，只不过实体为isDestroyed = true状态
+		// It may be destroyed in addEntityAndEnterWorld
+		// This requires that the entity be returned to the script, except that the entity is isdestroyed = True state
 		//if(pEntity->isDestroyed())
 		//{
 		//	Py_DECREF(pEntity);
@@ -781,16 +781,16 @@ void Cellapp::onDbmgrInitCompleted(Network::Channel* pChannel,
 {
 	EntityApp<Entity>::onDbmgrInitCompleted(pChannel, gametime, startID, endID, startGlobalOrder, startGroupOrder, digest);
 	
-	// 再次同步自己的新信息(startGlobalOrder, startGroupOrder等)到machine
+	// Synchronize your new information (startGlobalOrder, startGroupOrder, etc.) again to the machine
 	Components::getSingleton().broadcastSelf();
 
-	// 这里需要更新一下python的环境变量
+	// Here need to update python environment variables
 	this->getScript().setenv("KBE_BOOTIDX_GLOBAL", getenv("KBE_BOOTIDX_GLOBAL"));
 	this->getScript().setenv("KBE_BOOTIDX_GROUP", getenv("KBE_BOOTIDX_GROUP"));
 
 	SCOPED_PROFILE(SCRIPTCALL_PROFILE);
 
-	// 所有脚本都加载完毕
+	// All scripts are loaded
 	PyObject* pyResult = PyObject_CallMethod(getEntryScript().get(), 
 										const_cast<char*>("onInit"), 
 										const_cast<char*>("i"), 
@@ -832,7 +832,7 @@ void Cellapp::onBroadcastCellAppDataChanged(Network::Channel* pChannel, KBEngine
 		{
 			SCOPED_PROFILE(SCRIPTCALL_PROFILE);
 
-			// 通知脚本
+			// Notify script
 			SCRIPT_OBJECT_CALL_ARGS1(getEntryScript().get(), const_cast<char*>("onCellAppDataDel"), 
 				const_cast<char*>("O"), pyKey, false);
 		}
@@ -852,7 +852,7 @@ void Cellapp::onBroadcastCellAppDataChanged(Network::Channel* pChannel, KBEngine
 		{
 			SCOPED_PROFILE(SCRIPTCALL_PROFILE);
 
-			// 通知脚本
+			// Notify script
 			SCRIPT_OBJECT_CALL_ARGS2(getEntryScript().get(), const_cast<char*>("onCellAppData"), 
 				const_cast<char*>("OO"), pyKey, pyValue, false);
 		}
@@ -884,7 +884,7 @@ void Cellapp::onCreateCellEntityInNewSpaceFromBaseapp(Network::Channel* pChannel
 	Space* space = Spaces::createNewSpace(spaceID, entityType);
 	if(space != NULL)
 	{
-		// 创建entity
+		// Create entity
 		Entity* e = createEntity(entityType.c_str(), NULL, false, entitycallEntityID, false);
 		
 		if(e == NULL)
@@ -893,7 +893,7 @@ void Cellapp::onCreateCellEntityInNewSpaceFromBaseapp(Network::Channel* pChannel
 
 			ERROR_MSG("Cellapp::onCreateCellEntityInNewSpaceFromBaseapp: createEntity error!\n");
 
-			/* 目前来说除非内存或者系统问题，否则不会出现这个错误
+			/* Currently, this error does not occur unless there is a memory or system problem.
 			Network::Bundle* pBundle = Network::Bundle::createPoolObject();
 			pBundle->newMessage(BaseappInterface::onCreateCellFailure);
 			BaseappInterface::onCreateCellFailureArgs1::staticAddToBundle(*pBundle, entitycallEntityID);
@@ -904,7 +904,7 @@ void Cellapp::onCreateCellEntityInNewSpaceFromBaseapp(Network::Channel* pChannel
 
 		PyObject* cellData = e->createCellDataFromStream(&s);
 
-		// 设置entity的baseEntityCall
+		// Set entity's baseEntityCall
 		EntityCall* entityCall = new EntityCall(e->pScriptModule(), NULL, componentID, entitycallEntityID, ENTITYCALL_TYPE_BASE);
 		e->baseEntityCall(entityCall);
 		
@@ -915,14 +915,14 @@ void Cellapp::onCreateCellEntityInNewSpaceFromBaseapp(Network::Channel* pChannel
 			KBE_ASSERT(clientEntityCall != Py_None);
 
 			EntityCall* client = static_cast<EntityCall*>(clientEntityCall);
-			// Py_INCREF(clientEntityCall); 这里不需要增加引用， 因为每次都会产生一个新的对象
+			// Py_INCREF(clientEntityCall); There is no need to add a reference here because a new object will be created each time
 
-			// 为了能够让entity.__init__中能够修改属性立刻能广播到客户端我们需要提前设置这些
+			// In order to enable the entity.__init__ to be able to modify attributes immediately broadcast to the client we need to set these in advance
 			e->clientEntityCall(client);
 			e->setWitness(Witness::createPoolObject());
 		}
 
-		// 此处baseapp可能还有没初始化过来， 所以有一定概率是为None的
+		// Baseapp may not be initialized here, so it's possible that it is None
 		Components::ComponentInfos* cinfos = Components::getSingleton().findComponent(BASEAPP_TYPE, componentID);
 		if(cinfos == NULL || cinfos->pChannel == NULL)
 		{
@@ -946,7 +946,7 @@ void Cellapp::onCreateCellEntityInNewSpaceFromBaseapp(Network::Channel* pChannel
 		e->initializeEntity(cellData);
 		Py_XDECREF(cellData);
 
-		// 添加到space
+		// Add to space
 		space->addEntityToNode(e);
 
 		if (hasClient)
@@ -991,7 +991,7 @@ void Cellapp::onRestoreSpaceInCellFromBaseapp(Network::Channel* pChannel, KBEngi
 	Space* space = Spaces::createNewSpace(spaceID, entityType);
 	if(space != NULL)
 	{
-		// 创建entity
+		// Create entity
 		Entity* e = createEntity(entityType.c_str(), NULL, false, entitycallEntityID, false);
 		
 		if(e == NULL)
@@ -1002,7 +1002,7 @@ void Cellapp::onRestoreSpaceInCellFromBaseapp(Network::Channel* pChannel, KBEngi
 
 		PyObject* cellData = e->createCellDataFromStream(&s);
 
-		// 设置entity的baseEntityCall
+		// Set entity's baseEntityCall
 		EntityCall* entityCall = new EntityCall(e->pScriptModule(), NULL, componentID, entitycallEntityID, ENTITYCALL_TYPE_BASE);
 		e->baseEntityCall(entityCall);
 		
@@ -1013,14 +1013,14 @@ void Cellapp::onRestoreSpaceInCellFromBaseapp(Network::Channel* pChannel, KBEngi
 			KBE_ASSERT(clientEntityCall != Py_None);
 
 			EntityCall* client = static_cast<EntityCall*>(clientEntityCall);
-			// Py_INCREF(clientEntityCall); 这里不需要增加引用， 因为每次都会产生一个新的对象
+			// Py_INCREF(clientEntityCall); There is no need to add a reference here because a new object will be created each time
 
-			// 为了能够让entity.__init__中能够修改属性立刻能广播到客户端我们需要提前设置这些
+			// In order to enable the entity.__init__ to be able to modify attributes immediately broadcast to the client we need to set these in advance
 			e->clientEntityCall(client);
 			e->setWitness(Witness::createPoolObject());
 		}
 
-		// 此处baseapp可能还有没初始化过来， 所以有一定概率是为None的
+		// Baseapp may not be initialized here, so it's possible that it is None
 		Components::ComponentInfos* cinfos = Components::getSingleton().findComponent(BASEAPP_TYPE, componentID);
 		if(cinfos == NULL || cinfos->pChannel == NULL)
 		{
@@ -1043,7 +1043,7 @@ void Cellapp::onRestoreSpaceInCellFromBaseapp(Network::Channel* pChannel, KBEngi
 		e->createNamespace(cellData);
 		Py_XDECREF(cellData);
 
-		// 添加到space
+		// Add to space
 		e->onRestore();
 
 		space->addEntityAndEnterWorld(e, true);
@@ -1094,7 +1094,7 @@ void Cellapp::onCreateCellEntityFromBaseapp(Network::Channel* pChannel, KBEngine
 	s >> hasClient;
 	s >> inRescore;
 
-	// 此处baseapp可能还有没初始化过来， 所以有一定概率是为None的
+	// Baseapp may not be initialized here, so it's possible that it is None
 	Components::ComponentInfos* cinfos = Components::getSingleton().findComponent(BASEAPP_TYPE, componentID);
 	if(cinfos == NULL || cinfos->pChannel == NULL)
 	{
@@ -1127,14 +1127,14 @@ void Cellapp::_onCreateCellEntityFromBaseapp(std::string& entityType, ENTITY_ID 
 											MemoryStream* pCellData, bool hasClient, bool inRescore, COMPONENT_ID componentID, 
 											SPACE_ID spaceID)
 {
-	// 注意：此处理论不会找不到组件， 因为onCreateCellEntityFromBaseapp中已经进行过一次消息缓存判断
+	// Note: If it can't find the component, it's because a message caching decision has been made in onCreateCellEntityFromBaseapp
 	Components::ComponentInfos* cinfos = Components::getSingleton().findComponent(BASEAPP_TYPE, componentID);
 	KBE_ASSERT(cinfos != NULL && cinfos->pChannel != NULL);
 
 	Entity* pCreateToEntity = pEntities_->find(createToEntityID);
 
-	// 可能spaceEntity已经销毁了， 但还未来得及通知到baseapp时
-	// base部分在向这个space创建entity
+	// It is possible that the spaceEntity has been destroyed, but it has not yet been notified to the baseapp
+	// Base section creates entity to this space
 	if(pCreateToEntity == NULL)
 	{
 		ERROR_MSG("Cellapp::_onCreateCellEntityFromBaseapp: not fount spaceEntity. may have been destroyed!\n");
@@ -1154,16 +1154,16 @@ void Cellapp::_onCreateCellEntityFromBaseapp(std::string& entityType, ENTITY_ID 
 	Space* space = Spaces::findSpace(spaceID);
 	if(space != NULL && space->isGood())
 	{
-		// 告知baseapp， entity的cell创建了
+		// Tell baseapp that the cell of the entity was created
 		Network::Bundle* pBundle = Network::Bundle::createPoolObject();
 		pBundle->newMessage(BaseappInterface::onEntityGetCell);
 		BaseappInterface::onEntityGetCellArgs3::staticAddToBundle(*pBundle, entityID, componentID_, spaceID);
 		cinfos->pChannel->send(pBundle);
 
-		// 解包cellData信息.
+		// Unpack cellData information.
 		PyObject* cellData = NULL;
 	
-		// 创建entity
+		// Create entity
 		Entity* e = createEntity(entityType.c_str(), cellData, false, entityID, false);
 		
 		if(e == NULL)
@@ -1172,7 +1172,7 @@ void Cellapp::_onCreateCellEntityFromBaseapp(std::string& entityType, ENTITY_ID 
 			return;
 		}
 
-		// 设置entity的baseEntityCall
+		// Set entity's baseEntityCall
 		EntityCall* entityCall = new EntityCall(e->pScriptModule(), NULL, componentID, entityID, ENTITYCALL_TYPE_BASE);
 		e->baseEntityCall(entityCall);
 		
@@ -1187,9 +1187,9 @@ void Cellapp::_onCreateCellEntityFromBaseapp(std::string& entityType, ENTITY_ID 
 			KBE_ASSERT(clientEntityCall != Py_None);
 
 			EntityCall* client = static_cast<EntityCall*>(clientEntityCall);	
-			// Py_INCREF(clientEntityCall); 这里不需要增加引用， 因为每次都会产生一个新的对象
+			// Py_INCREF(clientEntityCall); There is no need to add a reference here because a new object will be created each time
 
-			// 为了能够让entity.__init__中能够修改属性立刻能广播到客户端我们需要提前设置这些
+			// In order to enable the entity.__init__ to be able to modify attributes immediately broadcast to the client we need to set these in advance
 			e->clientEntityCall(client);
 			e->setWitness(Witness::createPoolObject());
 		}
@@ -1207,7 +1207,7 @@ void Cellapp::_onCreateCellEntityFromBaseapp(std::string& entityType, ENTITY_ID 
 
 		Py_XDECREF(cellData);
 		
-		// 这里增加一个引用， 因为可能在进入时被销毁
+		// Add a reference here because it may be destroyed on entry
 		Py_INCREF(e);
 
 		space->addEntityToNode(e);
@@ -1217,7 +1217,7 @@ void Cellapp::_onCreateCellEntityFromBaseapp(std::string& entityType, ENTITY_ID 
 		if(isDestroyed == true)
 			return;
 
-		// 如果是有client的entity则设置它的cliententitycall, baseapp部分的onEntityGetCell会告知客户端enterworld.
+		// If there is a client entity then set its clientEtityCall, baseapp onEntityGetCell will inform the client enterWorld.
 		if(hasClient)
 		{
 			e->onGetWitness();
@@ -1255,7 +1255,7 @@ void Cellapp::onEntityCall(Network::Channel* pChannel, KBEngine::MemoryStream& s
 	ENTITYCALL_TYPE calltype;
 	s >> calltype;
 
-	// 在本地区尝试查找该收件人信息， 看收件人是否属于本区域
+	// Try to find the recipient information in this cellapp to see if the entity is on this cellapp
 	Entity* entity = pEntities_->find(eid);
 	if(entity == NULL)
 	{
@@ -1282,7 +1282,7 @@ void Cellapp::onEntityCall(Network::Channel* pChannel, KBEngine::MemoryStream& s
 
 	switch(calltype)
 	{
-		// 本组件是cellapp，那么确认邮件的目的地是这里， 那么执行最终操作
+		// This component is cellapp, then confirm the mail destination is here, and perform the final operation
 		case ENTITYCALL_TYPE_CELL:	
 			{
 				if(!entity->isReal())
@@ -1378,7 +1378,8 @@ void Cellapp::onRemoteCallMethodFromClient(Network::Channel* pChannel, KBEngine:
 		return;
 	}
 
-	// 这个方法呼叫如果不是这个proxy自己的方法则必须呼叫的entity和proxy的cellEntity在一个space中。
+	// This method calls if it is not the proxy's own method, then the entity and
+	//  proxy's cellEntity must be called in a space.
 	try
 	{
 		e->onRemoteCallMethodFromClient(pChannel, srcEntityID, s);
@@ -1414,12 +1415,12 @@ void Cellapp::onUpdateDataFromClient(Network::Channel* pChannel, KBEngine::Memor
 		return;
 	}
 
-	// 如果是被系统控制了，又或被别人控制了，则忽略来自自己客户端的更新消息
+	// If it is controlled by the system, or is controlled by others, the update message from its own client is ignored
 	if (e->controlledBy() == NULL || e->controlledBy()->id() != srcEntityID)
 	{
-		// phw: 经测试发现，由于controlledBy改变时通知客户端存在一定的时间差，
-		//      所以客户端收到消息前仍然发送位移消息，这使得下面的错误日志变得有点多，
-		//      因此注释掉这个日志，以减少不必要的日志输出。
+		// phw: After testing, it was found that there is a certain time difference between the notification of the client due to controlledBy change.
+		// So before the client receives the message, it still sends a displacement message, which makes the following error log a bit more,
+		// So comment out this log to reduce unnecessary log output.
 		//ERROR_MSG(fmt::format("Cellapp::onUpdateDataFromClientForControlledEntity: entity {} has no permission to control entity {}!\n", proxiesEntityID, srcEntityID));
 
 		s.done();
@@ -1462,9 +1463,9 @@ void Cellapp::onUpdateDataFromClientForControlledEntity(Network::Channel* pChann
 
 	if (e->controlledBy() == NULL || e->controlledBy()->id() != proxiesEntityID)
 	{
-		// phw: 经测试发现，由于controlledBy改变时通知客户端存在一定的时间差，
-		//      所以客户端收到消息前仍然发送位移消息，这使得下面的错误日志变得有点多，
-		//      因此注释掉这个日志，以减少不必要的日志输出。
+		// phw: After testing, it was found that there is a certain time difference between the notification of the client due to controlledBy change.
+		// So before the client receives the message, it still sends a displacement message, which makes the following error log a bit more,
+		// So comment out this log to reduce unnecessary log output.
 		//ERROR_MSG(fmt::format("Cellapp::onUpdateDataFromClientForControlledEntity: entity {} has no permission to control entity {}!\n", proxiesEntityID, srcEntityID));
 		
 		s.done();
@@ -1613,7 +1614,7 @@ void Cellapp::forwardEntityMessageToCellappFromClient(Network::Channel* pChannel
 		return;
 	}
 
-	// 检查是否是entity消息， 否则不合法.
+	// Check if it is an entity message, otherwise it is illegal.
 	while(s.length() > 0 && !e->isDestroyed())
 	{
 		Network::MessageID currMsgID;
@@ -1655,7 +1656,7 @@ void Cellapp::forwardEntityMessageToCellappFromClient(Network::Channel* pChannel
 			return;
 		}
 
-		// 临时设置有效读取位， 防止接口中溢出操作
+		// Temporarily set valid read bits to prevent overflow operations in the interface
 		size_t wpos = s.wpos();
 		// size_t rpos = s.rpos();
 		size_t frpos = s.rpos() + currMsgLen;
@@ -1673,7 +1674,7 @@ void Cellapp::forwardEntityMessageToCellappFromClient(Network::Channel* pChannel
 			return;
 		}
 
-		// 防止handle中没有将数据导出获取非法操作
+		// Prevent handle from illegally manipulating exported data
 		if(currMsgLen > 0)
 		{
 			if(frpos != s.rpos())
@@ -1843,7 +1844,7 @@ void Cellapp::reqTeleportToCellApp(Network::Channel* pChannel, MemoryStream& s)
 		return;
 	}
 
-	// 创建entity
+	// Create entity
 	Entity* e = createEntity(EntityDef::findScriptModule(entityType)->getName(), NULL, false, teleportEntityID, false);
 	if (e == NULL)
 	{
@@ -1865,12 +1866,14 @@ void Cellapp::reqTeleportToCellApp(Network::Channel* pChannel, MemoryStream& s)
 	Py_INCREF(e);
 	e->createFromStream(s);
 
-	// 有可能序列化过来的ghost内容包含移动控制器，之所以序列化过来是为了
-	// 在传送失败时可以用于恢复现场, 那么传送成功了我们应该停止以前的移动行为
+	// It is possible that the serialized ghost content contains a move controller.
+	// It is serialized so that it can be used to restore the scene if the transmission fails.
+	// Then the transfer is successful. We should stop the previous move controller.
 	e->stopMove();
 
-	// 对于传送操作来说，实体传送过来就不会有ghost部分了
-	// 当前实体做出的任何改变不需要同步到原有cell，这可能会产生网络消息死循环
+	// For the transfer operation, the entity will not have a ghost part.
+	// Any changes made by the current entity do not need to be synchronized to the original cell.
+	// This may result in an endless loop of network messages.
 	//ghostCell = 0;
 	e->ghostCell(0);
 
@@ -1881,10 +1884,10 @@ void Cellapp::reqTeleportToCellApp(Network::Channel* pChannel, MemoryStream& s)
 	{
 		e->addFlags(ENTITY_FLAGS_TELEPORT_START);
 		
-		// 如果是有base的实体，需要将baseappID填入，以便在reqTeleportToCellAppCB中回调给baseapp传输结束状态
+		// If there is a base entity, you need to fill in the baseappID so you can callback to the baseapp in reqTeleportToCellAppCB.
 		entityBaseappID = e->baseEntityCall()->componentID();
 
-		// 向baseapp发送传送到达通知
+		// Send a delivery arrival notification to baseapp
 		Network::Bundle* pBundle = Network::Bundle::createPoolObject();
 		(*pBundle).newMessage(BaseappInterface::onMigrationCellappEnd);
 		(*pBundle) << e->id();
@@ -1892,7 +1895,7 @@ void Cellapp::reqTeleportToCellApp(Network::Channel* pChannel, MemoryStream& s)
 		e->baseEntityCall()->sendCall(pBundle);
 	}
 
-	// 进入新space之前必须通知客户端leaveSpace
+	// You must notify client leaveSpace before entering new space
 	if (e->clientEntityCall())
 	{
 		Network::Bundle* pSendBundle = Network::Bundle::createPoolObject();
@@ -1903,7 +1906,7 @@ void Cellapp::reqTeleportToCellApp(Network::Channel* pChannel, MemoryStream& s)
 		e->clientEntityCall()->sendCall(pSendBundle);
 	}
 
-	// 进入新的space中
+	// Enter the new space
 	space->addEntityAndEnterWorld(e);
 
 	Entity* nearbyMBRef = Cellapp::getSingleton().findEntity(nearbyMBRefID);
@@ -1932,22 +1935,23 @@ void Cellapp::reqTeleportToCellAppCB(Network::Channel* pChannel, MemoryStream& s
 
 	s >> sourceCellappID >> targetCellappID >> entityBaseappID >> teleportEntityID >> success;
 
-	// 正常情况下， 应该传送结果返回时传送前的实体应该在当前cell上， 如果到其他cellapp上了， 说明在此期间被迁移走了
-	// 此时被迁移很可能会有问题
+	// Under normal circumstances, the entity that was sent before the result should be returned should be on the current cell.
+	// If it is on other cellapps, it means that it was migrated during this period.
+	// It is likely to be a problem to be migrated at this time
 	if (sourceCellappID != g_componentID)
 	{
 		ERROR_MSG(fmt::format("Cellapp::reqTeleportToCellAppCB(): sourceCellappID={} != currCellappID={}, targetCellappID={}\n", 
 			sourceCellappID, g_componentID, targetCellappID));
 	}
 
-	// 传送成功，我们销毁这个entity
+	// Transmission is successful, we destroy this entity
 	if(success)
 	{
 		destroyEntity(teleportEntityID, false);
 		return;
 	}
 
-	// 实体可能没有base部分，那么不需要通知baseapp
+	// Entities may not have a base part, you do not need to notify Baseapp
 	if (entityBaseappID > 0)
 	{
 		Components::ComponentInfos* pInfos = Components::getSingleton().findComponent(entityBaseappID);
@@ -1966,7 +1970,7 @@ void Cellapp::reqTeleportToCellAppCB(Network::Channel* pChannel, MemoryStream& s
 		}
 	}
 
-	// 某些情况下实体可能此时找不到了，例如：副本销毁了
+	// In some cases the entity may not be found at this time, for example: Copy destroyed
 	Entity* entity = Cellapp::getSingleton().findEntity(teleportEntityID);
 	if(entity == NULL)
 	{
@@ -1977,7 +1981,7 @@ void Cellapp::reqTeleportToCellAppCB(Network::Channel* pChannel, MemoryStream& s
 		return;
 	}
 
-	// 传送失败了，我们需要重恢复entity
+	// Teleport failed, we need to restore the entity
 	ENTITY_ID nearbyMBRefID = 0;
 	Position3D pos;
 	Direction3D dir;
@@ -2006,7 +2010,7 @@ void Cellapp::reqTeleportToCellAppOver(Network::Channel* pChannel, MemoryStream&
 
 	s >> teleportEntityID;
 	
-	// 某些情况下实体可能此时找不到了，例如：副本销毁了
+	// In some cases, the entity may not be found at this time, for example: the copy is destroyed
 	Entity* entity = Cellapp::getSingleton().findEntity(teleportEntityID);
 	if(entity == NULL)
 	{
@@ -2172,7 +2176,7 @@ void Cellapp::setSpaceViewer(Network::Channel* pChannel, MemoryStream& s)
 	SPACE_ID spaceID;
 	s >> spaceID;
 
-	// 如果为0，则查看所有cell
+	// If 0, view all cells
 	CELL_ID cellID;
 	s >> cellID;
 
