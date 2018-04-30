@@ -60,13 +60,13 @@ public:
 	virtual bool initializeWatcher();
 
 	/**  
-		相关处理接口 
+		Related processing interface
 	*/
 	virtual void handleTimeout(TimerHandle handle, void * arg);
 	virtual void handleGameTick();
 
 	/**  
-		初始化相关接口 
+		Initialize related interfaces
 	*/
 	bool initializeBegin();
 	bool initializeEnd();
@@ -80,9 +80,9 @@ public:
 	float _getLoad() const { return getLoad(); }
 	virtual void onUpdateLoad();
 
-	/**  网络接口
-		dbmgr告知已经启动的其他baseapp或者cellapp的地址
-		当前app需要主动的去与他们建立连接
+	/**  Network interface
+		Dbmgr tells the address of other baseapp or cellapp that has been started
+		Current app needs to actively establish a connection with them
 	*/
 	virtual void onGetEntityAppFromDbmgr(Network::Channel* pChannel, 
 							int32 uid, 
@@ -91,120 +91,122 @@ public:
 							uint32 intaddr, uint16 intport, uint32 extaddr, uint16 extport, std::string& extaddrEx);
 
 	/**  
-		创建一个entity 
+		Create an entity
 	*/
 	static PyObject* __py_createEntity(PyObject* self, PyObject* args);
 
 	/** 
-		想dbmgr请求执行一个数据库命令
+		Dbmgr request to execute a database command
 	*/
 	static PyObject* __py_executeRawDatabaseCommand(PyObject* self, PyObject* args);
 	void executeRawDatabaseCommand(const char* datas, uint32 size, PyObject* pycallback, ENTITY_ID eid, const std::string& dbInterfaceName);
 	void onExecuteRawDatabaseCommandCB(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	/** 网络接口
-		dbmgr发送初始信息
-		startID: 初始分配ENTITY_ID 段起始位置
-		endID: 初始分配ENTITY_ID 段结束位置
-		startGlobalOrder: 全局启动顺序 包括各种不同组件
-		startGroupOrder: 组内启动顺序， 比如在所有baseapp中第几个启动。
-		machineGroupOrder: 在machine中真实的组顺序, 提供底层在某些时候判断是否为第一个cellapp时使用
+	/** Network interface
+		Dbmgr Send initial information
+		startID: Initial allocation of ENTITY_ID segment start position
+		endID: Initial allocation of ENTITY_ID segment end position
+		startGlobalOrder: The global startup sequence includes a variety of different components
+		startGroupOrder: The start order within the group, such as the first few start in all baseapps.
+		machineGroupOrder: The actual group order in the machine, which provides the 
+							bottom layer to use when determining if it is the first cellapp at some point
 	*/
 	void onDbmgrInitCompleted(Network::Channel* pChannel, GAME_TIME gametime, 
 		ENTITY_ID startID, ENTITY_ID endID, COMPONENT_ORDER startGlobalOrder, COMPONENT_ORDER startGroupOrder, 
 		const std::string& digest);
 
-	/** 网络接口
-		dbmgr广播global数据的改变
+	/** Network interface
+		Dbmgr broadcast global data changes
 	*/
 	void onBroadcastCellAppDataChanged(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	/** 网络接口
-		baseEntity请求创建在一个新的space中
+	/** Network interface
+		baseEntity request created in a new space
 	*/
 	void onCreateCellEntityInNewSpaceFromBaseapp(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	/** 网络接口
-		baseEntity请求创建在一个新的space中
+	/** Network interface
+		baseEntity request created in a new space
 	*/
 	void onRestoreSpaceInCellFromBaseapp(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 	
-	/** 网络接口
-	工具请求改变space查看器（含添加和删除功能）
-	如果是请求更新并且服务器上不存在该地址的查看器则自动创建，如果是删除则明确给出删除要求
+	/** Network interface
+	Tool request to change the space viewer (including add and delete functions)
+	If the viewer is requesting an update and the address does not exist on the server,
+	 it is automatically created. If it is deleted, the delete request is explicitly given.
 	*/
 	void setSpaceViewer(Network::Channel* pChannel, MemoryStream& s);
 
-	/** 网络接口
-		其他APP请求在此灾难恢复
+	/** Network interface
+		Other APP requests in this disaster recovery
 	*/
 	void requestRestore(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	/** 网络接口
-		baseapp请求在这个cellapp上创建一个entity
+	/** Network interface
+		Baseapp requests to create an entity on this cellapp
 	*/
 	void onCreateCellEntityFromBaseapp(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 	void _onCreateCellEntityFromBaseapp(std::string& entityType, ENTITY_ID createToEntityID, ENTITY_ID entityID, 
 		MemoryStream* pCellData, bool hasClient, bool inRescore, COMPONENT_ID componentID, SPACE_ID spaceID);
 
-	/** 网络接口
-		销毁某个cellEntity
+	/** Network interface
+		Destroy a cellEntity
 	*/
 	void onDestroyCellEntityFromBaseapp(Network::Channel* pChannel, ENTITY_ID eid);
 
-	/** 网络接口
-		entity收到远程call请求, 由某个app上的entitycall发起
+	/** Network interface
+		The entity receives a remote call request initiated by an entitycall on an app
 	*/
 	void onEntityCall(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 	
-	/** 网络接口
-		client访问entity的cell方法由baseapp转发
+	/** Network interface
+		The client accesses a cell method, forwarded by the baseapp
 	*/
 	void onRemoteCallMethodFromClient(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	/** 网络接口
-		client更新数据
+	/** Network interface
+		Client update data
 	*/
 	void onUpdateDataFromClient(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 	void onUpdateDataFromClientForControlledEntity(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	/** 网络接口
-		real请求更新属性到ghost
+	/** Network interface
+		Real entity requests to update attributes to ghost
 	*/
 	void onUpdateGhostPropertys(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 	
-	/** 网络接口
-		ghost请求调用def方法real
+	/** Network interface
+		Ghost request to call def method real entity
 	*/
 	void onRemoteRealMethodCall(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	/** 网络接口
-		real请求更新属性到ghost
+	/** Network interface
+		Real request to update volatile attributes to ghost
 	*/
 	void onUpdateGhostVolatileData(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	/** 网络接口
-		base请求获取celldata
+	/** Network interface
+		Base request to get celldata
 	*/
 	void reqBackupEntityCellData(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	/** 网络接口
-		base请求获取WriteToDB
+	/** Network interface
+		Base requests to WriteToDB
 	*/
 	void reqWriteToDBFromBaseapp(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	/** 网络接口
-		客户端直接发送消息给cell实体
+	/** Network interface
+		The client sends a message directly to the cell entity
 	*/
 	void forwardEntityMessageToCellappFromClient(Network::Channel* pChannel, MemoryStream& s);
 
 	/**
-		获取游戏时间
+		Get game time
 	*/
 	static PyObject* __py_gametime(PyObject* self, PyObject* args);
 
 	/**
-		添加与删除一个Updatable对象
+		Add and remove a updatable object
 	*/
 	bool addUpdatable(Updatable* pObject);
 	bool removeUpdatable(Updatable* pObject);
@@ -214,40 +216,40 @@ public:
 	*/
 	RemoteEntityMethod* createEntityCallCallEntityRemoteMethod(MethodDescription* pMethodDescription, EntityCallAbstract* pEntityCall);
 
-	/** 网络接口
-		某个app请求查看该app
+	/** Network interface
+		Another app requested to view this app
 	*/
 	virtual void lookApp(Network::Channel* pChannel);
 
 	/**
-		重新导入所有的脚本
+		Re-import All Scripts
 	*/
 	static PyObject* __py_reloadScript(PyObject* self, PyObject* args);
 	virtual void reloadScript(bool fullReload);
 	virtual void onReloadScript(bool fullReload);
 
 	/**
-		获取进程是否正在关闭中
+		Gets whether the process is closing
 	*/
 	static PyObject* __py_isShuttingDown(PyObject* self, PyObject* args);
 
 	/**
-		获取进程内部网络地址
+		Get internal network address for process
 	*/
 	static PyObject* __py_address(PyObject* self, PyObject* args);
 
 	WitnessedTimeoutHandler	* pWitnessedTimeoutHandler(){ return pWitnessedTimeoutHandler_; }
 
 	/**
-		网络接口
-		另一个cellapp的entity要teleport到本cellapp上的space中
+		Network interface
+		Another cellapp entity wants to teleport to the space on this cellapp
 	*/
 	void reqTeleportToCellApp(Network::Channel* pChannel, MemoryStream& s);
 	void reqTeleportToCellAppCB(Network::Channel* pChannel, MemoryStream& s);
 	void reqTeleportToCellAppOver(Network::Channel* pChannel, MemoryStream& s);
 
 	/**
-		获取和设置ghost管理器
+		Get and set the ghost manager
 	*/
 	void pGhostManager(GhostManager* v){ pGhostManager_ = v; }
 	GhostManager* pGhostManager() const{ return pGhostManager_; }
@@ -255,7 +257,7 @@ public:
 	ArraySize spaceSize() const { return (ArraySize)Spaces::size(); }
 
 	/** 
-		射线 
+		Raycast
 	*/
 	int raycast(SPACE_ID spaceID, int layer, const Position3D& start, const Position3D& end, std::vector<Position3D>& hitPos);
 	static PyObject* __py_raycast(PyObject* self, PyObject* args);
@@ -273,7 +275,7 @@ protected:
 
 	Updatables							updatables_;
 
-	// 所有的cell
+	// All cells
 	Cells								cells_;
 
 	TelnetServer*						pTelnetServer_;
@@ -282,10 +284,10 @@ protected:
 
 	GhostManager*						pGhostManager_;
 	
-	// APP的标志
+	// APP flags
 	uint32								flags_;
 
-	// 通过工具查看space
+	// View space through tools
 	SpaceViewers						spaceViewers_;
 };
 
