@@ -38,7 +38,7 @@ along with KBEngine.  If not, see <http://www.gnu.org/licenses/>.
 namespace KBEngine{
 
 /**
-	Baseappmgr消息宏，  参数为流， 需要自己解开
+	Baseappmgr message macro, parameter is stream, need to unpack
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef BASEAPPMGR_MESSAGE_HANDLER_STREAM
@@ -79,7 +79,7 @@ namespace KBEngine{
 																				\
 
 /**
-	Baseappmgr消息宏，  只有零个参数的消息
+	Baseappmgr message macro, 0 parameter message
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef BASEAPPMGR_MESSAGE_HANDLER_ARGS0
@@ -120,7 +120,7 @@ namespace KBEngine{
 																				\
 
 /**
-	Baseappmgr消息宏，  只有一个参数的消息
+	Baseappmgr message macro, 1 parameter message
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef BASEAPPMGR_MESSAGE_HANDLER_ARGS1
@@ -163,7 +163,7 @@ namespace KBEngine{
 																				\
 
 /**
-	Baseappmgr消息宏，  只有二个参数的消息
+	Baseappmgr message macro, 2 parameter message
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef BASEAPPMGR_MESSAGE_HANDLER_ARGS2
@@ -215,7 +215,7 @@ namespace KBEngine{
 
 
 /**
-	Baseappmgr消息宏，  只有三个参数的消息
+	Baseappmgr message macro, 3 parameter message
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef BASEAPPMGR_MESSAGE_HANDLER_ARGS3
@@ -275,7 +275,7 @@ namespace KBEngine{
 											ARG_TYPE3, ARG_NAME3)				\
 
 /**
-	Baseappmgr消息宏，  只有四个参数的消息
+	Baseappmgr message macro, 4 parameter message
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef BASEAPPMGR_MESSAGE_HANDLER_ARGS4
@@ -343,7 +343,7 @@ namespace KBEngine{
 											ARG_TYPE4, ARG_NAME4)				\
 
 /**
-	Baseappmgr消息宏，  只有五个参数的消息
+	Baseappmgr message macro, 5 parameter message
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef BASEAPPMGR_MESSAGE_HANDLER_ARGS5
@@ -420,7 +420,7 @@ namespace KBEngine{
 
 
 /**
-	Baseappmgr消息宏，  只有六个参数的消息
+	Baseappmgr message macro, 6 parameter message
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef BASEAPPMGR_MESSAGE_HANDLER_ARGS6
@@ -505,7 +505,7 @@ namespace KBEngine{
 
 
 /**
-	Baseappmgr消息宏，  只有七个参数的消息
+	Baseappmgr message macro, 7 parameter message
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef BASEAPPMGR_MESSAGE_HANDLER_ARGS7
@@ -599,7 +599,7 @@ namespace KBEngine{
 
 
 /**
-	Baseappmgr消息宏，  只有八个参数的消息
+	Baseappmgr message macro, 8 parameter message
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef BASEAPPMGR_MESSAGE_HANDLER_ARGS8
@@ -700,7 +700,7 @@ namespace KBEngine{
 											ARG_TYPE8, ARG_NAME8)				\
 
 /**
-	Baseappmgr消息宏，  只有九个参数的消息
+	Baseappmgr message macro, 9 parameter message
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef BASEAPPMGR_MESSAGE_HANDLER_ARGS9
@@ -809,7 +809,7 @@ namespace KBEngine{
 											ARG_TYPE9, ARG_NAME9)				\
 
 /**
-	Baseappmgr消息宏，  只有十个参数的消息
+	Baseappmgr message macro, 10 parameter message
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef BASEAPPMGR_MESSAGE_HANDLER_ARGS10
@@ -928,7 +928,7 @@ namespace KBEngine{
 
 
 /**
-	Baseappmgr消息宏，  只有十一个参数的消息
+	Baseappmgr message macro, 11 parameter message
 */
 #if defined(NETWORK_INTERFACE_DECLARE_BEGIN)
 	#undef BASEAPPMGR_MESSAGE_HANDLER_ARGS11

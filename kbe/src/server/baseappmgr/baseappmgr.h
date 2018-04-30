@@ -57,7 +57,7 @@ public:
 	void handleTimeout(TimerHandle handle, void * arg);
 	void handleGameTick();
 
-	/* 初始化相关接口 */
+	/* Initialize related interfaces */
 	bool initializeBegin();
 	bool inInitialize();
 	bool initializeEnd();
@@ -66,78 +66,80 @@ public:
 	COMPONENT_ID findFreeBaseapp();
 	void updateBestBaseapp();
 
-	/** 网络接口
+	/** Network Interface
 		baseapp::createEntityAnywhere查询当前最好的组件ID
 	*/
 	void reqCreateEntityAnywhereFromDBIDQueryBestBaseappID(Network::Channel* pChannel, MemoryStream& s);
 
-	/** 网络接口
-		收到baseapp::createEntityAnywhere请求在某个空闲的baseapp上创建一个baseEntity
-		@param sp: 这个数据包中存储的是 entityType	: entity的类别， entities.xml中的定义的。
-										strInitData	: 这个entity被创建后应该给他初始化的一些数据， 
-													  需要使用pickle.loads解包.
-										componentID	: 请求创建entity的baseapp的组件ID
+	/** Network Interface
+		Received baseapp::createEntityAnywhere request to create a baseEntity on a free baseapp
+		@param sp: Stored in this packet,	entityType : The type of entity, defined in entities.xml.
+											strInitData	: Some data that should be initialized after this entity is created,
+															Need to use pickle.loads to unpack.
+											componentID	: The component ID of the baseapp requesting to create an entity
 	*/
 	void reqCreateEntityAnywhere(Network::Channel* pChannel, MemoryStream& s);
 
-	/** 网络接口
-	收到baseapp::createEntityRemotely请求在某个空闲的baseapp上创建一个baseEntity
-	@param sp: 这个数据包中存储的是 entityType	: entity的类别， entities.xml中的定义的。
-	strInitData	: 这个entity被创建后应该给他初始化的一些数据，
-	需要使用pickle.loads解包.
-	componentID	: 请求创建entity的baseapp的组件ID
+	/** Network Interface
+	Received a baseapp::createEntityRemotely request to create a baseEntity on an idle baseapp
+	@param sp: Stored in this packet,	entityType : The type of entity, defined in entities.xml.
+										strInitData	: Some data that should be initialized after this entity is created,
+														Need to use pickle.loads to unpack.
+										componentID	: The component ID of the baseapp requesting to create an entity
 	*/
 	void reqCreateEntityRemotely(Network::Channel* pChannel, MemoryStream& s);
 
-	/** 网络接口
-		收到baseapp::createEntityAnywhereFromDBID请求在某个空闲的baseapp上创建一个baseEntity
+	/** Network Interface
+		Received a baseapp::createEntityAnywhereFromDBID request to create a baseEntity on an idle baseapp
 	*/
 	void reqCreateEntityAnywhereFromDBID(Network::Channel* pChannel, MemoryStream& s);
 
-	/** 网络接口
-		收到baseapp::createEntityRemotelyFromDBID请求在某个空闲的baseapp上创建一个baseEntity
+	/** Network Interface
+		Received a baseapp::createEntityRemotelyFromDBID request to create a baseEntity on an idle baseapp
 	*/
 	void reqCreateEntityRemotelyFromDBID(Network::Channel* pChannel, MemoryStream& s);
 	
-	/** 网络接口
-		消息转发， 由某个app想通过本app将消息转发给某个app。
+	/** Network Interface
+		Message is forwarded by an app that wants to forward the message to another app through this baseappmgr.
 	*/
 	void forwardMessage(Network::Channel* pChannel, MemoryStream& s);
 
-	/** 网络接口
-		一个新登录的账号获得合法登入baseapp的权利， 现在需要将账号注册给baseapp
-		使其允许在此baseapp上登录。
+	/** Network Interface
+		A newly logged in account has the right to legally login to baseapp.
+		Now you need to register your account with baseapp.
+		Make it allowed to login on this baseapp.
 	*/
 	void registerPendingAccountToBaseapp(Network::Channel* pChannel, MemoryStream& s);
 
-	/** 网络接口
-		一个新登录的账号获得合法登入baseapp的权利， 现在需要将账号注册给指定的baseapp
-		使其允许在此baseapp上登录。
+	/** Network Interface
+		A newly logged in account has the right to legally login to baseapp.
+		Now it is necessary to register the account to the specified baseapp.
+		Make it allowed to login on this baseapp.
 	*/
 	void registerPendingAccountToBaseappAddr(Network::Channel* pChannel, MemoryStream& s);
 
-	/** 网络接口
-		baseapp将自己的地址发送给loginapp并转发给客户端。
+	/** Network Interface
+		Baseapp sends its own address to the loginapp and forwards it to the client.
 	*/
 	void onPendingAccountGetBaseappAddr(Network::Channel* pChannel, 
 								  std::string& loginName, std::string& accountName, 
 								  std::string& addr, uint16 port);
 
-	/** 网络接口
-		更新baseapp情况。
+	/** Network Interface
+		Update Baseapp information
 	*/
 	void updateBaseapp(Network::Channel* pChannel, COMPONENT_ID componentID,
 								ENTITY_ID numEntitys, ENTITY_ID numProxies, float load, uint32 flags);
 
-	/** 网络接口
-		baseapp同步自己的初始化信息
-		startGlobalOrder: 全局启动顺序 包括各种不同组件
-		startGroupOrder: 组内启动顺序， 比如在所有baseapp中第几个启动。
+	/** Network Interface
+		Baseapp synchronizes its own initialization information
+		startGlobalOrder: The global startup sequence includes a variety of different components
+		startGroupOrder: The order in which the groups are started, such as the first few in all Baseapp.
 	*/
 	void onBaseappInitProgress(Network::Channel* pChannel, COMPONENT_ID cid, float progress);
 
 	/** 
-		将分配的baseapp地址发送给loginapp并转发给客户端。
+		The assigned baseapp address is sent to the loginapp and forwarded to the client.
 	*/
 	void sendAllocatedBaseappAddr(Network::Channel* pChannel, 
 								  std::string& loginName, std::string& accountName, 
@@ -150,19 +152,19 @@ public:
 
 	uint32 numLoadBalancingApp();
 
-	/** 网络接口
-		查询所有相关进程负载信息
+	/** Network Interface
+		Query all relevant process load information
 	*/
 	void queryAppsLoads(Network::Channel* pChannel, MemoryStream& s);
 
-	/** 网络接口
-		baseapp请求绑定email（返回时需要找到loginapp的地址）
+	/** Network Interface
+		Baseapp request binding e-mail (return to need to find loginapp address)
 	*/
 	void reqAccountBindEmailAllocCallbackLoginapp(Network::Channel* pChannel, COMPONENT_ID reqBaseappID, ENTITY_ID entityID, std::string& accountName, std::string& email,
 		SERVER_ERROR_CODE failedcode, std::string& code);
 
-	/** 网络接口
-		请求绑定email, loginapp返回需要找到loginapp的地址
+	/** Network Interface
+		Request binding email, loginapp returns the address of the need to find loginapp
 	*/
 	void onReqAccountBindEmailCBFromLoginapp(Network::Channel* pChannel, COMPONENT_ID reqBaseappID, ENTITY_ID entityID, std::string& accountName, std::string& email,
 		SERVER_ERROR_CODE failedcode, std::string& code, std::string& loginappCBHost, uint16 loginappCBPort);
