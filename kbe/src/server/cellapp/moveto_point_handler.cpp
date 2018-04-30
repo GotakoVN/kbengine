@@ -107,7 +107,7 @@ bool MoveToPointHandler::requestMoveOver(const Position3D& oldPos)
 		if(pController_->pEntity())
 			pController_->pEntity()->onMoveOver(pController_->id(), layer_, oldPos, pyuserarg_);
 
-		// 如果在onMoveOver中调用cancelController（id）会导致MoveController析构导致pController_为NULL
+		// Calling cancelController(id) in onMoveOver causes the MoveController to destruct and causes pController_ to be NULL
 		pController_->destroy();
 	}
 
@@ -143,7 +143,7 @@ bool MoveToPointHandler::update()
 
 		if (distance_ > 0.0f)
 		{
-			// 单位化向量
+			// Unit vector
 			KBEVec3Normalize(&movement, &movement); 
 				
 			if(dist_len > distance_)
@@ -164,15 +164,15 @@ bool MoveToPointHandler::update()
 	}
 	else
 	{
-		// 单位化向量
+		// Unit vector
 		KBEVec3Normalize(&movement, &movement); 
 
-		// 移动位置
+		// Move Location
 		movement *= velocity_;
 		currpos += movement;
 	}
 	
-	// 是否需要改变面向
+	// Should change the orientation?
 	if (faceMovement_)
 	{
 		if (movement.x != 0.f || movement.z != 0.f)
@@ -182,19 +182,19 @@ bool MoveToPointHandler::update()
 			direction.pitch(movement.pitch());
 	}
 	
-	// 设置entity的新位置和面向
+	// Set the new location and orientation of the entity
 	if(!isDestroyed_)
 		pEntity->setPositionAndDirection(currpos, direction);
 
-	// 非navigate都不能确定其在地面上
+	// Non-navigate cannot be sure to be on the ground
 	if(!isDestroyed_)
 		pEntity->isOnGround(isOnGround());
 
-	// 通知脚本
+	// Notify script
 	if(!isDestroyed_)
 		pEntity->onMove(pController_->id(), layer_, currpos_backup, pyuserarg_);
 
-	// 如果在onMove过程中被停止，又或者达到目的地了，则直接销毁并返回false
+	// If it was stopped in the onMove process, or reached the destination, it will be destroyed and returned false
 	if (isDestroyed_ || 
 		(!ret && requestMoveOver(currpos_backup)))
 	{

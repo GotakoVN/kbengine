@@ -43,7 +43,7 @@ namespace KBEngine{
 
 class ClientsRemoteEntityMethod : public script::ScriptObject
 {
-	/** 子类化 将一些py操作填充进派生类 */
+	/** Subclassing Fill some py operations into derived classes */
 	INSTANCE_SCRIPT_HREADER(ClientsRemoteEntityMethod, script::ScriptObject)	
 public:	
 	ClientsRemoteEntityMethod(PropertyDescription* pComponentPropertyDescription, 
@@ -72,10 +72,10 @@ public:
 protected:	
 	PropertyDescription*	pComponentPropertyDescription_;
 
-	const ScriptDefModule*	pScriptModule_;			// 该entity所使用的脚本模块对象
-	MethodDescription*		methodDescription_;		// 这个方法的描述
+	const ScriptDefModule*	pScriptModule_;			// The script module object used by this entity
+	MethodDescription*		methodDescription_;		// Description of this method
 
-	bool					otherClients_;			// 是否只是其他客户端， 不包括自己
+	bool					otherClients_;			// Is it just another client, not including yourself
 
 	ENTITY_ID				id_;					// entityID
 };

@@ -71,7 +71,7 @@ CoordinateSystem::~CoordinateSystem()
 			pNode = pNextNode;
 		}
 		
-		// 上面已经销毁过了
+		// It's been destroyed.
 		first_x_coordinateNode_ = NULL;
 		first_y_coordinateNode_ = NULL;
 		first_z_coordinateNode_ = NULL;
@@ -83,7 +83,7 @@ CoordinateSystem::~CoordinateSystem()
 //-------------------------------------------------------------------------------------
 bool CoordinateSystem::insert(CoordinateNode* pNode)
 {
-	// 如果链表是空的, 初始第一个和最后一个xz节点为该节点
+	// If the list is empty, the initial first and last XZ nodes are the nodes
 	if(isEmpty())
 	{
 		first_x_coordinateNode_ = pNode;
@@ -106,7 +106,7 @@ bool CoordinateSystem::insert(CoordinateNode* pNode)
 
 		size_ = 1;
 		
-		// 只有一个节点不需要更新
+		// Only one node does not need to be updated
 		// update(pNode);
 		pNode->resetOld();
 		return true;
@@ -150,8 +150,9 @@ bool CoordinateSystem::remove(CoordinateNode* pNode)
 	
 	pNode->addFlags(COORDINATE_NODE_FLAG_REMOVED);
 
-	// 由于在update过程中可能会因为多级update的进行导致COORDINATE_NODE_FLAG_PENDING标志被取消，因此此处并不能很好的判断
-	// 除非实现了标记的计数器，这里强制所有的行为都放入dels_， 由releaseNodes在space中进行调用统一释放
+	// Since the COORDINATE_NODE_FLAG_PENDING flag may be cancelled during the update process due to the multi-level update,
+	//  this is not a good judgment.
+	// Unless the tag counter is implemented, all behaviors are forced into dels_, which is called by releaseNodes in space.
 	if(true /*pNode->hasFlags(COORDINATE_NODE_FLAG_PENDING)*/)
 	{
 		std::list<CoordinateNode*>::iterator iter = std::find(dels_.begin(), dels_.end(), pNode);
@@ -207,7 +208,7 @@ bool CoordinateSystem::removeReal(CoordinateNode* pNode)
 		return true;
 	}
 
-	// 如果是第一个节点
+	// If it is the first node
 	if(first_x_coordinateNode_ == pNode)
 	{
 		first_x_coordinateNode_ = first_x_coordinateNode_->pNextX();
@@ -227,7 +228,7 @@ bool CoordinateSystem::removeReal(CoordinateNode* pNode)
 
 	if(CoordinateSystem::hasY)
 	{
-		// 如果是第一个节点
+		// If it is the first node
 		if(first_y_coordinateNode_ == pNode)
 		{
 			first_y_coordinateNode_ = first_y_coordinateNode_->pNextY();
@@ -246,7 +247,7 @@ bool CoordinateSystem::removeReal(CoordinateNode* pNode)
 		}
 	}
 
-	// 如果是第一个节点
+	// If it is the first node
 	if(first_z_coordinateNode_ == pNode)
 	{
 		first_z_coordinateNode_ = first_z_coordinateNode_->pNextZ();
@@ -455,7 +456,7 @@ void CoordinateSystem::update(CoordinateNode* pNode)
 	DEBUG_MSG(fmt::format("CoordinateSystem::update enter:[{:p}]:  ({}  {}  {})\n", (void*)pNode, pNode->xx(), pNode->yy(), pNode->zz()));
 #endif
 
-	// 没有计数器支持，这个标记很可能中途被update子分支取消，因此没有意义
+	// Without counter support, this tag is likely to be cancelled midway by the update sub-branch, so it does not make sense
 	//pNode->addFlags(COORDINATE_NODE_FLAG_PENDING);
 
 	++updating_;
@@ -473,7 +474,7 @@ void CoordinateSystem::update(CoordinateNode* pNode)
 					DEBUG_MSG(fmt::format("CoordinateSystem::update start: [-X] ({}), pCurrNode=>({})\n", pNode->c_str(), pCurrNode->c_str()));
 				#endif
 				
-				// 先把节点移动过去
+				// Move nodes first
 				moveNodeX(pNode, pNode->xx(), pCurrNode);
 
 				if (!pNode->hasFlags(COORDINATE_NODE_FLAG_HIDE_OR_REMOVED))
@@ -513,7 +514,7 @@ void CoordinateSystem::update(CoordinateNode* pNode)
 					DEBUG_MSG(fmt::format("CoordinateSystem::update start: [+X] ({}), pCurrNode=>({})\n", pNode->c_str(), pCurrNode->c_str()));
 				#endif
 
-				// 先把节点移动过去
+				// Move nodes first
 				moveNodeX(pNode, pNode->xx(), pCurrNode);
 
 				if (!pNode->hasFlags(COORDINATE_NODE_FLAG_HIDE_OR_REMOVED))
@@ -566,7 +567,7 @@ void CoordinateSystem::update(CoordinateNode* pNode)
 					DEBUG_MSG(fmt::format("CoordinateSystem::update start: [-Y] ({}), pCurrNode=>({})\n", pNode->c_str(), pCurrNode->c_str()));
 				#endif
 
-				// 先把节点移动过去
+				// Move nodes first
 				moveNodeY(pNode, pNode->yy(), pCurrNode);
 
 				if (!pNode->hasFlags(COORDINATE_NODE_FLAG_HIDE_OR_REMOVED))
@@ -606,7 +607,7 @@ void CoordinateSystem::update(CoordinateNode* pNode)
 					DEBUG_MSG(fmt::format("CoordinateSystem::update start: [+Y] ({}), pCurrNode=>({})\n", pNode->c_str(), pCurrNode->c_str()));
 				#endif
 					
-				// 先把节点移动过去
+				// Move nodes first
 				moveNodeY(pNode, pNode->yy(), pCurrNode);
 
 				if (!pNode->hasFlags(COORDINATE_NODE_FLAG_HIDE_OR_REMOVED))
@@ -659,7 +660,7 @@ void CoordinateSystem::update(CoordinateNode* pNode)
 					DEBUG_MSG(fmt::format("CoordinateSystem::update start: [-Z] ({}), pCurrNode=>({})\n", pNode->c_str(), pCurrNode->c_str()));
 				#endif
 				
-				// 先把节点移动过去
+				// Move nodes first
 				moveNodeZ(pNode, pNode->zz(), pCurrNode);
 
 				if (!pNode->hasFlags(COORDINATE_NODE_FLAG_HIDE_OR_REMOVED))
@@ -699,7 +700,7 @@ void CoordinateSystem::update(CoordinateNode* pNode)
 					DEBUG_MSG(fmt::format("CoordinateSystem::update start: [+Z] ({}), pCurrNode=>({})\n", pNode->c_str(), pCurrNode->c_str()));
 				#endif
 				
-				// 先把节点移动过去
+				// Move nodes first
 				moveNodeZ(pNode, pNode->zz(), pCurrNode);
 
 				if (!pNode->hasFlags(COORDINATE_NODE_FLAG_HIDE_OR_REMOVED))

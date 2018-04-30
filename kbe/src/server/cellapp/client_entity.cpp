@@ -228,7 +228,7 @@ PyObject* ClientEntity::onScriptGetAttribute(PyObject* attr)
 	}
 	else
 	{
-		// 是否是组件方法调用
+		// Is it a component method call
 		PropertyDescription* pComponentPropertyDescription = const_cast<ScriptDefModule*>(e->pScriptModule())->findComponentPropertyDescription(ccattr);
 		if (pComponentPropertyDescription)
 		{

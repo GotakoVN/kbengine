@@ -58,7 +58,7 @@ class PropertyDescription;
 
 class ClientEntityComponent : public script::ScriptObject
 {
-	/** 子类化 将一些py操作填充进派生类 */
+	/** Subclassing Fill some py operations into derived classes */
 	INSTANCE_SCRIPT_HREADER(ClientEntityComponent, ScriptObject)
 public:
 	ClientEntityComponent(PropertyDescription* pComponentPropertyDescription, ClientEntity* pClientEntity);
@@ -68,12 +68,12 @@ public:
 	ScriptDefModule* pComponentScriptDefModule();
 
 	/**
-		脚本请求获取属性或者方法
+		Script requests get property or method
 	*/
 	PyObject* onScriptGetAttribute(PyObject* attr);
 
 	/**
-		获得对象的描述
+		Get the description of the object
 	*/
 	PyObject* tp_repr();
 	PyObject* tp_str();
@@ -88,7 +88,7 @@ protected:
 
 class ClientEntity : public script::ScriptObject
 {
-	/** 子类化 将一些py操作填充进派生类 */
+	/** Subclassing Fill some py operations into derived classes */
 	INSTANCE_SCRIPT_HREADER(ClientEntity, ScriptObject)
 public:
 	ClientEntity(ENTITY_ID srcEntityID, ENTITY_ID clientEntityID);
@@ -96,12 +96,12 @@ public:
 	~ClientEntity();
 	
 	/** 
-		脚本请求获取属性或者方法 
+		Script request get property or method
 	*/
 	PyObject* onScriptGetAttribute(PyObject* attr);						
 			
 	/** 
-		获得对象的描述 
+		Get the description of the object
 	*/
 	PyObject* tp_repr();
 	PyObject* tp_str();

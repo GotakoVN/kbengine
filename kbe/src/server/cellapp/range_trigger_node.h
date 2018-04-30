@@ -43,8 +43,8 @@ public:
 	INLINE void pRangeTrigger(RangeTrigger* pRangeTrigger);
 
 	/**
-		(扩展坐标)
-		x && z由不同的应用实现(从不同处获取)
+		(Extended coordinates)
+		X & Z implemented by different apps (obtained from different places)
 	*/
 	virtual float xx() const;
 	virtual float yy() const;
@@ -66,7 +66,7 @@ public:
 	}
 
 	/**
-		父节点删除
+		Parent node deleted
 	*/
 	virtual void onParentRemove(CoordinateNode* pParentNode);
 
@@ -75,8 +75,8 @@ public:
 	void onTriggerUninstall();
 
 	/**
-		某个节点变动经过了本节点
-		@isfront: 向前移动还是向后移动
+		A node changes through this node
+		@isfront: Move forward or backward
 	*/
 	virtual void onNodePassX(CoordinateNode* pNode, bool isfront);
 	virtual void onNodePassY(CoordinateNode* pNode, bool isfront);

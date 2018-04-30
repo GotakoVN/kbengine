@@ -47,19 +47,19 @@ public:
 	INLINE void origin(CoordinateNode* pCoordinateNode);
 
 	/**
-		更新范围数据
+		Update range data
 	*/
 	virtual void update(float xz, float y);
 
 	/**
-		某个节点进入或者离开了rangeTrigger
+		A node enters or leaves the rangeTrigger
 	*/
 	virtual void onEnter(CoordinateNode * pNode) = 0;
 	virtual void onLeave(CoordinateNode * pNode) = 0;
 
 	/**
-		某个节点变动经过了本节点
-		@isfront: 向前移动还是向后移动
+		A node changes through this node
+		@isfront: Move forward or backward
 	*/
 	virtual void onNodePassX(RangeTriggerNode* pRangeTriggerNode, CoordinateNode* pNode, bool isfront);
 	virtual void onNodePassY(RangeTriggerNode* pRangeTriggerNode, CoordinateNode* pNode, bool isfront);

@@ -83,7 +83,7 @@ void MoveController::destroy()
 {
 	Controller::destroy();
 
-	// 既然自己要销毁了，那么与自己相联的updatable也应该停止了
+	// Since they are going to be destroyed, the Updatables associated with them should also be stopped.
 	if (pMoveToPointHandler_)
 	{
 		pMoveToPointHandler_->destroy();

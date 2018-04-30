@@ -64,7 +64,7 @@ void TurnController::destroy()
 {
 	Controller::destroy();
 
-	// 既然自己要销毁了，那么与自己相联的updatable也应该停止了
+	// Since they are going to be destroyed, the updatables associated with them should also be stopped.
 	if (pRotatorHandler_)
 	{
 		pRotatorHandler_->pController(KBEShared_ptr<Controller>());

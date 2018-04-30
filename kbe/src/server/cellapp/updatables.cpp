@@ -44,7 +44,7 @@ void Updatables::clear()
 //-------------------------------------------------------------------------------------
 bool Updatables::add(Updatable* updatable)
 {
-	// 由于没有大量优先级需求，因此这里固定优先级数组
+	// Since there are not a lot of priority requirements, this fixed priority array
 	if (objects_.size() == 0)
 	{
 		objects_.push_back(std::map<uint32, Updatable*>());
@@ -56,13 +56,13 @@ bool Updatables::add(Updatable* updatable)
 	static uint32 idx = 1;
 	std::map<uint32, Updatable*>& pools = objects_[updatable->updatePriority()];
 
-	// 防止重复
+	// Prevent duplicates
 	while (pools.find(idx) != pools.end())
 		++idx;
 
 	pools[idx] = updatable;
 
-	// 记录存储位置
+	// Record storage location
 	updatable->removeIdx = idx++;
 
 	return true;

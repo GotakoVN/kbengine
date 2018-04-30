@@ -53,7 +53,8 @@ public:
 		Position3D position;
 		Direction3D direction;
 
-		// 更新序列号， 所有实体都更新完毕则序列号+1， 在某些时候量比较大的情况每次迭代一部分实体更新
+		// Update the serial number. All entities are updated. The serial number is +1.
+		// At some times a larger number of instances of an entity update per iteration
 		int updateVersion;
 	};
 
@@ -71,7 +72,7 @@ public:
 	}
 
 protected:
-	// 改变了查看space的cell
+	// Changed the cell to view space
 	void onChangedSpaceOrCell();
 	void resetViewer();
 
@@ -80,7 +81,7 @@ protected:
 
 	Network::Address addr_;
 
-	// 当前所查看的space和cell
+	// Space and Cell currently viewed
 	SPACE_ID spaceID_;
 	CELL_ID cellID_;
 
@@ -88,7 +89,8 @@ protected:
 
 	int updateType_;
 
-	// 更新序列号， 所有实体都更新完毕则序列号+1， 在某些时候量比较大的情况每次迭代一部分实体更新
+	// Update the serial number. All entities are updated. The serial number is +1.
+	// At some times a larger number of instances of an entity update per iteration
 	int lastUpdateVersion_;
 };
 

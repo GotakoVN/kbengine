@@ -35,8 +35,8 @@ public:
 	virtual ~EntityCoordinateNode();
 
 	/**
-		(扩展坐标)
-		x && z由不同的应用实现(从不同处获取)
+		(extended coordinates)
+		x & z implemented by different applications (obtained from different places)
 	*/
 	virtual float xx() const;
 	virtual float yy() const;

@@ -72,7 +72,7 @@ bool InitProgressHandler::process()
 
 	if(PyObject_HasAttrString(Cellapp::getSingleton().getEntryScript().get(), "onReadyForLogin") > 0)
 	{
-		// 所有脚本都加载完毕
+		// All scripts are loaded
 		PyObject* pyResult = PyObject_CallMethod(Cellapp::getSingleton().getEntryScript().get(), 
 											const_cast<char*>("onReadyForLogin"), 
 											const_cast<char*>("i"), 

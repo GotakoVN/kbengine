@@ -37,12 +37,12 @@ public:
 	~CoordinateSystem();
 
 	/**
-		向list中插入节点
+		Insert node into list
 	*/
 	bool insert(CoordinateNode* pNode);
 
 	/**
-		将节点从list中移除
+		Remove node from list
 	*/
 	bool remove(CoordinateNode* pNode);
 	bool removeReal(CoordinateNode* pNode);
@@ -50,13 +50,13 @@ public:
 	void releaseNodes();
 
 	/**
-		当某个节点有变动时，需要更新它在list中的
-		相关位置等信息
+		When a node changes, it needs to be updated in the list
+		Related locations and other information
 	*/
 	void update(CoordinateNode* pNode);
 
 	/**
-		移动节点
+		Move node
 	*/
 	void moveNodeX(CoordinateNode* pNode, float px, CoordinateNode* pCurrNode);
 	void moveNodeY(CoordinateNode* pNode, float py, CoordinateNode* pCurrNode);
@@ -78,7 +78,7 @@ public:
 private:
 	uint32 size_;
 
-	// 链表的首尾指针
+	// The first and last pointers of the list
 	CoordinateNode* first_x_coordinateNode_;
 	CoordinateNode* first_y_coordinateNode_;
 	CoordinateNode* first_z_coordinateNode_;

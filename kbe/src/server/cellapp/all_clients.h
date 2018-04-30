@@ -56,7 +56,7 @@ class PropertyDescription;
 
 class AllClientsComponent : public script::ScriptObject
 {
-	/** 子类化 将一些py操作填充进派生类 */
+	/** Subclassing Fill some py operations into derived classes */
 	INSTANCE_SCRIPT_HREADER(AllClientsComponent, ScriptObject)
 public:
 	AllClientsComponent(PropertyDescription* pComponentPropertyDescription, AllClients* pAllClients);
@@ -64,12 +64,12 @@ public:
 	~AllClientsComponent();
 
 	/**
-	脚本请求获取属性或者方法
+	Script request get property or method
 	*/
 	PyObject* onScriptGetAttribute(PyObject* attr);
 
 	/**
-	获得对象的描述
+	Get the description of the object
 	*/
 	PyObject* tp_repr();
 	PyObject* tp_str();
@@ -85,7 +85,7 @@ protected:
 
 class AllClients : public script::ScriptObject
 {
-	/** 子类化 将一些py操作填充进派生类 */
+	/** Subclassing Fill some py operations into derived classes */
 	INSTANCE_SCRIPT_HREADER(AllClients, ScriptObject)
 public:
 	AllClients(const ScriptDefModule* pScriptModule, 
@@ -95,12 +95,12 @@ public:
 	~AllClients();
 	
 	/** 
-		脚本请求获取属性或者方法 
+		Script request get property or method
 	*/
 	PyObject* onScriptGetAttribute(PyObject* attr);						
 			
 	/** 
-		获得对象的描述 
+		Get the description of the object
 	*/
 	PyObject* tp_repr();
 	PyObject* tp_str();
@@ -108,7 +108,7 @@ public:
 	void c_str(char* s, size_t size);
 	
 	/** 
-		获取entityID 
+		Get EntityId 
 	*/
 	ENTITY_ID id() const{ return id_; }
 	void setID(int id){ id_ = id; }
@@ -123,11 +123,11 @@ public:
 	}
 
 protected:
-	const ScriptDefModule*					pScriptModule_;			// 该entity所使用的脚本模块对象
+	const ScriptDefModule*					pScriptModule_;			//The script module object used by this entity
 
 	ENTITY_ID								id_;					// entityID
 
-	bool									otherClients_;			// 是否只是其他客户端， 不包括自己
+	bool									otherClients_;			// Is it just another client, not including yourself
 };
 
 }
