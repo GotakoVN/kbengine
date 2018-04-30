@@ -42,6 +42,19 @@ class Entity;
 
 	* cell1: entity(1) is real, 如果被再迁移到cell3， 则需要向ghost_route_临时设置一个路由地址， 路由在最后一次收ghost请求包超过一定时间擦除。
 	                    如果期间有一些ghost请求包被转发过来， 那么找不到entity就查询路由表，并继续转发到realEntity。
+
+ *...goog translate:
+	* cell1: entity(1) is real, then stored in entityHosts_ in GhostManager for checking (update to other ghosts)
+
+	* cell2: entity(1) is ghost. If cell2 is to be migrated as a whole, it needs to temporarily set a route
+		address to ghost_route_. The route is erased after the last packet received exceeds a certain time.
+		If some packets are forwarded during the period, then the entity is not found on the routing table,
+		and continues to be forwarded to the ghostEntity (for example, real destroy destroys the ghost immediately).
+
+	* cell1: entity(1) is real. If it is re-migrated to cell3, it needs to temporarily set a route address to ghost_route_. 
+		The route is erased after the last time the ghost request packet is received.
+		If some ghost request packets are forwarded during the period, then the entity 
+		cannot find the routing table and continue forwarding to real entity.
 */
 class GhostManager : public TimerHandler
 {
@@ -56,8 +69,8 @@ public:
 	void addRoute(ENTITY_ID entityID, COMPONENT_ID componentID);
 
 	/**
-	创建发送bundle，该bundle可能是从send放入发送队列中获取的，如果队列为空
-	则创建一个新的
+	Creates a send bundle. The bundle may be obtained from the send queue.
+	If the queue is empty, a new one is created.
 	*/
 	Network::Bundle* createSendBundle(COMPONENT_ID componentID);
 
@@ -89,15 +102,19 @@ private:
 	};
 
 private:
-	// 所有存在ghost的相关entity
+	// All related entities with ghost
 	std::map<ENTITY_ID, Entity*> 	realEntities_;
 	
 	// ghost路由， 分布式程序某些时候无法保证同步， 那么在本机上的某些entity被迁移走了的
 	// 时候可能会还会收到一些网络消息， 因为其他app可能还无法立即得到迁移地址， 此时我们
 	// 可以在当前app上将迁移走的entity指向缓存一下， 有网络消息过来我们可以继续转发到新的地址
+	//...goog translate:
+	// Ghost routing, distributed programs sometimes do not guarantee synchronization, then some entity on this machine are migrated away
+	// You may receive some network messages at the time, because other apps may not be able to get the migration address immediately.
+	// You can point the migrated entity to the cache on the current app. With network messages we can continue forwarding to the new address.
 	std::map<ENTITY_ID, ROUTE_INFO> ghost_route_;
 
-	// 所有需要广播的事件消息
+	// All event messages that need to be broadcast
 	std::map<COMPONENT_ID, std::vector< Network::Bundle* > > messages_;
 
 	TimerHandle* pTimerHandle_;
