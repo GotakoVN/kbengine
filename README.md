@@ -28,7 +28,7 @@ KBEngine
 ## Docs
 
 	Docs		: http://kbengine.org/docs/
-	API		: https://github.com/kbengine/kbengine/tree/master/docs
+	API		: https://krogank9.github.io/kbengine/docs.html
 
 ## Stresstest
 
