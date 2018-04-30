@@ -152,8 +152,8 @@ void Entity::onDefDataChanged(EntityComponent* pEntityComponent, const PropertyD
 		propertyDescription->getName(), 
 		pBundle->currMsgLength());
 
-	// 按照当前的设计来说，有clientEntityCall_必定是proxy
-	// 至于为何跑到baseEntity里来和python本身是C语言实现有关
+	// According to the current design, if it has a clientEntityCall_ it must be a proxy
+	// As for why this is in base Entity, it's related to Python itself being a C language implementation
 	static_cast<Proxy*>(this)->sendToClient(ClientInterface::onUpdatePropertys, pBundle);
 	MemoryStream::reclaimPoolObject(mstream);
 }
@@ -176,8 +176,8 @@ void Entity::onDestroy(bool callScript)
 	
 	eraseEntityLog();
 
-	// 按照当前的设计来说，有clientEntityCall_必定是proxy
-	// 至于为何跑到baseEntity里来和python本身是C语言实现有关
+	// According to the current design, if it has a clientEntityCall_ it must be a proxy
+	// As for why this is in base Entity, it's related to Python itself being a C language implementation
 	if(clientEntityCall_)
 		static_cast<Proxy*>(this)->kick();
 }
@@ -185,9 +185,9 @@ void Entity::onDestroy(bool callScript)
 //-------------------------------------------------------------------------------------
 void Entity::eraseEntityLog()
 {
-	// 这里没有使用hasDB()来进行判断
-	// 用户可能destroy( writeToDB = False ), 这个操作会导致hasDB为false， 因此这里
-	// 需要判断dbid是否大于0， 如果大于0则应该要去擦除在线等记录情况.
+	// Can't use hasDB() to determine, the user may destroy (writeToDB = False). This operation will cause hasDB to be false. 
+	// Therefore, it is necessary to determine whether dbid is greater than 0.
+	// If it is greater than 0, then it should be erased.
 	if(this->dbid() > 0)
 	{
 		Network::Bundle* pBundle = Network::Bundle::createPoolObject();
@@ -293,7 +293,7 @@ void Entity::createCellData(void)
 		SCRIPT_ERROR_CHECK();
 	}
 
-	// 初始化cellEntity的位置和方向变量
+	// Initialize the position and orientation variables of the cellEntity
 	PyObject* position = PyTuple_New(3);
 	PyTuple_SET_ITEM(position, 0, PyFloat_FromDouble(0.0));
 	PyTuple_SET_ITEM(position, 1, PyFloat_FromDouble(0.0));
@@ -384,10 +384,10 @@ void Entity::addPersistentsDataToStream(uint32 flags, MemoryStream* s)
 {
 	std::vector<ENTITY_PROPERTY_UID> log;
 
-	// 再将base中存储属性取出
+	// Then remove the storage properties in the base
 	PyObject* pydict = PyObject_GetAttrString(this, "__dict__");
 
-	// 先将celldata中的存储属性取出
+	// First remove the storage attributes from celldata
 	ScriptDefModule::PROPERTYDESCRIPTION_MAP& propertyDescrs = pScriptModule_->getPersistentPropertyDescriptions();
 	ScriptDefModule::PROPERTYDESCRIPTION_MAP::const_iterator iter = propertyDescrs.begin();
 
@@ -533,7 +533,7 @@ void Entity::sendToCellapp(Network::Channel* pChannel, Network::Bundle* pBundle)
 //-------------------------------------------------------------------------------------
 void Entity::destroyCellData(void)
 {
-	// cellDataDict_ 继续保留， 以供备份时使用， 这里仅仅让脚步层无法访问到即可
+	// cellDataDict_ continues to be reserved for use when backing up, here only the footsteps(?goog translate) cannot be accessed
 	// S_RELEASE(cellDataDict_);
 	if(PyObject_DelAttrString(this, "cellData") == -1)
 	{
@@ -639,8 +639,8 @@ PyObject* Entity::__py_pyDestroyEntity(PyObject* self, PyObject* args, PyObject 
 
 	if(deleteFromDB || writeToDB)
 	{
-		// 有可能已经请求了writeToDB但还未返回写入的dbid
-		// 这种情况需要返回给用户一个错误， 用户可以继续尝试这个操作
+		// It is possible that writeToDB has been requested but dbid has not been returned yet
+		// This situation needs to return an error to the user and the user can continue to try this operation
 		if(pobj->hasDB() && pobj->dbid() == 0)
 		{
 			PyErr_Format(PyExc_AssertionError, "%s::destroy: id:%i has db, current dbid is 0. "
@@ -690,7 +690,7 @@ void Entity::onDestroyEntity(bool deleteFromDB, bool writeToDB)
 
 	if(writeToDB)
 	{
-		// 这个行为默认会处理
+		// This behavior is handled by default
 		// this->writeToDB(NULL);
 	}
 	else
@@ -711,8 +711,9 @@ PyObject* Entity::onScriptGetAttribute(PyObject* attr)
 	char* ccattr = strutil::wchar2char(PyUnicode_AsWideCharStringRet0);
 	PyMem_Free(PyUnicode_AsWideCharStringRet0);
 	
-	// 如果访问了def持久化类容器属性
-	// 由于没有很好的监测容器类属性内部的变化，这里使用一个折中的办法进行标脏
+	// If you access the def persistent class container property
+	// Since there is no good monitoring of the internal changes in the properties of the container class,
+	// use a compromise here
 	PropertyDescription* pPropertyDescription = const_cast<ScriptDefModule*>(pScriptModule())->findPersistentPropertyDescription(ccattr);
 	if(pPropertyDescription && (pPropertyDescription->getFlags() & ENTITY_BASE_DATA_FLAGS) > 0)
 	{
@@ -921,7 +922,7 @@ void Entity::onRemoteMethodCall(Network::Channel* pChannel, MemoryStream& s)
 		return;
 	}
 
-	// 如果是外部通道调用则判断来源性
+	// If it is an external channel call, the source is judged
 	if (pChannel->isExternal())
 	{
 		ENTITY_ID srcEntityID = pChannel->proxyID();
@@ -1001,10 +1002,10 @@ void Entity::onGetCell(Network::Channel* pChannel, COMPONENT_ID componentID)
 
 	creatingCell_ = false;
 
-	// 删除cellData属性
+	// Delete cellData property
 	destroyCellData();
 	
-	// 回调给脚本，获得了cell
+	// Call back to the script and get the cell
 	if(cellEntityCall_ == NULL)
 		cellEntityCall_ = new EntityCall(pScriptModule_, NULL, componentID, id_, ENTITYCALL_TYPE_CELL);
 
@@ -1108,7 +1109,7 @@ void Entity::writeToDB(void* data, void* extra1, void* extra2)
 	PyObject* pyCallback = NULL;
 	int8 shouldAutoLoad = dbid() <= 0 ? 0 : -1;
 
-	// data 是有可能会NULL的， 比如定时存档是不需要回调函数的
+	// Data is likely to be null, such as a scheduled archive that does not require a callback function.
 	if(data != NULL)
 		pyCallback = static_cast<PyObject*>(data);
 
@@ -1146,7 +1147,7 @@ void Entity::writeToDB(void* data, void* extra1, void* extra2)
 
 	if(isArchiving_)
 	{
-		// __py_pyWriteToDB没有增加引用
+		// __py_pyWriteToDB did not increase the reference
 		//if(pyCallback != NULL)
 		//	Py_DECREF(pyCallback);
 
@@ -1160,7 +1161,7 @@ void Entity::writeToDB(void* data, void* extra1, void* extra2)
 
 	if(isDestroyed())
 	{	
-		// __py_pyWriteToDB没有增加引用
+		// __py_pyWriteToDB did not increase the reference
 		//if(pyCallback != NULL)
 		//	Py_DECREF(pyCallback);
 
@@ -1176,9 +1177,9 @@ void Entity::writeToDB(void* data, void* extra1, void* extra2)
 		callbackID = callbackMgr().save(pyCallback);
 	}
 
-	// creatingCell_ 此时可能正在创建cell
-	// 不过我们在此假设在cell未创建完成的时候base这个接口被调用
-	// 写入数据库的是该entity的初始值， 并不影响
+	// creatingCell_ may be creating a cell at this time
+	// However, we assume here that the base interface is called when the cell is not created.
+	// The initial value of this entity is written to the database and does not affect
 	if(this->cellEntityCall() == NULL) 
 	{
 		onCellWriteToDBCompleted(callbackID, shouldAutoLoad, -1);
@@ -1263,13 +1264,14 @@ void Entity::onCellWriteToDBCompleted(CALLBACK_ID callbackID, int8 shouldAutoLoa
 	
 	onWriteToDB();
 	
-	// 如果在数据库中已经存在该entity则允许应用层多次调用写库进行数据及时覆盖需求
+	// If the database already exists, the entity allows the application layer
+	//  is allowed to call the database many times to write library for data coverage needs in a timely manner
 	if(this->DBID_ > 0)
 		isArchiving_ = false;
 	else
 		setDirty();
 	
-	// 如果数据没有改变那么不需要持久化
+	// If the data does not change then no persistence is required
 	if(!isDirty())
 		return;
 	
@@ -1302,7 +1304,7 @@ void Entity::onCellWriteToDBCompleted(CALLBACK_ID callbackID, int8 shouldAutoLoa
 	(*pBundle) << callbackID;
 	(*pBundle) << shouldAutoLoad;
 
-	// 记录登录地址
+	// Record login address
 	if(this->dbid() == 0)
 	{
 		uint32 ip = 0;
@@ -1454,8 +1456,8 @@ void Entity::forwardEntityMessageToCellappFromClient(Network::Channel* pChannel,
 	if(mb == NULL)
 		return;
 
-	// 将这个消息再打包转寄给cellapp， cellapp会对这个包中的每个消息进行判断
-	// 检查是否是entity消息， 否则不合法.
+	// This packet is forwarded to the cellapp and the cellapp evaluates each message in the packet.
+	// Check if it is an entity message, otherwise it is illegal.
 	Network::Bundle* pBundle = Network::Bundle::createPoolObject();
 	(*pBundle).newMessage(CellappInterface::forwardEntityMessageToCellappFromClient);
 	(*pBundle) << this->id();
@@ -1507,7 +1509,7 @@ PyObject* Entity::pyTeleport(PyObject* baseEntityMB)
 
 	ENTITY_ID eid = 0;
 
-	// 如果不是entityCall则是本地base
+	// If it's not EntityCall, it's on the local baseapp.
 	if(isEntityCall)
 	{
 		EntityCall* mb = static_cast<EntityCall*>(baseEntityMB);
@@ -1669,8 +1671,9 @@ void Entity::onMigrationCellappEnd(Network::Channel* pChannel, COMPONENT_ID sour
 
 	KBE_ASSERT(!pBufferedSendToClientMessages_);
 	
-	// 某些极端情况下可能onMigrationCellappStart会慢于onMigrationCellappEnd触发，此时必须设置标记
-	// 等待onMigrationCellappEnd触发后做清理
+	// In some extreme cases, onMigrationCellappStart may be triggered slower than onMigrationCellappEnd, 
+	//  and the flag must be set
+	// Wait for onMigrationCellappEnd to trigger after cleanup
 	if (!hasFlags(ENTITY_FLAGS_TELEPORT_START))
 	{
 		addFlags(ENTITY_FLAGS_TELEPORT_STOP);
@@ -1699,7 +1702,7 @@ void Entity::onMigrationCellappOver(COMPONENT_ID targetCellAppID)
 		pInfos->pChannel->send(pBundle);
 	}
 	
-	// 改变cell的指向到新的cellapp
+	// Change the cell to point to the new cellapp
 	if(this->cellEntityCall())
 		this->cellEntityCall()->componentID(targetCellAppID);
 }

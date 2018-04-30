@@ -167,7 +167,7 @@ void Proxy::initClientCellPropertys()
 
 	MemoryStream* s = MemoryStream::createPoolObject();
 
-	// celldata获取客户端感兴趣的数据初始化客户端 如:ALL_CLIENTS
+	// Celldata gets client data of interest to initialize the client like: ALL_CLIENTS
 	addCellDataToStream(CLIENT_TYPE, ED_FLAG_ALL_CLIENTS|ED_FLAG_CELL_PUBLIC_AND_OWN|ED_FLAG_OWN_CLIENT, s, true);
 	(*pBundle).append(*s);
 	MemoryStream::reclaimPoolObject(s);
@@ -245,7 +245,7 @@ void Proxy::onClientDeath(void)
 //-------------------------------------------------------------------------------------
 void Proxy::onClientGetCell(Network::Channel* pChannel, COMPONENT_ID componentID)
 {	
-	// 回调给脚本，获得了cell
+	// Call back to the script and get the cell
 	if(cellEntityCall_ == NULL)
 		cellEntityCall_ = new EntityCall(pScriptModule_, NULL, componentID, id_, ENTITYCALL_TYPE_CELL);
 
@@ -276,7 +276,7 @@ PyObject* Proxy::pyGetClientDatas()
 }
 
 //-------------------------------------------------------------------------------------
-PyObject* Proxy::pyGiveClientTo(PyObject* pyOterProxy)
+PyObject* Proxy::pyGiveClientTo(PyObject* pyOtherProxy)
 {
 	if(this->isDestroyed())
 	{
@@ -287,7 +287,7 @@ PyObject* Proxy::pyGiveClientTo(PyObject* pyOterProxy)
 		return 0;
 	}
 
-	if (pyOterProxy == NULL || !PyObject_TypeCheck(pyOterProxy, Proxy::getScriptType()))
+	if (pyOtherProxy == NULL || !PyObject_TypeCheck(pyOtherProxy, Proxy::getScriptType()))
 	{
 		PyErr_Format(PyExc_AssertionError, "%s[%d]::giveClientTo: arg1 not is Proxy!\n",
 			scriptName(), id());
@@ -296,12 +296,12 @@ PyObject* Proxy::pyGiveClientTo(PyObject* pyOterProxy)
 		return 0;
 	}
 
-	// 如果为None 则设置为NULL
-	Proxy* oterProxy = NULL;
-	if(pyOterProxy != Py_None)
-		oterProxy = static_cast<Proxy*>(pyOterProxy);
+	// Set to NULL if None
+	Proxy* otherProxy = NULL;
+	if(pyOtherProxy != Py_None)
+		otherProxy = static_cast<Proxy*>(pyOtherProxy);
 	
-	giveClientTo(oterProxy);
+	giveClientTo(otherProxy);
 	S_Return;
 }
 
@@ -381,22 +381,22 @@ void Proxy::giveClientTo(Proxy* proxy)
 
 		if(cellEntityCall())
 		{
-			// 当前这个entity如果有cell，说明已经绑定了witness， 那么既然我们将控制权
-			// 交换给了另一个entity， 这个entity需要解绑定witness。
-			// 通知cell丢失witness
+			// If the current entity has a cell, it means that the witness has already been bound. 
+			// So since we have given control to another entity, the entity needs to unbind the witness.
+			// Notify cell to lose witness
 			Network::Bundle* pBundle = Network::Bundle::createPoolObject();
 			(*pBundle).newMessage(CellappInterface::onLoseWitness);
 			(*pBundle) << this->id();
 			sendToCellapp(pBundle);
 		}
 
-		// 既然客户端失去对其的控制, 那么通知client销毁这个entity
+		// Since the client loses control of it, notify the client to destroy the entity
 		Network::Bundle* pBundle = Network::Bundle::createPoolObject();
 		(*pBundle).newMessage(ClientInterface::onEntityDestroyed);
 		(*pBundle) << this->id();
 		sendToClient(ClientInterface::onEntityDestroyed, pBundle);
 
-		// 将控制权交换
+		// Transfer control
 		clientEnabled_ = false;
 		clientEntityCall()->addr(Network::Address::NONE);
 		Py_DECREF(clientEntityCall());
@@ -419,8 +419,8 @@ void Proxy::onGiveClientTo(Network::Channel* lpChannel)
 	addr(lpChannel->addr());
 	Baseapp::getSingleton().createClientProxies(this);
 
-	// 如果有cell, 需要通知其获得witness， 因为这个客户端刚刚绑定到这个proxy
-	// 此时这个entity即使有cell正常情况必须是没有witness的。
+	// If there is a cell, it needs to be notified to get the witness because the client has just bound to this proxy
+	// At this point, the entity must have no witness even if the cell is normal.
 	onGetWitness();
 }
 
@@ -429,7 +429,7 @@ void Proxy::onGetWitness()
 {
 	if(cellEntityCall())
 	{
-		// 通知cell获得客户端
+		// Notify the cell to get the client
 		Network::Bundle* pBundle = Network::Bundle::createPoolObject();
 		(*pBundle).newMessage(CellappInterface::onGetWitnessFromBase);
 		(*pBundle) << this->id();
@@ -780,7 +780,7 @@ bool Proxy::pushBundle(Network::Bundle* pBundle)
 	pChannel->pushBundle(pBundle);
 
 	{
-		// 如果数据大量阻塞发不出去将会报警
+		// If a lot of data is blocked, it will not be sent out and alarm
 		//AUTO_SCOPED_PROFILE("pushBundleAndSendToClient");
 		//pChannel->send(pBundle);
 	}
@@ -825,7 +825,7 @@ bool Proxy::sendToClient(bool expectData)
 	}
 
 	{
-		// 如果数据大量阻塞发不出去将会报警
+		// If a lot of data is blocked, it will not be sent out and alarm
 		AUTO_SCOPED_PROFILE("sendToClient");
 		pChannel->send();
 	}
