@@ -90,17 +90,17 @@ public:
 	*/
 	ENTITY_ID ownerID() const;
 
-	DECLARE_PY_GET_MOTHOD(pyGetOwnerID);
+	DECLARE_PY_GET_METHOD(pyGetOwnerID);
 
 	PyObject* owner(bool attempt = false);
 
-	DECLARE_PY_GET_MOTHOD(pyIsDestroyed);
+	DECLARE_PY_GET_METHOD(pyIsDestroyed);
 
 	bool isDestroyed() const {
 		return ownerID() == 0;
 	}
 
-	DECLARE_PY_GET_MOTHOD(pyGetOwner);
+	DECLARE_PY_GET_METHOD(pyGetOwner);
 
 	DECLARE_PY_MOTHOD_ARG3(pyAddTimer, float, float, int32);
 	DECLARE_PY_MOTHOD_ARG1(pyDelTimer, ScriptID);
@@ -200,32 +200,32 @@ public:
 	/**
 		脚本请求获取client地址
 	*/
-	DECLARE_PY_GET_MOTHOD(pyName);
+	DECLARE_PY_GET_METHOD(pyName);
 
 	/**
 		脚本获取entityCall
 	*/
-	DECLARE_PY_GET_MOTHOD(pyGetCellEntityCall);
+	DECLARE_PY_GET_METHOD(pyGetCellEntityCall);
 
 	/**
 		脚本获取entityCall
 	*/
-	DECLARE_PY_GET_MOTHOD(pyGetBaseEntityCall);
+	DECLARE_PY_GET_METHOD(pyGetBaseEntityCall);
 
 	/**
 		脚本获取entityCall
 	*/
-	DECLARE_PY_GET_MOTHOD(pyGetClientEntityCall);
+	DECLARE_PY_GET_METHOD(pyGetClientEntityCall);
 
 	/**
 		脚本获取entityCall
 	*/
-	DECLARE_PY_GET_MOTHOD(pyGetAllClients);
+	DECLARE_PY_GET_METHOD(pyGetAllClients);
 
 	/**
 		脚本获取entityCall
 	*/
-	DECLARE_PY_GET_MOTHOD(pyGetOtherClients);
+	DECLARE_PY_GET_METHOD(pyGetOtherClients);
 
 	/**
 		调用客户端实体的方法

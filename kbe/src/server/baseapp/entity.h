@@ -69,13 +69,13 @@ public:
 	*/
 	INLINE DBID dbid() const;
 	INLINE void dbid(uint16 dbInterfaceIndex, DBID id);
-	DECLARE_PY_GET_MOTHOD(pyGetDBID);
+	DECLARE_PY_GET_METHOD(pyGetDBID);
 
 	/**
 		Database Association Name
 	*/
 	INLINE uint16 dbInterfaceIndex() const;
-	DECLARE_PY_GET_MOTHOD(pyGetDBInterfaceName);
+	DECLARE_PY_GET_METHOD(pyGetDBInterfaceName);
 
 	/** 
 		Destroy entity's cell part
@@ -87,7 +87,7 @@ public:
 	/** 
 		script gets cell EntityCall
 	*/
-	DECLARE_PY_GET_MOTHOD(pyGetCellEntityCall);
+	DECLARE_PY_GET_METHOD(pyGetCellEntityCall);
 
 	EntityCall* cellEntityCall(void) const;
 
@@ -96,7 +96,7 @@ public:
 	/** 
 		script gets client EntityCall
 	*/
-	DECLARE_PY_GET_MOTHOD(pyGetClientEntityCall);
+	DECLARE_PY_GET_METHOD(pyGetClientEntityCall);
 
 	EntityCall* clientEntityCall() const;
 
@@ -256,14 +256,14 @@ public:
 	*/
 	INLINE int8 shouldAutoArchive() const;
 	INLINE void shouldAutoArchive(int8 v);
-	DECLARE_PY_GETSET_MOTHOD(pyGetShouldAutoArchive, pySetShouldAutoArchive);
+	DECLARE_PY_GETSET_METHOD(pyGetShouldAutoArchive, pySetShouldAutoArchive);
 
 	/**
 		Set whether to automatically backup
 	*/
 	INLINE int8 shouldAutoBackup() const;
 	INLINE void shouldAutoBackup(int8 v);
-	DECLARE_PY_GETSET_MOTHOD(pyGetShouldAutoBackup, pySetShouldAutoBackup);
+	DECLARE_PY_GETSET_METHOD(pyGetShouldAutoBackup, pySetShouldAutoBackup);
 
 	/**
 		cellap died

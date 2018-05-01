@@ -112,7 +112,7 @@ public:
 	*/
 	ENTITY_ID id() const{ return id_; }
 	void setID(int id){ id_ = id; }
-	DECLARE_PY_GET_MOTHOD(pyGetID);
+	DECLARE_PY_GET_METHOD(pyGetID);
 
 	void setScriptModule(const ScriptDefModule*	pScriptModule){ 
 		pScriptModule_ = pScriptModule; 

@@ -97,7 +97,7 @@ public:
 
 	INLINE void id(int v);
 
-	DECLARE_PY_GET_MOTHOD(pyGetID);
+	DECLARE_PY_GET_METHOD(pyGetID);
 
 	/** 
 		获得组件ID 

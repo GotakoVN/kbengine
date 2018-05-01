@@ -89,13 +89,13 @@ public:
 	static PyObject* __py_pyList(PyObject* self, PyObject* args);
 	static PyObject* __py_pySet(PyObject* self, PyObject* args);
 
-	DECLARE_PY_GET_MOTHOD(pyGetVectorLength);
-	DECLARE_PY_GET_MOTHOD(pyGetVectorLengthSquared);
+	DECLARE_PY_GET_METHOD(pyGetVectorLength);
+	DECLARE_PY_GET_METHOD(pyGetVectorLengthSquared);
 
-	DECLARE_PY_GETSET_MOTHOD(pyGetX, pySetX);
-	DECLARE_PY_GETSET_MOTHOD(pyGetY, pySetY);
-	DECLARE_PY_GETSET_MOTHOD(pyGetZ, pySetZ);
-	DECLARE_PY_GETSET_MOTHOD(pyGetW, pySetW);
+	DECLARE_PY_GETSET_METHOD(pyGetX, pySetX);
+	DECLARE_PY_GETSET_METHOD(pyGetY, pySetY);
+	DECLARE_PY_GETSET_METHOD(pyGetZ, pySetZ);
+	DECLARE_PY_GETSET_METHOD(pyGetW, pySetW);
 	
 	/** 
 		支持pickler 方法 

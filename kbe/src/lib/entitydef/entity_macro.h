@@ -1021,12 +1021,12 @@ public:																										\
 	{																										\
 		return isDestroyed_;																				\
 	}																										\
-	DECLARE_PY_GET_MOTHOD(pyGetIsDestroyed);																\
+	DECLARE_PY_GET_METHOD(pyGetIsDestroyed);																\
 																											\
 	void destroyEntity();																					\
 	static PyObject* __py_pyDestroyEntity(PyObject* self, PyObject* args, PyObject * kwargs);				\
 																											\
-	DECLARE_PY_GET_MOTHOD(pyGetClassName);																	\
+	DECLARE_PY_GET_METHOD(pyGetClassName);																	\
 																											\
 	void initProperty(bool isReload = false);																\
 																											\

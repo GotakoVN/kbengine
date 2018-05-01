@@ -124,12 +124,12 @@ public:
 		optimized_ = v;
 	};
 
-	DECLARE_PY_GETSET_MOTHOD(pyGetPosition, pySetPosition);
-	DECLARE_PY_GETSET_MOTHOD(pyGetYaw, pySetYaw);
-	DECLARE_PY_GETSET_MOTHOD(pyGetPitch, pySetPitch);
-	DECLARE_PY_GETSET_MOTHOD(pyGetRoll, pySetRoll);
+	DECLARE_PY_GETSET_METHOD(pyGetPosition, pySetPosition);
+	DECLARE_PY_GETSET_METHOD(pyGetYaw, pySetYaw);
+	DECLARE_PY_GETSET_METHOD(pyGetPitch, pySetPitch);
+	DECLARE_PY_GETSET_METHOD(pyGetRoll, pySetRoll);
 
-	DECLARE_PY_GETSET_MOTHOD(pyGetOptimized, pySetOptimized);
+	DECLARE_PY_GETSET_METHOD(pyGetOptimized, pySetOptimized);
 
 	void addToStream(KBEngine::MemoryStream& s);
 	void createFromStream(KBEngine::MemoryStream& s);

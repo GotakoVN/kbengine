@@ -139,7 +139,7 @@ namespace KBEngine{ namespace script{
 
 //-----------------------------------------------------------------------------------------------------------
 /* 声明一个脚本get方法 */
-#define DECLARE_PY_GET_MOTHOD(MNAME)												\
+#define DECLARE_PY_GET_METHOD(MNAME)												\
 	PyObject* MNAME();																\
 	static PyObject* __pyget_##MNAME(PyObject *self, void *closure)					\
 	{																				\
@@ -157,8 +157,8 @@ namespace KBEngine{ namespace script{
 	}																				\
 
 /* 声明一个脚本getset方法 */
-#define DECLARE_PY_GETSET_MOTHOD(GETNAME, SETNAME)									\
-	DECLARE_PY_GET_MOTHOD(GETNAME)													\
+#define DECLARE_PY_GETSET_METHOD(GETNAME, SETNAME)									\
+	DECLARE_PY_GET_METHOD(GETNAME)													\
 	DECLARE_PY_SET_MOTHOD(SETNAME)													\
 
 //-----------------------------------------------------------------------------------------------------------

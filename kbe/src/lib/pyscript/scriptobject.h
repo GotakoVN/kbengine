@@ -495,9 +495,9 @@ public:
 	PyObject* tp_repr();
 	PyObject* tp_str();
 
-	DECLARE_PY_GET_MOTHOD(py__module__);
-	DECLARE_PY_GET_MOTHOD(py__qualname__);
-	DECLARE_PY_GET_MOTHOD(py__name__);
+	DECLARE_PY_GET_METHOD(py__module__);
+	DECLARE_PY_GET_METHOD(py__qualname__);
+	DECLARE_PY_GET_METHOD(py__name__);
 
 	/** 
 		脚本请求创建一个该对象 

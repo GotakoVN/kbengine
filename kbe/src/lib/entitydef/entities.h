@@ -91,7 +91,7 @@ public:
 	size_t size() const { return _entities.size(); }
 
 	EntityGarbages<T>* pGetbages() { return _pGarbages; }
-	DECLARE_PY_GET_MOTHOD(pyGarbages);
+	DECLARE_PY_GET_METHOD(pyGarbages);
 
 private:
 	ENTITYS_MAP _entities;

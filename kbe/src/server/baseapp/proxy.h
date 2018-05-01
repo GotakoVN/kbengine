@@ -69,30 +69,30 @@ public:
 		Script requests the RTT value of the connection
 	*/
 	double getRoundTripTime() const;
-	DECLARE_PY_GET_MOTHOD(pyGetRoundTripTime);
+	DECLARE_PY_GET_METHOD(pyGetRoundTripTime);
 
 	/** 
 		This is the number of seconds since a packet from the client was last received. 
 	*/
 	double getTimeSinceHeardFromClient() const;
-	DECLARE_PY_GET_MOTHOD(pyGetTimeSinceHeardFromClient);
+	DECLARE_PY_GET_METHOD(pyGetTimeSinceHeardFromClient);
 
 	/** 
 		The script asks if there is a client bound to the proxy
 	*/
 	bool hasClient() const;
-	DECLARE_PY_GET_MOTHOD(pyHasClient);
+	DECLARE_PY_GET_METHOD(pyHasClient);
 
 	/** 
 		Script request for client address
 	*/
-	DECLARE_PY_GET_MOTHOD(pyClientAddr);
+	DECLARE_PY_GET_METHOD(pyClientAddr);
 
 	/** 
 		Whether the entity is available
 	*/
 	INLINE bool clientEnabled() const;
-	DECLARE_PY_GET_MOTHOD(pyGetClientEnabled);
+	DECLARE_PY_GET_METHOD(pyGetClientEnabled);
 
 	/**
 		The entity is activated. After the client initializes its corresponding entity, this method is called.

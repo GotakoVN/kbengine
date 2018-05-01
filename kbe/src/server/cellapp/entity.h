@@ -63,7 +63,7 @@ typedef std::vector<EntityPtr> SPACE_ENTITIES;
 
 class Entity : public script::ScriptObject
 {
-	/** 子类化 将一些py操作填充进派生类 */
+	/** Subclassing Fill some py operations into derived classes */
 	BASE_SCRIPT_HREADER(Entity, ScriptObject)	
 	ENTITY_HEADER(Entity)
 
@@ -72,51 +72,51 @@ public:
 	~Entity();
 	
 	/** 
-		销毁这个entity 
+		This entity is destroyed
 	*/
 	void onDestroy(bool callScript);
 	
 	/**
-		销毁场景
+		Destroy space
 	*/
 	DECLARE_PY_MOTHOD_ARG0(pyDestroySpace);
 	void destroySpace(void);
 
 	/** 
-		当前实体所在的space将要销毁时触发  
+		Trigger when the current entity's space is about to be destroyed
 	*/
 	void onSpaceGone();
 	
 	/** 
-		判断自身是否是一个realEntity 
+		Determine if it is a realEntity
 	*/
 	INLINE bool isReal(void) const;
 
 	/** 
-		判断自身是否有ghostEntity 
+		Determine if it has a ghost entity
 	*/
 	INLINE bool hasGhost(void) const;
 
 	/** 
-		判断自身是否是一个realEntity 
+		Determine if it is a realEntity
 	*/
 	INLINE COMPONENT_ID realCell(void) const;
 	INLINE void realCell(COMPONENT_ID cellID);
 
 	/** 
-		判断自身是否有ghostEntity 
+		To determine whether there is ghostentity 
 	*/
 	INLINE COMPONENT_ID ghostCell(void) const;
 	INLINE void ghostCell(COMPONENT_ID cellID);
 
 	/** 
-		定义属性数据被改变了 
+		Defined attribute data was changed
 	*/
 	void onDefDataChanged(EntityComponent* pEntityComponent, const PropertyDescription* propertyDescription,
 			PyObject* pyData);
 	
 	/** 
-		该entity通信通道
+		The entity communication channel
 	*/
 	INLINE void pChannel(Network::Channel* pchannel);
 	INLINE Network::Channel* pChannel(void) const ;
@@ -126,34 +126,34 @@ public:
 		entityCall section
 	*/
 	INLINE EntityCall* baseEntityCall() const;
-	DECLARE_PY_GET_MOTHOD(pyGetBaseEntityCall);
+	DECLARE_PY_GET_METHOD(pyGetBaseEntityCall);
 	INLINE void baseEntityCall(EntityCall* entityCall);
 	
 	INLINE EntityCall* clientEntityCall() const;
-	DECLARE_PY_GET_MOTHOD(pyGetClientEntityCall);
+	DECLARE_PY_GET_METHOD(pyGetClientEntityCall);
 	INLINE void clientEntityCall(EntityCall* entityCall);
 
 	/**
 		all_clients
 	*/
 	INLINE AllClients* allClients() const;
-	DECLARE_PY_GET_MOTHOD(pyGetAllClients);
+	DECLARE_PY_GET_METHOD(pyGetAllClients);
 	INLINE void allClients(AllClients* clients);
 
 	/**
 		other_clients
 	*/
 	INLINE AllClients* otherClients() const;
-	DECLARE_PY_GET_MOTHOD(pyGetOtherClients);
+	DECLARE_PY_GET_METHOD(pyGetOtherClients);
 	INLINE void otherClients(AllClients* clients);
 
 	/**
-		脚本获取controlledBy属性
+		Script gets controlledBy property
 	*/
 	INLINE bool isControlledNotSelfClient() const;
 	INLINE EntityCall* controlledBy() const;
 	INLINE void controlledBy(EntityCall* baseEntityCall);
-	DECLARE_PY_GETSET_MOTHOD(pyGetControlledBy, pySetControlledBy);
+	DECLARE_PY_GETSET_METHOD(pyGetControlledBy, pySetControlledBy);
 	bool setControlledBy(EntityCall* baseEntityCall);
 	void sendControlledByStatusMessage(EntityCall* baseEntityCall, int8 isControlled);
 
@@ -162,21 +162,21 @@ public:
 	*/
 	INLINE Position3D& position();
 	INLINE void position(const Position3D& pos);
-	DECLARE_PY_GETSET_MOTHOD(pyGetPosition, pySetPosition);
+	DECLARE_PY_GETSET_METHOD(pyGetPosition, pySetPosition);
 
 	/** 
 		脚本获取和设置entity的方向 
 	*/
 	INLINE Direction3D& direction();
 	INLINE void direction(const Direction3D& dir);
-	DECLARE_PY_GETSET_MOTHOD(pyGetDirection, pySetDirection);
+	DECLARE_PY_GETSET_METHOD(pyGetDirection, pySetDirection);
 
 	/**
 		是否在地面上
 	*/
 	INLINE void isOnGround(bool v);
 	INLINE bool isOnGround() const;
-	DECLARE_PY_GET_MOTHOD(pyGetIsOnGround);
+	DECLARE_PY_GET_METHOD(pyGetIsOnGround);
 
 	/** 
 		设置entity方向和位置 
@@ -296,7 +296,7 @@ public:
 		脚本获取和设置entity的position 
 	*/
 	INLINE int8 layer() const;
-	DECLARE_PY_GETSET_MOTHOD(pyGetLayer, pySetLayer);
+	DECLARE_PY_GETSET_METHOD(pyGetLayer, pySetLayer);
 
 	/** 
 		entity移动导航 
@@ -344,14 +344,14 @@ public:
 	*/
 	float topSpeed() const{ return topSpeed_; }
 	INLINE void topSpeed(float speed);
-	DECLARE_PY_GETSET_MOTHOD(pyGetTopSpeed, pySetTopSpeed);
+	DECLARE_PY_GETSET_METHOD(pyGetTopSpeed, pySetTopSpeed);
 	
 	/** 
 		脚本获取和设置entity的最高y移动速度 
 	*/
 	INLINE float topSpeedY() const;
 	INLINE void topSpeedY(float speed);
-	DECLARE_PY_GETSET_MOTHOD(pyGetTopSpeedY, pySetTopSpeedY);
+	DECLARE_PY_GETSET_METHOD(pyGetTopSpeedY, pySetTopSpeedY);
 	
 	/** 
 		脚本请求获得一定范围内的某种类型的entities 
@@ -368,7 +368,7 @@ public:
 	*/
 	INLINE int8 shouldAutoBackup() const;
 	INLINE void shouldAutoBackup(int8 v);
-	DECLARE_PY_GETSET_MOTHOD(pyGetShouldAutoBackup, pySetShouldAutoBackup);
+	DECLARE_PY_GETSET_METHOD(pyGetShouldAutoBackup, pySetShouldAutoBackup);
 
 	/** 网络接口
 		远程呼叫本entity的方法 
@@ -388,13 +388,13 @@ public:
 		是否被任何proxy监视到, 如果这个entity没有客户端， 则这个值有效 
 	*/
 	INLINE bool isWitnessed(void) const;
-	DECLARE_PY_GET_MOTHOD(pyIsWitnessed);
+	DECLARE_PY_GET_METHOD(pyIsWitnessed);
 
 	/** 
 		entity是否是一个观察者 
 	*/
 	INLINE bool hasWitness(void) const;
-	DECLARE_PY_GET_MOTHOD(pyHasWitness);
+	DECLARE_PY_GET_METHOD(pyHasWitness);
 
 	/** 
 		自身被一个观察者观察到了 
@@ -597,7 +597,7 @@ public:
 		VolatileInfo section
 	*/
 	INLINE VolatileInfo* pCustomVolatileinfo(void);
-	DECLARE_PY_GETSET_MOTHOD(pyGetVolatileinfo, pySetVolatileinfo);
+	DECLARE_PY_GETSET_METHOD(pyGetVolatileinfo, pySetVolatileinfo);
 
 	/**
 		调用实体的回调函数，有可能被缓存

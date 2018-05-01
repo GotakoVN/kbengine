@@ -69,11 +69,11 @@ public:
 		entityCall section
 	*/
 	INLINE EntityCall* baseEntityCall() const;
-	DECLARE_PY_GET_MOTHOD(pyGetBaseEntityCall);
+	DECLARE_PY_GET_METHOD(pyGetBaseEntityCall);
 	INLINE void baseEntityCall(EntityCall* entityCall);
 	
 	INLINE EntityCall* cellEntityCall() const;
-	DECLARE_PY_GET_MOTHOD(pyGetCellEntityCall);
+	DECLARE_PY_GET_METHOD(pyGetCellEntityCall);
 	INLINE void cellEntityCall(EntityCall* entityCall);
 
 	/** 
@@ -84,7 +84,7 @@ public:
 	INLINE void position(const Position3D& pos);
 	INLINE void serverPosition(const Position3D& pos);
 	void onPositionChanged();
-	DECLARE_PY_GETSET_MOTHOD(pyGetPosition, pySetPosition);
+	DECLARE_PY_GETSET_METHOD(pyGetPosition, pySetPosition);
 
 	/** 
 		脚本获取和设置entity的方向 
@@ -92,7 +92,7 @@ public:
 	INLINE Direction3D& direction();
 	INLINE void direction(const Direction3D& dir);
 	void onDirectionChanged();
-	DECLARE_PY_GETSET_MOTHOD(pyGetDirection, pySetDirection);
+	DECLARE_PY_GETSET_METHOD(pyGetDirection, pySetDirection);
 	
 	/**
 		实体客户端的位置和朝向
@@ -111,12 +111,12 @@ public:
 	INLINE void moveSpeed(float speed);
 	INLINE float moveSpeed() const;
 	void onMoveSpeedChanged();
-	DECLARE_PY_GETSET_MOTHOD(pyGetMoveSpeed, pySetMoveSpeed);
+	DECLARE_PY_GETSET_METHOD(pyGetMoveSpeed, pySetMoveSpeed);
 
 	/** 
 		pClientApp section
 	*/
-	DECLARE_PY_GET_MOTHOD(pyGetClientApp);
+	DECLARE_PY_GET_METHOD(pyGetClientApp);
 	void pClientApp(ClientObjectBase* p);
 	INLINE ClientObjectBase* pClientApp() const;
 	
