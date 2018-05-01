@@ -76,6 +76,17 @@ Witness::~Witness()
 void Witness::addToStream(KBEngine::MemoryStream& s)
 {
 	/**
+	 * @TODO(phw): 注释下面的原始代码，简单修正如下的问题：
+	 * 想象一下：A、B、C三个玩家互相能看见对方，那么它们的viewEntities_里面必须会互相记录着对方的entityID，
+	 * 那么假如三个玩家都在同一时间传送到另一个cellapp的地图的同一点上，
+	 * 这时三个玩家还原的时候都会为另两个玩家生成一个flags_ == ENTITYREF_FLAG_UNKONWN的EntityRef实例，
+	 * 把它们记录在自己的viewEntities_，
+	 * 但是，Witness::update()并没有针对flags_ == ENTITYREF_FLAG_UNKONWN的情况做特殊处理——把玩家entity数据发送给客户端，
+	 * 所以进入了默认的updateVolatileData()流程，
+	 * 使得客户端在没有别的玩家entity的情况下就收到了别的玩家的坐标更新的信息，导致客户端错误发生。
+	 *
+	 * ..goog translate.. probably important to fix this so keeping original chinese to further understand:
+	 * 
 	 * @TODO(phw): Comment the following source code to simply fix the following problem:
 	 * Imagine: Three players A, B, and C can see each other, then their viewEntities_ must each record their entityIDs.
 	 * So if all three players are teleported at the same time to the same point on the map of another cellapp,
@@ -97,7 +108,7 @@ void Witness::addToStream(KBEngine::MemoryStream& s)
 	}
 	*/
 
-	// 当前这么做能解决问题，但是在space多cell分割的情况下将会出现问题
+	// Doing so currently solves the problem, but there will be problems with space multiple cell segmentation
 	s << viewRadius_ << viewHysteresisArea_ << (uint16)0;	
 	s << (uint32)0; // viewEntities_map_.size();
 }
@@ -139,7 +150,7 @@ void Witness::attach(Entity* pEntity)
 
 	if(g_kbeSrvConfig.getCellApp().use_coordinate_system)
 	{
-		// 初始化默认View范围
+		// Initialize default view Range
 		ENGINE_COMPONENT_INFO& ecinfo = ServerConfig::getSingleton().getCellApp();
 		setViewRadius(ecinfo.defaultViewRadius, ecinfo.defaultViewHysteresisArea);
 	}
@@ -155,7 +166,7 @@ void Witness::onAttach(Entity* pEntity)
 	lastBasePos_.z = -FLT_MAX;
 	lastBaseDir_.yaw(-FLT_MAX);
 
-	// 通知客户端enterworld
+	// Notify Client enterWorld
 	Network::Bundle* pSendBundle = Network::Bundle::createPoolObject();
 	NETWORK_ENTITY_MESSAGE_FORWARD_CLIENT_BEGIN(pEntity_->id(), (*pSendBundle));
 	
@@ -192,7 +203,7 @@ void Witness::detach(Entity* pEntity)
 		{
 			pChannel->send();
 
-			// 通知客户端leaveworld
+			// Notify Client leaveWorld
 			Network::Bundle* pSendBundle = Network::Bundle::createPoolObject();
 			NETWORK_ENTITY_MESSAGE_FORWARD_CLIENT_BEGIN(pEntity_->id(), (*pSendBundle));
 
