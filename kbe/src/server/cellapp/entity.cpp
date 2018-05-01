@@ -3537,9 +3537,12 @@ void Entity::teleportRefEntityCall(EntityCall* nearbyMBRef, Position3D& pos, Dir
 		Network::Channel* pBaseChannel = baseEntityCall()->getChannel();
 		if(pBaseChannel)
 		{
-			// 同时需要通知base暂存发往cellapp的消息，因为后面如果跳转成功需要切换cellEntityCall映射关系到新的cellapp
-			// 为了避免在切换的一瞬间消息次序发生混乱(旧的cellapp消息也会转到新的cellapp上)， 因此需要在传送前进行
-			// 暂存， 传送成功后通知旧的cellapp销毁entity之后同时通知baseapp改变映射关系。
+			// At the same time, need to inform base to temporarily store the message sent to cellapp, because if the jump
+			//  succeeds later, it needs to switch the cellEntityCall to the new cellapp entity.
+			// In order to avoid mess in the moment of handover (the old cellapp message will also go to the new cellapp),
+			//  it needs to be done before the transfer
+			// Temporarily, after the success of the transfer, the old cellapp is notified to destroy the entity and the
+			//  baseapp is notified to change the mapping at the same time.
 			Network::Bundle* pBundle = Network::Bundle::createPoolObject();
 			(*pBundle).newMessage(BaseappInterface::onMigrationCellappStart);
 			(*pBundle) << id();
@@ -3562,7 +3565,7 @@ void Entity::teleportRefEntityCall(EntityCall* nearbyMBRef, Position3D& pos, Dir
 //-------------------------------------------------------------------------------------
 void Entity::onTeleportRefEntityCall(EntityCall* nearbyMBRef, Position3D& pos, Direction3D& dir)
 {
-	// 我们需要将entity打包发往目的cellapp
+	// We need to send the entity packet to the destination cellapp
 	Network::Bundle* pBundle = Network::Bundle::createPoolObject();
 	(*pBundle).newMessage(CellappInterface::reqTeleportToCellApp);
 	(*pBundle) << id();
@@ -3579,33 +3582,35 @@ void Entity::onTeleportRefEntityCall(EntityCall* nearbyMBRef, Position3D& pos, D
 	(*pBundle).append(s);
 	MemoryStream::reclaimPoolObject(s);
 
-	// 暂时不销毁这个entity, 等那边成功创建之后再回来销毁
-	// 此期间的消息可以通过ghost转发给real
-	// 如果未能正确传输过去则可以从当前cell继续恢复entity.
+	// Don't destroy the entity for the time being, wait for it to be successfully created
+	// Messages during this period can be forwarded to real via ghost
+	// If it fails to transmit correctly, you can resume the entity from the current cell.
 	// Cellapp::getSingleton().destroyEntity(id(), false);
 
 	nearbyMBRef->sendCall(pBundle);
 
-	// 序列化后将entity先停止移动， 如果传送失败了则可以根据序列化的内容进行恢复
+	// After the serialization, the entity will stop moving first. If the transmission fails,
+	//  it can be restored according to the serialized content.
 	stopMove();
 }
 
 //-------------------------------------------------------------------------------------
 void Entity::teleportLocal(PyObject_ptr nearbyMBRef, Position3D& pos, Direction3D& dir)
 {
-	// 本地跳转在未来需要考虑space被分割为多cell的情况， 当前直接操作
+	// In the future, local teleport needs to consider a space can be divided into multiple cells.
+	// Currently though, it can just use direct calls
 	SPACE_ID lastSpaceID = this->spaceID();
 
-	// 先要从CoordinateSystem中删除entity节点
+	// First remove the entity node from CoordinateSystem
 	Space* currspace = Spaces::findSpace(this->spaceID());
 	this->uninstallCoordinateNodes(currspace->pCoordinateSystem());
 
-	// 此时不会扰动ranglist
+	// This does not disturb the rangelist
 	this->setPositionAndDirection(pos, dir);
 
 	if(this->pWitness())
 	{
-		// 通知位置强制改变
+		// Notify that location was forcibly changed
 		Network::Bundle* pSendBundle = Network::Bundle::createPoolObject();
 		NETWORK_ENTITY_MESSAGE_FORWARD_CLIENT_BEGIN(id(), (*pSendBundle));
 		
@@ -3635,12 +3640,12 @@ void Entity::teleportLocal(PyObject_ptr nearbyMBRef, Position3D& pos, Direction3
 		if (pChannel == NULL)
 			continue;
 
-		// 这个可能性是存在的，例如数据来源于createWitnessFromStream()
-		// 又如自己的entity还未在目标客户端上创建
+		// This possibility exists, for example the data comes from createWitnessFromStream()
+		// Another example is that their entity is not yet created on the target client
 		if (!pEntity->pWitness()->entityInView(id()))
 			continue;
 
-		// 通知位置强制改变
+		// Notify that location was forcibly changed
 		Network::Bundle* pSendBundle = Network::Bundle::createPoolObject();
 		NETWORK_ENTITY_MESSAGE_FORWARD_CLIENT_BEGIN(pEntity->id(), (*pSendBundle));
 		
@@ -3660,42 +3665,50 @@ void Entity::teleportLocal(PyObject_ptr nearbyMBRef, Position3D& pos, Direction3
 void Entity::teleport(PyObject_ptr nearbyMBRef, Position3D& pos, Direction3D& dir)
 {
 	/*
-		1: 任何形式的teleport都被认为是瞬间移动的（可突破空间限制进入到任何空间）， 哪怕是在当前位置只移动了0.1米, 这就造成如果当前entity
-			刚好在某个trap中， teleport向前移动0.1米但是没有出trap， 因为这是瞬间移动的特性我们目前认为
-			entity会先离开trap并且触发相关回调, 然后瞬时出现在了另一个点， 那么因为该点也是在当前trap中所以又会抛出进入trap回调.
+		1: Any form of teleport is considered to be momentary (can instantly move to any space),
+			even if it is only 0.1m from the current position. If the current entity happens to be in some trap,
+			the teleport before moving 0.1 meters will cause leaving the trap, because this is the characteristic of the momentary
+			movement. Currently, the entity will leave the trap triggering the relevant callback, and then
+			instantaneously appear at another point, then because this point is also in the current trap,
+			also throws the enter trap callback.
 
-		2: 如果是当前space上跳转则立即进行移动操作
+		2: If it is a jump on the current space, move it immediately
 
-		3: 如果是跳转到其他space上, 但是那个space也在当前cellapp上的情况时， 立即执行跳转操作(因为不需要进行任何其他关系的维护， 直接切换就好了)。 
+		3: If it is a jump to another space, but that space is also in the current cellapp situation, immediately perform
+			the teleport operation (since there is no need to do any other maintenance of the relationship, just switch directly).
 		
-		4: 如果要跳转的目标space在另一个cellapp上：
-			4.1: 当前entity没有base部分， 不考虑维护base部分的关系， 但是还是要考虑意外情况导致跳转失败， 那么此时应该返回跳转失败回调并且继续
-			正常存在于当前space上。
+		4: If the target space to jump to is on another cellapp:
+			4.1: The current entity does not have a base part, and does not need to consider maintaining the relationship of the base part.
+				However, it is still necessary to consider unexpected situations that cause a teleport failure.
+				At this point, the jump failure callback should be returned and continue.
+					Normally exists on the current space.
 		
-			4.2: 当前entity有base部分， 那么我们需要改变base所映射的cell部分(并且在未正式切换关系时baseapp上所有送达cell的消息都应该不被丢失)， 为了安全我们需要做一些工作
+			4.2: The current entity has a base part, so we need to change the cell EntityCall of the base.
+				(and all messages sent to the cell on the baseapp should not be lost when the relationship is in the process of being switched).
+				We need to do some work to ensure safety.
 	*/
 
 	Py_INCREF(this);
 
-	// 如果为None则是entity自己想在本space上跳转到某位置
+	// If it is None, then the entity wants to jump to a location on this space.
 	if(nearbyMBRef == Py_None)
 	{
-		// 直接执行操作
+		// Directly perform operations
 		teleportLocal(nearbyMBRef, pos, dir);
 	}
 	else
 	{
 		//EntityCall* mb = NULL;
 
-		// 如果是entity则一定是在本cellapp上， 可以直接进行操作
+		// If it is an entity, it must be on this cellapp and can also be directly operated
 		if(PyObject_TypeCheck(nearbyMBRef, Entity::getScriptType()))
 		{
 			teleportRefEntity(static_cast<Entity*>(nearbyMBRef), pos, dir);
 		}
 		else
 		{
-			// 如果是entityCall, 先检查本cell上是否能够通过这个entityCall的ID找到entity
-			// 如果能找到则也是在本cellapp上可直接进行操作
+			// If it is an entityCall, first check whether the cell can find the entity through the ID of the entityCall.
+			// If it can find it, it is also on this cellapp and can operate directly on it
 			if(PyObject_TypeCheck(nearbyMBRef, EntityCall::getScriptType()))
 			{
 				EntityCall* mb = static_cast<EntityCall*>(nearbyMBRef);
@@ -3712,7 +3725,7 @@ void Entity::teleport(PyObject_ptr nearbyMBRef, Position3D& pos, Direction3D& di
 			}
 			else
 			{
-				// 如果不是entity， 也不是entityCall同时也不是None? 那肯定是输入错误
+				// If it's not an Entity, not an EntityCall, and it's not None, then must be an input error.
 				PyErr_Format(PyExc_Exception, "%s::teleport: %d, nearbyRef error!\n", scriptName(), id());
 				PyErr_PrintEx(0);
 
@@ -3727,7 +3740,7 @@ void Entity::teleport(PyObject_ptr nearbyMBRef, Position3D& pos, Direction3D& di
 //-------------------------------------------------------------------------------------
 void Entity::onTeleport()
 {
-	// 这个方法仅在base.teleport跳转之前被调用， cell.teleport是不会被调用的。
+	// This method is only called before the base.teleport jump, cell.teleport will not be called.
 	SCOPED_PROFILE(SCRIPTCALL_PROFILE);
 
 	bufferOrExeCallback(const_cast<char*>("onTeleport"), NULL);
@@ -3753,7 +3766,7 @@ void Entity::onTeleportSuccess(PyObject* nearbyEntity, SPACE_ID lastSpaceID)
 		_sendBaseTeleportResult(this->id(), mb->componentID(), this->spaceID(), lastSpaceID, true);
 	}
 
-	// 如果身上有trap等触发器还得重新添加进去
+	// If the Entity has traps and other triggers, they have to be added back in
 	restoreProximitys();
 
 	SCOPED_PROFILE(SCRIPTCALL_PROFILE);
@@ -3910,11 +3923,11 @@ void Entity::onUpdateGhostVolatileData(KBEngine::MemoryStream& s)
 //-------------------------------------------------------------------------------------
 void Entity::changeToGhost(COMPONENT_ID realCell, KBEngine::MemoryStream& s)
 {
-	// 一个entity要转变为ghost
-	// 首先需要设置自身的realCell
-	// 将所有def数据添加进流
-	// 序列化controller并停止所有的controller(timer, navigate, trap,...)
-	// 卸载witness， 并且序列化
+	// Convert Entity to a ghost
+	// First, need to set our realCell
+	// Add all def data into the stream
+	// Serialize the controller and stop all controllers (timer, navigate, trap,...)
+	// Uninstall Witness and Serialize
 	KBE_ASSERT(isReal() == true && "Entity::changeToGhost(): not is real.\n");
 	KBE_ASSERT(realCell_ != g_componentID);
 
@@ -3930,7 +3943,7 @@ void Entity::changeToGhost(COMPONENT_ID realCell, KBEngine::MemoryStream& s)
 	DEBUG_MSG(fmt::format("{}::changeToGhost(): {}, realCell={}, spaceID={}, position=({},{},{}).\n", 
 		scriptName(), id(), realCell_, spaceID_, position().x, position().y, position().z));
 	
-	// 必须放在前面
+	// Must be done first
 	addToStream(s);
 
 	//witnesses_.clear();
@@ -3956,11 +3969,11 @@ void Entity::changeToGhost(COMPONENT_ID realCell, KBEngine::MemoryStream& s)
 //-------------------------------------------------------------------------------------
 void Entity::changeToReal(COMPONENT_ID ghostCell, KBEngine::MemoryStream& s)
 {
-	// 一个entity要转变为real
-	// 首先需要设置自身的ghostCell
-	// 将所有def数据添加进流
-	// 反序列化controller并恢复所有的controller(timer, navigate, trap,...)
-	// 反序列化安装witness
+	// Convert Ghost to a real Entity
+	// First, need to set our ghostCell
+	// Add all def data into the stream
+	// Deserialize the controller and stop all controllers (timer, navigate, trap,...)
+	// Deserialize and install Witness
 	KBE_ASSERT(isReal() == false && "Entity::changeToReal(): not is ghost.\n");
 
 	ghostCell_ = ghostCell;
@@ -4021,20 +4034,21 @@ void Entity::createFromStream(KBEngine::MemoryStream& s)
 		pCustomVolatileinfo_->createFromStream(s);
 	}
 
-	// 此时强制设置为不在地面，无法判定其是否在地面，角色需要客户端上报是否在地面
-	// 而服务端的NPC则与移动后是否在地面来判定。
+	// At this time, it is forcibly set to not be on the ground, it cannot be judged whether it is on the ground,
+	//  and the character needs the client to report on the ground.
+	// The server's NPC is then judged whether it is on the ground after the move.
 	isOnGround_ = false;
 
 	this->pScriptModule_ = EntityDef::findScriptModule(scriptUType);
 
 	KBE_ASSERT(this->pScriptModule_);
 
-	// 设置entity的baseEntityCall
+	// Set entity's baseEntityCall
 	if(baseEntityCallComponentID > 0)
 		baseEntityCall(new EntityCall(pScriptModule(), NULL, baseEntityCallComponentID, id_, ENTITYCALL_TYPE_BASE));
 
-	// 如果传送前的控制者是系统或自己的客户端，则继续保持
-	// 如果是其它客户端在控制，则尝试恢复控制关系，如果无法恢复，则重置
+	// If the controller before the transfer is the system or its own client, keep it
+	// If another client is in control, try to restore the control relationship and reset it if it cannot be restored
 	if (controlledByID == id())
 		controlledBy(baseEntityCall());
 	else if (controlledByID == 0)
@@ -4072,7 +4086,7 @@ void Entity::addControllersToStream(KBEngine::MemoryStream& s)
 	{
 		s << true;
 
-		// 必须先清理移动相关的Controllers
+		// Must clean up move Controllers
 		stopMove();
 
 		pControllers_->addToStream(s);
@@ -4200,7 +4214,7 @@ void Entity::createWitnessFromStream(KBEngine::MemoryStream& s)
 		EntityCall* client = static_cast<EntityCall*>(clientMB);	
 		clientEntityCall(client);
 
-		// 不要使用setWitness，因为此时不需要走onAttach流程，客户端不需要重新enterworld。
+		// Do not use setWitness, because you do not need to go onAttach process, the client does not need to enterWorld again.
 		// setWitness(Witness::createPoolObject());
 		pWitness_ = Witness::createPoolObject();
 		pWitness_->pEntity(this);
