@@ -49,7 +49,7 @@ class MemoryStream;
 class ViewTrigger;
 class Space;
 
-/** 观察者信息结构 */
+/** Observer Information Structure */
 struct WitnessInfo
 {
 	WitnessInfo(const int8& lv, Entity* e, const float& r):
@@ -64,17 +64,19 @@ struct WitnessInfo
 				detailLevelLog[i] = false;
 	}
 	
-	int8 detailLevel;							// 当前所在详情级别
-	Entity* entity;								// 所表达的entity
-	float range;								// 当前与这个entity的距离
-	bool detailLevelLog[3];						// 表示这个entity都进入过该entity的哪些详情级别， 提供属性广播优化用的
-												// 当没有进入过某级别时， 会将所有这个级别的属性更新给他， 否则只更新近段时间曾经改变过的属性
-	std::vector<uint32> changeDefDataLogs[3];	// entity离开了某个详情级别(没有脱离witness)后， 这期间有某个详情级别的属性改变均记录在这里
+	int8 detailLevel;							// Current level of detail
+	Entity* entity;								// Witnessed entity
+	float range;								// Current distance from entity
+	bool detailLevelLog[3];						// Indicates which level of detail this entity has entered with, for attribute broadcast optimization
+												// When entering a LOD, all that LOD's properties will be updated to the witness,
+												//  otherwise, it will only update properties changed recently.
+	std::vector<uint32> changeDefDataLogs[3];	// After the entity leaves a level of detail (without leaving the witness),
+												//  level of detail changes are recorded here.
 };
 
 /**
-	这个模块用来监视我们感兴趣的entity数据， 如：view， 属性更新， 调用entity的方法
-	并将其传输给监视者。
+	This class is used to monitor entity data of interest, such as: view, property update, calling entity methods.
+	And transmits it to the observer.
 */
 class Witness : public PoolObject, public Updatable
 {
@@ -128,12 +130,12 @@ public:
 	bool pushBundle(Network::Bundle* pBundle);
 
 	/**
-		基础位置， 如果有坐骑基础位置可能是坐骑等
+		Base position, if there is a vehicle base position may be vehicle etc.
 	*/
 	INLINE const Position3D& basePos();
 
 	/**
-	基础朝向， 如果有坐骑基础朝向可能是坐骑等
+		Base orientation, if there is a vehicle base facing may be vehicle etc
 	*/
 	INLINE const Direction3D& baseDir();
 
@@ -147,7 +149,7 @@ public:
 	void _onLeaveView(EntityRef* pEntityRef);
 
 	/**
-		获得实体本次同步Volatile数据的标记
+		Get flags for syncing Volatile data for the entity
 	*/
 	uint32 getEntityVolatileDataUpdateFlags(Entity* otherEntity);
 	
@@ -158,17 +160,17 @@ public:
 	bool entityID2AliasID(ENTITY_ID id, uint8& aliasID);
 
 	/**
-		使用何种协议来更新客户端
+		What protocol to use to update the client
 	*/
 	void addUpdateToStream(Network::Bundle* pForwardBundle, uint32 flags, EntityRef* pEntityRef);
 
 	/**
-		添加基础位置到更新包
+		Add base location to update package
 	*/
 	void addBaseDataToStream(Network::Bundle* pSendBundle);
 
 	/**
-		向witness客户端推送一条消息
+		Push a message to the witness client
 	*/
 	bool sendToClient(const Network::MessageHandler& msgHandler, Network::Bundle* pBundle);
 	Network::Channel* pChannel();
@@ -176,10 +178,10 @@ public:
 	INLINE VIEW_ENTITIES_MAP& viewEntitiesMap();
 	INLINE VIEW_ENTITIES& viewEntities();
 
-	/** 获得viewentity的引用 */
+	/** Get a reference to viewentity */
 	INLINE EntityRef* getViewEntityRef(ENTITY_ID entityID);
 
-	/** entityID是否在view内 */
+	/** Whether the entityID is in the view */
 	INLINE bool entityInView(ENTITY_ID entityID);
 
 	INLINE ViewTrigger* pViewTrigger();
@@ -189,27 +191,27 @@ public:
 	void uninstallViewTrigger();
 
 	/**
-		重置View范围内的entities， 使其同步状态恢复到最初未同步的状态
+		Reset the entities in View-range to bring them back to their original unsynchronized state
 	*/
 	void resetViewEntities();
 
 private:
 	/**
-		如果view中entity数量小于256则只发送索引位置
+		If the number of entities in the view is less than 256, only the index position is sent
 	*/
 	INLINE void _addViewEntityIDToBundle(Network::Bundle* pBundle, EntityRef* pEntityRef);
 	
 	/**
-		当update执行时view列表有改变的时候需要更新entityRef的aliasID
+		The update of the entityRef's aliasID is required when the view is changed when the update is executed
 	*/
 	void updateEntitiesAliasID();
 		
 private:
 	Entity*									pEntity_;
 
-	// 当前entity的view半径
+	// The current entity's view radius
 	float									viewRadius_;
-	// 当前entityView的一个滞后范围
+	// A lag range for the current entityView
 	float									viewHysteresisArea_;
 
 	ViewTrigger*							pViewTrigger_;

@@ -45,7 +45,7 @@ public:
 	void loadSpaceGeometry(const std::map< int, std::string >& params);
 
 	/** 
-		更新space中的内容 
+		Update the contents of space
 	*/
 	bool update();
 
@@ -56,7 +56,7 @@ public:
 	void removeEntity(Entity* pEntity);
 
 	/**
-		一个entity进入了游戏世界
+		An entity enters the game world
 	*/
 	void onEnterWorld(Entity* pEntity);
 	void _onEnterWorld(Entity* pEntity);
@@ -69,19 +69,16 @@ public:
 	const SPACE_ENTITIES& entities() const{ return entities_; }
 	Entity* findEntity(ENTITY_ID entityID);
 
-	/**
-		销毁
-	*/
 	bool destroy(ENTITY_ID entityID, bool ignoreGhost = true);
 
 	/**
-		这个space的cell
+		Cell of this space
 	*/
 	Cell * pCell() const	{ return pCell_; }
 	void pCell( Cell * pCell );
 
 	/**
-		添加space的几何映射
+		Add space geometric mapping
 	*/
 	static PyObject* __py_AddSpaceGeometryMapping(PyObject* self, PyObject* args);
 	bool addSpaceGeometryMapping(std::string respath, bool shouldLoadOnServer, const std::map< int, std::string >& params);
@@ -94,7 +91,7 @@ public:
 	NavigationHandlePtr pNavHandle() const{ return pNavHandle_; }
 
 	/**
-		spaceData相关操作接口
+		spaceData related operation interface
 	*/
 	void setSpaceData(const std::string& key, const std::string& value);
 	void delSpaceData(const std::string& key);
@@ -123,27 +120,27 @@ protected:
 	};
 
 protected:
-	// 这个space的ID
+	// The ID of this space
 	SPACE_ID					id_;														
 
-	// 创建这个space时用的实体脚本模块名称
+	// The entity script module name to use when creating this space
 	std::string					scriptModuleName_;
 
-	// 这个space上的entity
+	// The entities on this space
 	SPACE_ENTITIES				entities_;							
 
-	// 是否加载过地形数据
+	// Has loaded terrain data?
 	bool						hasGeometry_;
 
-	// 每个space最多只有一个cell
+	// There is at most one cell per space
 	Cell*						pCell_;
 
 	CoordinateSystem			coordinateSystem_;
 
 	NavigationHandlePtr			pNavHandle_;
 
-	// spaceData, 只能存储字符串资源， 这样能比较好的兼容客户端。
-	// 开发者可以将其他类型转换成字符串进行传输
+	// spaceData can only store string resources so that it can be better compatible with client.
+	// Developers can convert other types to strings for transmission
 	SPACE_DATA					datas_;
 
 	int8						state_;
