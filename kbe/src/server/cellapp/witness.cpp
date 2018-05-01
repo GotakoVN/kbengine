@@ -76,14 +76,14 @@ Witness::~Witness()
 void Witness::addToStream(KBEngine::MemoryStream& s)
 {
 	/**
-	 * @TODO(phw): 注释下面的原始代码，简单修正如下的问题：
-	 * 想象一下：A、B、C三个玩家互相能看见对方，那么它们的viewEntities_里面必须会互相记录着对方的entityID，
-	 * 那么假如三个玩家都在同一时间传送到另一个cellapp的地图的同一点上，
-	 * 这时三个玩家还原的时候都会为另两个玩家生成一个flags_ == ENTITYREF_FLAG_UNKONWN的EntityRef实例，
-	 * 把它们记录在自己的viewEntities_，
-	 * 但是，Witness::update()并没有针对flags_ == ENTITYREF_FLAG_UNKONWN的情况做特殊处理——把玩家entity数据发送给客户端，
-	 * 所以进入了默认的updateVolatileData()流程，
-	 * 使得客户端在没有别的玩家entity的情况下就收到了别的玩家的坐标更新的信息，导致客户端错误发生。
+	 * @TODO(phw): Comment the following source code to simply fix the following problem:
+	 * Imagine: Three players A, B, and C can see each other, then their viewEntities_ must each record their entityIDs.
+	 * So if all three players are teleported at the same time to the same point on the map of another cellapp,
+	 * At this time, when the three players restore, they will generate an EntityRef instance of flags_ == ENTITYREF_FLAG_UNKNOWN for the other two players.
+	 * Record them in their viewEntities_,
+	 * However, Witness::update() does not do special processing for flags_ == ENTITYREF_FLAG_UNKNOWN - send the player entity data to the client,
+	 * So we entered the default updateVolatileData() process,
+	 * Enables the client to receive information from other player's coordinate updates without any other player entity, resulting in client error.
 	
 	s << viewRadius_ << viewHysteresisArea_ << clientViewSize_;	
 	

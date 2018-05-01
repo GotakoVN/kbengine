@@ -62,7 +62,7 @@ INLINE bool Witness::entityInView(ENTITY_ID entityID)
 {
 	EntityRef* pEntityRef = getViewEntityRef(entityID);
 
-	if(pEntityRef == NULL || pEntityRef->pEntity() == NULL || pEntityRef->flags() == ENTITYREF_FLAG_UNKONWN || 
+	if(pEntityRef == NULL || pEntityRef->pEntity() == NULL || pEntityRef->flags() == ENTITYREF_FLAG_UNKNOWN || 
 		(pEntityRef->flags() & (ENTITYREF_FLAG_ENTER_CLIENT_PENDING | ENTITYREF_FLAG_LEAVE_CLIENT_PENDING)) > 0)
 		return false;
 		

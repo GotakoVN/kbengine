@@ -30,7 +30,7 @@ namespace KBEngine{
 class Entity;
 class MemoryStream;
 
-#define ENTITYREF_FLAG_UNKONWN							0x00000000
+#define ENTITYREF_FLAG_UNKNOWN							0x00000000
 #define ENTITYREF_FLAG_ENTER_CLIENT_PENDING				0x00000001	// Client enter flag
 #define ENTITYREF_FLAG_LEAVE_CLIENT_PENDING				0x00000002	// Client leave flag
 #define ENTITYREF_FLAG_NORMAL							0x00000004	// Normal flag

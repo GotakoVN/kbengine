@@ -29,7 +29,7 @@ EntityRef::EntityRef(Entity* pEntity):
 id_(0),
 aliasID_(0),
 pEntity_(pEntity),
-flags_(ENTITYREF_FLAG_UNKONWN)
+flags_(ENTITYREF_FLAG_UNKNOWN)
 {
 	id_ = pEntity->id();
 }
@@ -39,7 +39,7 @@ EntityRef::EntityRef():
 id_(0),
 aliasID_(0),
 pEntity_(NULL),
-flags_(ENTITYREF_FLAG_UNKONWN)
+flags_(ENTITYREF_FLAG_UNKNOWN)
 {
 }
 
@@ -88,7 +88,7 @@ void EntityRef::onReclaimObject()
 	id_ = 0;
 	aliasID_ =  0;
 	pEntity_ = NULL;
-	flags_ = ENTITYREF_FLAG_UNKONWN;
+	flags_ = ENTITYREF_FLAG_UNKNOWN;
 }
 
 //-------------------------------------------------------------------------------------
