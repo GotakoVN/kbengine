@@ -216,8 +216,8 @@ void Entity::onDestroy(bool callScript)
 		SCOPED_PROFILE(SCRIPTCALL_PROFILE);
 		CALL_ENTITY_AND_COMPONENTS_METHOD(this, SCRIPT_OBJECT_CALL_ARGS0(pyTempObj, const_cast<char*>("onDestroy"), false));
 
-		// 如果不通知脚本， 那么也不会产生这个回调
-		// 通常销毁一个entity不通知脚本可能是迁移或者传送造成的
+		// If you do not notify the script, then this callback will not be generated
+		// Often if destroying an entity does not notify the script it may have been caused by a migration or teleport
 		if(baseEntityCall_ != NULL)
 		{
 			setDirty();
@@ -232,7 +232,7 @@ void Entity::onDestroy(bool callScript)
 
 	stopMove();
 
-	// 解除控制者的引用
+	// Remove the controller's reference
 	S_RELEASE(controlledBy_);
 
 	if(pWitness_)
@@ -242,7 +242,7 @@ void Entity::onDestroy(bool callScript)
 		pWitness_ = NULL;
 	}
 
-	// 将entity从场景中剔除
+	// Remove this entity from its space
 	Space* space = Spaces::findSpace(this->spaceID());
 	if(space)
 	{
@@ -254,10 +254,10 @@ void Entity::onDestroy(bool callScript)
 			this->scriptName(), this->id(), spaceID()));
 	}
 	
-	// 在进程强制关闭时这里可能不为0
+	// This may not be 0 when the process is forced off
 	//KBE_ASSERT(spaceID() == 0);
 
-	// 此时不应该还有witnesses，否则为View BUG
+	// There should not be witnesses at this time, otherwise it's a View BUG
 	if (witnesses_count_ > 0)
 	{
 		ERROR_MSG(fmt::format("{}::onDestroy(): id={}, witnesses_count({}/{}) != 0, isReal={}, spaceID={}, position=({},{},{})\n", 
@@ -448,10 +448,10 @@ int Entity::pySetControlledBy(PyObject *value)
 
 		entityCall = static_cast<EntityCall *>(value);
 
-		// 如果看不见我，就不要控制我
+		// If controlling entity can't see this one, can't control it
 		if (!entityInWitnessed(entityCall->id()) && entityCall->id() != id())
 		{
-			PyErr_Format(PyExc_AssertionError, "%s: entity '%d' can't witnessed me!\n",
+			PyErr_Format(PyExc_AssertionError, "%s: entity '%d' isn't witnessing me!\n",
 				scriptName(), entityCall->id());
 			PyErr_PrintEx(0);
 			return 0;
@@ -475,7 +475,7 @@ bool Entity::setControlledBy(EntityCall* controllerBaseEntityCall)
 {
 	EntityCall *oldEntityCall = controlledBy();
 
-	//  如果新旧的entityCall是同一个人，则不做任何更改
+	// If the old and new entityCall are the same person, do not make any changes
 	if (oldEntityCall != NULL && controllerBaseEntityCall != NULL &&
 		oldEntityCall->id() == controllerBaseEntityCall->id())
 	{
@@ -485,13 +485,13 @@ bool Entity::setControlledBy(EntityCall* controllerBaseEntityCall)
 
 	if (oldEntityCall != NULL)
 	{
-		// 如果旧的控制者是我自己的客户端，
-		// 那就需要通知自己的客户端：你不能再控制你自己了，也就是你被其它人控制了
+		// If the old controller is my own client,
+		// Then you need to inform your client: You can no longer control yourself, that is, you are controlled by others.
 		if (oldEntityCall->id() == id())
 			sendControlledByStatusMessage(oldEntityCall, 1);
 
-		// 如果旧的控制者也是我的观察者之一，那就表示它的客户端能看到我，
-		// 所以，需要通知旧的客户端：你不能再控制某人的位移了
+		// If the old controller is also one of this entity's observers, it means that its clients can see this entity,
+		//  so need to notify the old client that you can't control our movement anymore.
 		else if (entityInWitnessed(oldEntityCall->id()))
 			sendControlledByStatusMessage(oldEntityCall, 0);
 
@@ -499,23 +499,23 @@ bool Entity::setControlledBy(EntityCall* controllerBaseEntityCall)
 		{
 			controlledBy(controllerBaseEntityCall);
 
-			// 如果是恢复自我控制，那么需要通知我的客户端：没有人控制你了
+			// If it is to restore self-control, then you need to notify my client: no one controls you
 			if (controllerBaseEntityCall->id() == id())
 			{
 				KBE_ASSERT(clientEntityCall_);
 				sendControlledByStatusMessage(controllerBaseEntityCall, 0);
 			}
 
-			// 如果是别人接手了控制，那么只需要通知接手者即可，
-			//     ——因为之前自己还是被别人控制着的，所以不需要另行通知，
-			// 所以，通知接手的控制者：你控制了谁
+			// If someone else took was controlling, only need to notify the receiver.
+			//    -Because he was still under the control of others, he did not need to be notified.
+			// So, inform the controller who took over: you/your entity
 			else
 			{
 				sendControlledByStatusMessage(controllerBaseEntityCall, 1);
 			}
 
 		}
-		else  // NULL表示交由系统控制，所以不需要通知其他人
+		else  // NULL means it is controlled by the system so there is no need to notify others
 		{
 			controlledBy(NULL);
 		}
@@ -524,19 +524,19 @@ bool Entity::setControlledBy(EntityCall* controllerBaseEntityCall)
 	{
 		controlledBy(controllerBaseEntityCall);
 		
-		// 既然有新的控制者了，系统的移动行为也就必须停止了
+		// Since there are new controllers, the system's move behavior must stop.
 		stopMove();
 		
-		// 如果是恢复自我控制，那么需要通知我的客户端：没有人控制你了
+		// If it is to restore self-control, then you need to notify my client: no one controls you
 		if (controllerBaseEntityCall->id() == id())
 		{
 			KBE_ASSERT(clientEntityCall_);
 			sendControlledByStatusMessage(controllerBaseEntityCall, 0);
 		}
 
-		// 如果是别人接手了控制，那么只需要通知接手者即可，
-		//     ——因为之前自己还是被别人控制着的，所以不需要另行通知，
-		// 所以，通知接手的控制者：你控制了谁
+		// If someone else took was controlling, only need to notify the receiver.
+		//    -Because he was still under the control of others, he did not need to be notified.
+		// So, inform the controller who took over: you/your entity
 		else
 		{
 			sendControlledByStatusMessage(controllerBaseEntityCall, 1);
@@ -649,7 +649,7 @@ PyObject* Entity::onScriptGetAttribute(PyObject* attr)
 	char* ccattr = strutil::wchar2char(PyUnicode_AsWideCharStringRet0);
 	PyMem_Free(PyUnicode_AsWideCharStringRet0);
 		
-	// 如果是ghost调用def方法则需要rpc调用。
+	// If it is ghost, calling def method requires rpc call.
 	if(!isReal())
 	{
 		MethodDescription* pMethodDescription = const_cast<ScriptDefModule*>(pScriptModule())->findCellMethodDescription(ccattr);
@@ -662,8 +662,8 @@ PyObject* Entity::onScriptGetAttribute(PyObject* attr)
 	}
 	else
 	{
-		// 如果访问了def持久化类容器属性
-		// 由于没有很好的监测容器类属性内部的变化，这里使用一个折中的办法进行标脏
+		// If you access the def persistent class container property
+		// Since there's no good monitoring of internal changes in the properties of the container class, use a compromise here
 		PropertyDescription* pPropertyDescription = const_cast<ScriptDefModule*>(pScriptModule())->findPersistentPropertyDescription(ccattr);
 		if(pPropertyDescription && (pPropertyDescription->getFlags() & ENTITY_CELL_DATA_FLAGS) > 0)
 		{
@@ -678,7 +678,7 @@ PyObject* Entity::onScriptGetAttribute(PyObject* attr)
 //-------------------------------------------------------------------------------------
 void Entity::onDefDataChanged(EntityComponent* pEntityComponent, const PropertyDescription* propertyDescription, PyObject* pyData)
 {
-	// 如果不是一个realEntity或者在初始化则不理会
+	// If it's not a realentity or it's initializing, ignore it.
 	if(!isReal() || initing())
 		return;
 
@@ -696,14 +696,16 @@ void Entity::onDefDataChanged(EntityComponent* pEntityComponent, const PropertyD
 
 	uint32 flags = propertyDescription->getFlags();
 
-	// 首先创建一个需要广播的模板流
+	// First create a template stream that needs to be broadcast
 	MemoryStream* mstream = MemoryStream::createPoolObject();
 
 	EntityDef::context().currComponentType = g_componentType;
 	propertyDescription->getDataType()->addToStream(mstream, pyData);
 
-	// 判断是否需要广播给其他的cellapp, 这还需一个前提是entity必须拥有ghost实体
-	// 只有在cell边界一定范围内的entity才拥有ghost实体, 或者在跳转space时也会短暂的置为ghost状态
+	// To determine if it needs to be broadcast to other cellapps, this also 
+	//  requires the premise that the entity must have a ghost entity
+	// Only entities within a certain range of cell boundaries have the ghost entity, 
+	//  or they are temporarily set to the ghost state when teleporting to another space.
 	if((flags & ENTITY_BROADCAST_CELL_FLAGS) > 0 && hasGhost())
 	{
 		GhostManager* gm = Cellapp::getSingleton().pGhostManager();
@@ -717,7 +719,7 @@ void Entity::onDefDataChanged(EntityComponent* pEntityComponent, const PropertyD
 
 			pForwardBundle->append(*mstream);
 
-			// 记录这个事件产生的数据量大小
+			// Record the amount of data generated by this event
 			g_publicCellEventHistoryStats.trackEvent(scriptName(), 
 				propertyDescription->getName(), 
 				pForwardBundle->currMsgLength());
@@ -746,8 +748,8 @@ void Entity::onDefDataChanged(EntityComponent* pEntityComponent, const PropertyD
 			if(pChannel == NULL)
 				continue;
 
-			// 这个可能性是存在的，例如数据来源于createWitnessFromStream()
-			// 又如自己的entity还未在目标客户端上创建
+			// It's possible that, for example, the data comes from createWitnessFromStream()
+			// Or if their own entity is not yet created on the target client
 			if(!pEntity->pWitness()->entityInView(id()))
 				continue;
 
@@ -789,7 +791,7 @@ void Entity::onDefDataChanged(EntityComponent* pEntityComponent, const PropertyD
 
 				pSendBundle->append(*mstream);
 				
-				// 记录这个事件产生的数据量大小
+				// Record the amount of data generated by this event
 				g_publicClientEventHistoryStats.trackEvent(scriptName(), 
 					propertyDescription->getName(), 
 					pSendBundle->currMsgLength());
@@ -802,7 +804,7 @@ void Entity::onDefDataChanged(EntityComponent* pEntityComponent, const PropertyD
 	}
 
 	/*
-	// 判断这个属性是否还需要广播给其他客户端
+	// Determine if this attribute still needs to be broadcast to other clients
 	if((flags & ENTITY_BROADCAST_OTHER_CLIENT_FLAGS) > 0)
 	{
 		int8 detailLevel = propertyDescription->getDetailLevel();

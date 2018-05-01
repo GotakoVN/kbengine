@@ -95,7 +95,7 @@ Space::~Space()
 //-------------------------------------------------------------------------------------
 void Space::_clearGhosts()
 {
-	// 因为space在destroy时做过一次清理，因此这里理论上剩下的是ghosts实体
+	// Because space was cleaned up in destroy, the only thing that should be left here is the ghosts entity.
 	if(entities_.size() == 0)
 		return;
 	
@@ -326,7 +326,7 @@ void Space::onLoadedSpaceGeometryMapping(NavigationHandlePtr pNavHandle)
 	INFO_MSG(fmt::format("KBEngine::onLoadedSpaceGeometryMapping: spaceID={}, respath={}!\n",
 			id(), getGeometryPath()));
 
-	// 通知脚本
+	// Notify script
 	{
 		SCOPED_PROFILE(SCRIPTCALL_PROFILE);
 		SCRIPT_OBJECT_CALL_ARGS2(Cellapp::getSingleton().getEntryScript().get(), const_cast<char*>("onSpaceGeometryLoaded"), 
@@ -356,7 +356,7 @@ void Space::onAllSpaceGeometryLoaded()
 {
 	SCOPED_PROFILE(SCRIPTCALL_PROFILE);
 
-	// 通知脚本
+	// Notify script
 	SCRIPT_OBJECT_CALL_ARGS3(Cellapp::getSingleton().getEntryScript().get(), const_cast<char*>("onAllSpaceGeometryLoaded"), 
 		const_cast<char*>("Iis"), this->id(), true, getGeometryPath().c_str(), false);
 }
@@ -412,13 +412,13 @@ void Space::removeEntity(Entity* pEntity)
 
 	pEntity->spaceID(0);
 	
-	// 先获取到所在位置
+	// Get entity's location first
 	SPACE_ENTITIES::size_type idx = pEntity->spaceEntityIdx();
 
 	KBE_ASSERT(idx < entities_.size());
 	KBE_ASSERT(entities_[ idx ] == pEntity);
 
-	// 如果有2个或以上的entity则将最后一个entity移至删除的这个entity所在位置
+	// If there are 2 or more entities then move the last entity to the deleted entity
 	Entity* pBack = entities_.back().get();
 	pBack->spaceEntityIdx(idx);
 	entities_[idx] = pBack;
@@ -427,11 +427,12 @@ void Space::removeEntity(Entity* pEntity)
 
 	onLeaveWorld(pEntity);
 
-	// 这句必须在onLeaveWorld之后， 因为可能rangeTrigger需要参考pEntityCoordinateNode
+	// This must be done after onLeaveWorld, because its rangeTrigger may need to reference pEntityCoordinateNode
 	pEntity->uninstallCoordinateNodes(&coordinateSystem_);
 	pEntity->onLeaveSpace(this);
 
-	// 如果没有entity了则需要销毁space, 因为space最少存在一个entity
+	// If there are no entities then need to destroy space,
+	//  because there must be at least one entity in a space as a handle to it
 	if(entities_.empty() && state_ == STATE_NORMAL)
 	{
 		Spaces::destroySpace(this->id(), 0);
@@ -456,8 +457,8 @@ void Space::onEnterWorld(Entity* pEntity)
 {
 	KBE_ASSERT(pEntity != NULL);
 	
-	// 如果是一个有Witness(通常是玩家)则需要将当前场景已经创建的有client部分的entity广播给他
-	// 否则是一个普通的entity进入世界， 那么需要将这个entity广播给所有看见他的有Witness的entity。
+	// If it is a Witness (usually a player) then it needs to broadcast to him that his entity was created in the space
+	// Otherwise it is an ordinary entity entering the world, and the entity needs to be broadcast to all entities that see him with Witness.
 	if(pEntity->hasWitness())
 	{
 		_onEnterWorld(pEntity);
@@ -477,8 +478,8 @@ void Space::onLeaveWorld(Entity* pEntity)
 	if(!pEntity->isReal() || !pEntity->pScriptModule()->hasClient())
 		return;
 	
-	// 向其他人客户端广播自己的离开
-	// 向客户端发送onLeaveWorld消息
+	// Broadcast departure to other clients
+	// Send onLeaveWorld message to this entity's client
 	if(pEntity->hasWitness())
 	{
 		pEntity->pWitness()->onLeaveSpace(this);
@@ -626,7 +627,7 @@ void Space::delSpaceData(const std::string& key)
 //-------------------------------------------------------------------------------------
 void Space::onSpaceDataChanged(const std::string& key, const std::string& value, bool isdel)
 {
-	// 通知脚本
+	// Notify script
 	if(!isdel)
 	{
 		SCOPED_PROFILE(SCRIPTCALL_PROFILE);
