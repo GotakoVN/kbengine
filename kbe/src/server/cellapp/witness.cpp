@@ -303,13 +303,13 @@ const Direction3D& Witness::baseDir()
 }
 
 //-------------------------------------------------------------------------------------
-void Witness::setViewRadius(float radius, float hyst)
+void Witness::setViewRadius(float radius, float lagSize)
 {
 	if(!g_kbeSrvConfig.getCellApp().use_coordinate_system)
 		return;
 
 	viewRadius_ = radius;
-	viewLagArea_ = hyst;
+	viewLagArea_ = lagSize;
 
 	// Because position synchronization uses the relative position compression for transmission,
 	//  the usable range is between -512 and 512, so an out of range error will occur.

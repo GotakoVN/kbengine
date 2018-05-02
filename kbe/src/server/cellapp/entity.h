@@ -267,12 +267,12 @@ public:
 	/** 
 		The current entity sets its own View radius
 	*/
-	int32 setViewRadius(float radius, float hyst);
+	int32 setViewRadius(float radius, float lagSize);
 	float getViewRadius(void) const;
-	float getViewHystArea(void) const;
+	float getViewLagArea(void) const;
 	DECLARE_PY_MOTHOD_ARG2(pySetViewRadius, float, float);
 	DECLARE_PY_MOTHOD_ARG0(pyGetViewRadius);
-	DECLARE_PY_MOTHOD_ARG0(pyGetViewHystArea);
+	DECLARE_PY_MOTHOD_ARG0(pyGetViewLagArea);
 
 	/** 
 		Whether the current entity is real

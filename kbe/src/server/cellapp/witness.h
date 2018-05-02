@@ -121,7 +121,7 @@ public:
 	void clear(Entity* pEntity);
 	void onAttach(Entity* pEntity);
 
-	void setViewRadius(float radius, float hyst = 5.0f);
+	void setViewRadius(float radius, float lagSize = 5.0f);
 	
 	INLINE float viewRadius() const;
 	INLINE float viewLagArea() const;

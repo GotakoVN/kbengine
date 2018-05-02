@@ -63,7 +63,7 @@ namespace KBEngine{
 ENTITY_METHOD_DECLARE_BEGIN(Cellapp, Entity)
 SCRIPT_METHOD_DECLARE("setViewRadius",				pySetViewRadius,				METH_VARARGS,				0)
 SCRIPT_METHOD_DECLARE("getViewRadius",				pyGetViewRadius,				METH_VARARGS,				0)
-SCRIPT_METHOD_DECLARE("getViewHystArea",			pyGetViewHystArea,				METH_VARARGS,				0)
+SCRIPT_METHOD_DECLARE("getViewLagArea",				pyGetViewLagArea,				METH_VARARGS,				0)
 SCRIPT_METHOD_DECLARE("isReal",						pyIsReal,						METH_VARARGS,				0)	
 SCRIPT_METHOD_DECLARE("addProximity",				pyAddProximity,					METH_VARARGS,				0)
 SCRIPT_METHOD_DECLARE("addYawRotator",				pyAddYawRotator,				METH_VARARGS,				0)
@@ -2364,11 +2364,11 @@ void Entity::onUpdateDataFromClient(KBEngine::MemoryStream& s)
 }
 
 //-------------------------------------------------------------------------------------
-int32 Entity::setViewRadius(float radius, float hyst)
+int32 Entity::setViewRadius(float radius, float lagSize)
 {
 	if(pWitness_)
 	{
-		pWitness_->setViewRadius(radius, hyst);
+		pWitness_->setViewRadius(radius, lagSize);
 		return 1;
 	}
 
@@ -2378,7 +2378,7 @@ int32 Entity::setViewRadius(float radius, float hyst)
 }
 
 //-------------------------------------------------------------------------------------
-PyObject* Entity::pySetViewRadius(float radius, float hyst)
+PyObject* Entity::pySetViewRadius(float radius, float lagSize)
 {
 	if(!isReal())
 	{
@@ -2388,7 +2388,7 @@ PyObject* Entity::pySetViewRadius(float radius, float hyst)
 		return 0;
 	}
 
-	return PyLong_FromLong(setViewRadius(radius, hyst));
+	return PyLong_FromLong(setViewRadius(radius, lagSize));
 }
 
 //-------------------------------------------------------------------------------------
@@ -2407,7 +2407,7 @@ PyObject* Entity::pyGetViewRadius()
 }
 
 //-------------------------------------------------------------------------------------
-float Entity::getViewHystArea(void) const
+float Entity::getViewLagArea(void) const
 {
 	if(pWitness_)
 		return pWitness_->viewLagArea();
@@ -2416,9 +2416,9 @@ float Entity::getViewHystArea(void) const
 }
 
 //-------------------------------------------------------------------------------------
-PyObject* Entity::pyGetViewHystArea()
+PyObject* Entity::pyGetViewLagArea()
 {
-	return PyFloat_FromDouble(getViewHystArea());
+	return PyFloat_FromDouble(getViewLagArea());
 }
 
 //-------------------------------------------------------------------------------------
@@ -2992,7 +2992,7 @@ void Entity::debugView()
 		}
 	}
 
-	Cellapp::getSingleton().getScript().pyPrint(fmt::format("{}::debugView: {} size={}, Seen={}, Pending={}, viewRadius={}, viewHyst={}", scriptName(), this->id(), 
+	Cellapp::getSingleton().getScript().pyPrint(fmt::format("{}::debugView: {} size={}, Seen={}, Pending={}, viewRadius={}, viewLagArea={}", scriptName(), this->id(), 
 		pWitness_->viewEntitiesMap().size(), pWitness_->viewEntitiesMap().size() - pending, pending, pWitness_->viewRadius(), pWitness_->viewLagArea()));
 
 	iter = pWitness_->viewEntities().begin();

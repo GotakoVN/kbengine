@@ -320,8 +320,8 @@ bool EntityDef::loadDetailLevelInfo(const std::string& defFilePath,
 	
 	TiXmlNode* node = defxml->enterNode(detailLevelNode, "NEAR");
 	TiXmlNode* radiusNode = defxml->enterNode(node, "radius");
-	TiXmlNode* hystNode = defxml->enterNode(node, "hyst");
-	if(node == NULL || radiusNode == NULL || hystNode == NULL) 
+	TiXmlNode* lagNode = defxml->enterNode(node, "lag");
+	if(node == NULL || radiusNode == NULL || lagNode == NULL) 
 	{
 		ERROR_MSG(fmt::format("EntityDef::loadDetailLevelInfo: failed to load entity:{} NEAR-DetailLevelInfo.\n",
 			moduleName.c_str()));
@@ -330,12 +330,12 @@ bool EntityDef::loadDetailLevelInfo(const std::string& defFilePath,
 	}
 	
 	dlInfo.level[DETAIL_LEVEL_NEAR].radius = (float)defxml->getValFloat(radiusNode);
-	dlInfo.level[DETAIL_LEVEL_NEAR].hyst = (float)defxml->getValFloat(hystNode);
+	dlInfo.level[DETAIL_LEVEL_NEAR].lag = (float)defxml->getValFloat(lagNode);
 	
 	node = defxml->enterNode(detailLevelNode, "MEDIUM");
 	radiusNode = defxml->enterNode(node, "radius");
-	hystNode = defxml->enterNode(node, "hyst");
-	if(node == NULL || radiusNode == NULL || hystNode == NULL) 
+	lagNode = defxml->enterNode(node, "lag");
+	if(node == NULL || radiusNode == NULL || lagNode == NULL) 
 	{
 		ERROR_MSG(fmt::format("EntityDef::loadDetailLevelInfo: failed to load entity:{} MEDIUM-DetailLevelInfo.\n",
 			moduleName.c_str()));
@@ -346,14 +346,14 @@ bool EntityDef::loadDetailLevelInfo(const std::string& defFilePath,
 	dlInfo.level[DETAIL_LEVEL_MEDIUM].radius = (float)defxml->getValFloat(radiusNode);
 
 	dlInfo.level[DETAIL_LEVEL_MEDIUM].radius += dlInfo.level[DETAIL_LEVEL_NEAR].radius + 
-												dlInfo.level[DETAIL_LEVEL_NEAR].hyst;
+												dlInfo.level[DETAIL_LEVEL_NEAR].lag;
 
-	dlInfo.level[DETAIL_LEVEL_MEDIUM].hyst = (float)defxml->getValFloat(hystNode);
+	dlInfo.level[DETAIL_LEVEL_MEDIUM].lag = (float)defxml->getValFloat(lagNode);
 	
 	node = defxml->enterNode(detailLevelNode, "FAR");
 	radiusNode = defxml->enterNode(node, "radius");
-	hystNode = defxml->enterNode(node, "hyst");
-	if(node == NULL || radiusNode == NULL || hystNode == NULL) 
+	lagNode = defxml->enterNode(node, "lag");
+	if(node == NULL || radiusNode == NULL || lagNode == NULL) 
 	{
 		ERROR_MSG(fmt::format("EntityDef::loadDetailLevelInfo: failed to load entity:{} FAR-DetailLevelInfo.\n", 
 			moduleName.c_str()));
@@ -364,9 +364,9 @@ bool EntityDef::loadDetailLevelInfo(const std::string& defFilePath,
 	dlInfo.level[DETAIL_LEVEL_FAR].radius = (float)defxml->getValFloat(radiusNode);
 
 	dlInfo.level[DETAIL_LEVEL_FAR].radius += dlInfo.level[DETAIL_LEVEL_MEDIUM].radius + 
-													dlInfo.level[DETAIL_LEVEL_MEDIUM].hyst;
+													dlInfo.level[DETAIL_LEVEL_MEDIUM].lag;
 
-	dlInfo.level[DETAIL_LEVEL_FAR].hyst = (float)defxml->getValFloat(hystNode);
+	dlInfo.level[DETAIL_LEVEL_FAR].lag = (float)defxml->getValFloat(lagNode);
 
 	return true;
 

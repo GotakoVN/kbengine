@@ -28,17 +28,17 @@ along with KBEngine.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace KBEngine{
 
-/** entity 详情级别类型定义 
-	默认有3个级别分别为:
-	 近， 中， 远
+/** Entity Level Of Detail type definition
+	The default three levels are:
+	Near, medium, far
 */
 struct DetailLevel
 {
 	struct Level
 	{
-		Level():radius(FLT_MAX), hyst(1.0f){};
+		Level():radius(FLT_MAX), lag(1.0f){};
 		float radius;
-		float hyst;
+		float lag;
 
 		bool inLevel(float dist)
 		{
@@ -57,7 +57,7 @@ struct DetailLevel
 	{
 	}
 
-	Level level[3]; // 近， 中， 远
+	Level level[3]; // near, medium, far
 };
 
 }
