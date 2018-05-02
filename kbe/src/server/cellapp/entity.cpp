@@ -2410,7 +2410,7 @@ PyObject* Entity::pyGetViewRadius()
 float Entity::getViewHystArea(void) const
 {
 	if(pWitness_)
-		return pWitness_->viewHysteresisArea();
+		return pWitness_->viewLagArea();
 		
 	return 0.0; 
 }
@@ -2993,7 +2993,7 @@ void Entity::debugView()
 	}
 
 	Cellapp::getSingleton().getScript().pyPrint(fmt::format("{}::debugView: {} size={}, Seen={}, Pending={}, viewRadius={}, viewHyst={}", scriptName(), this->id(), 
-		pWitness_->viewEntitiesMap().size(), pWitness_->viewEntitiesMap().size() - pending, pending, pWitness_->viewRadius(), pWitness_->viewHysteresisArea()));
+		pWitness_->viewEntitiesMap().size(), pWitness_->viewEntitiesMap().size() - pending, pending, pWitness_->viewRadius(), pWitness_->viewLagArea()));
 
 	iter = pWitness_->viewEntities().begin();
 	for(; iter != pWitness_->viewEntities().end(); ++iter)

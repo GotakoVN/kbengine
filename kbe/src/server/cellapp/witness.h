@@ -106,8 +106,8 @@ public:
 	virtual size_t getPoolObjectBytes()
 	{
 		size_t bytes = sizeof(pEntity_)
-		 + sizeof(viewRadius_) + sizeof(viewHysteresisArea_)
-		 + sizeof(pViewTrigger_) + sizeof(pViewHysteresisAreaTrigger_) + sizeof(clientViewSize_)
+		 + sizeof(viewRadius_) + sizeof(viewLagArea_)
+		 + sizeof(pViewTrigger_) + sizeof(pViewLagAreaTrigger_) + sizeof(clientViewSize_)
 		 + sizeof(lastBasePos_) + (sizeof(EntityRef*) * viewEntities_map_.size());
 
 		return bytes;
@@ -124,7 +124,7 @@ public:
 	void setViewRadius(float radius, float hyst = 5.0f);
 	
 	INLINE float viewRadius() const;
-	INLINE float viewHysteresisArea() const;
+	INLINE float viewLagArea() const;
 
 	typedef std::vector<Network::Bundle*> Bundles;
 	bool pushBundle(Network::Bundle* pBundle);
@@ -185,7 +185,7 @@ public:
 	INLINE bool entityInView(ENTITY_ID entityID);
 
 	INLINE ViewTrigger* pViewTrigger();
-	INLINE ViewTrigger* pViewHysteresisAreaTrigger();
+	INLINE ViewTrigger* pViewLagAreaTrigger();
 	
 	void installViewTrigger();
 	void uninstallViewTrigger();
@@ -212,10 +212,10 @@ private:
 	// The current entity's view radius
 	float									viewRadius_;
 	// A lag range for the current entityView
-	float									viewHysteresisArea_;
+	float									viewLagArea_;
 
 	ViewTrigger*							pViewTrigger_;
-	ViewTrigger*							pViewHysteresisAreaTrigger_;
+	ViewTrigger*							pViewLagAreaTrigger_;
 
 	VIEW_ENTITIES							viewEntities_;
 	VIEW_ENTITIES_MAP						viewEntities_map_;

@@ -40,9 +40,9 @@ INLINE float Witness::viewRadius() const
 }
 
 //-------------------------------------------------------------------------------------
-INLINE float Witness::viewHysteresisArea() const
+INLINE float Witness::viewLagArea() const
 { 
-	return viewHysteresisArea_; 
+	return viewLagArea_; 
 }
 
 //-------------------------------------------------------------------------------------
@@ -76,9 +76,9 @@ INLINE ViewTrigger* Witness::pViewTrigger()
 }
 
 //-------------------------------------------------------------------------------------
-INLINE ViewTrigger* Witness::pViewHysteresisAreaTrigger()
+INLINE ViewTrigger* Witness::pViewLagAreaTrigger()
 {
-	return pViewHysteresisAreaTrigger_;
+	return pViewLagAreaTrigger_;
 }
 
 //-------------------------------------------------------------------------------------

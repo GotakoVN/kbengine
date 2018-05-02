@@ -450,9 +450,9 @@ bool ServerConfig::loadConfig(std::string fileName)
 			if(node != NULL)
 				_cellAppInfo.defaultViewRadius = float(xml->getValFloat(node));
 					
-			node = xml->enterNode(viewNode, "hysteresisArea");
+			node = xml->enterNode(viewNode, "lagArea");
 			if(node != NULL)
-				_cellAppInfo.defaultViewHysteresisArea = float(xml->getValFloat(node));
+				_cellAppInfo.defaultViewLagArea = float(xml->getValFloat(node));
 		}
 			
 		node = xml->enterNode(rootNode, "ids");
@@ -1516,7 +1516,7 @@ void ServerConfig::updateInfos(bool isPrint, COMPONENT_TYPE componentType, COMPO
 			INFO_MSG("server-configs:\n");
 			INFO_MSG(fmt::format("\tgameUpdateHertz : {}\n", gameUpdateHertz()));
 			INFO_MSG(fmt::format("\tdefaultViewRadius : {}\n", info.defaultViewRadius));
-			INFO_MSG(fmt::format("\tdefaultViewHysteresisArea : {}\n", info.defaultViewHysteresisArea));
+			INFO_MSG(fmt::format("\tdefaultViewLagArea : {}\n", info.defaultViewLagArea));
 			INFO_MSG(fmt::format("\tentryScriptFile : {}\n", info.entryScriptFile));
 			INFO_MSG(fmt::format("\tinternalAddr : {}\n", internalAddr.c_str()));
 			//INFO_MSG(fmt::format("\texternalAddr : {}\n", externalAddr.c_str()));
@@ -1525,7 +1525,7 @@ void ServerConfig::updateInfos(bool isPrint, COMPONENT_TYPE componentType, COMPO
 			infostr += "server-configs:\n";
 			infostr += (fmt::format("\tgameUpdateHertz : {}\n", gameUpdateHertz()));
 			infostr += (fmt::format("\tdefaultViewRadius : {}\n", info.defaultViewRadius));
-			infostr += (fmt::format("\tdefaultViewHysteresisArea : {}\n", info.defaultViewHysteresisArea));
+			infostr += (fmt::format("\tdefaultViewLagArea : {}\n", info.defaultViewLagArea));
 			infostr += (fmt::format("\tentryScriptFile : {}\n", info.entryScriptFile));
 			infostr += (fmt::format("\tinternalAddr : {}\n", internalAddr.c_str()));
 			//infostr += (fmt::format("\texternalAddr : {}\n", externalAddr.c_str()));

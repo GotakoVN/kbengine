@@ -160,7 +160,7 @@ typedef struct EngineComponentInfo
 	char entryScriptFile[MAX_NAME];							// 组件的入口脚本文件
 	char dbAccountEntityScriptType[MAX_NAME];				// 数据库帐号脚本类别
 	float defaultViewRadius;								// 配置在cellapp节点中的player的view半径大小
-	float defaultViewHysteresisArea;						// 配置在cellapp节点中的player的view的滞后范围
+	float defaultViewLagArea;						// 配置在cellapp节点中的player的view的滞后范围
 	uint16 witness_timeout;									// 观察者默认超时时间(秒)
 	const Network::Address* externalAddr;					// 外部地址
 	const Network::Address* internalAddr;					// 内部地址

@@ -54,9 +54,9 @@ namespace KBEngine{
 Witness::Witness():
 pEntity_(NULL),
 viewRadius_(0.0f),
-viewHysteresisArea_(5.0f),
+viewLagArea_(5.0f),
 pViewTrigger_(NULL),
-pViewHysteresisAreaTrigger_(NULL),
+pViewLagAreaTrigger_(NULL),
 viewEntities_(),
 viewEntities_map_(),
 clientViewSize_(0)
@@ -69,7 +69,7 @@ Witness::~Witness()
 {
 	pEntity_ = NULL;
 	SAFE_RELEASE(pViewTrigger_);
-	SAFE_RELEASE(pViewHysteresisAreaTrigger_);
+	SAFE_RELEASE(pViewLagAreaTrigger_);
 }
 
 //-------------------------------------------------------------------------------------
@@ -96,7 +96,7 @@ void Witness::addToStream(KBEngine::MemoryStream& s)
 	 * So we entered the default updateVolatileData() process,
 	 * Enables the client to receive information from other player's coordinate updates without any other player entity, resulting in client error.
 	
-	s << viewRadius_ << viewHysteresisArea_ << clientViewSize_;	
+	s << viewRadius_ << viewLagArea_ << clientViewSize_;	
 	
 	uint32 size = viewEntitiesmap_.size();
 	s << size;
@@ -109,14 +109,14 @@ void Witness::addToStream(KBEngine::MemoryStream& s)
 	*/
 
 	// Doing so currently solves the problem, but there will be problems with space multiple cell segmentation
-	s << viewRadius_ << viewHysteresisArea_ << (uint16)0;	
+	s << viewRadius_ << viewLagArea_ << (uint16)0;	
 	s << (uint32)0; // viewEntities_map_.size();
 }
 
 //-------------------------------------------------------------------------------------
 void Witness::createFromStream(KBEngine::MemoryStream& s)
 {
-	s >> viewRadius_ >> viewHysteresisArea_ >> clientViewSize_;
+	s >> viewRadius_ >> viewLagArea_ >> clientViewSize_;
 
 	uint32 size;
 	s >> size;
@@ -130,7 +130,7 @@ void Witness::createFromStream(KBEngine::MemoryStream& s)
 		pEntityRef->aliasID(i);
 	}
 
-	setViewRadius(viewRadius_, viewHysteresisArea_);
+	setViewRadius(viewRadius_, viewLagArea_);
 
 	lastBasePos_.z = -FLT_MAX;
 	lastBaseDir_.yaw(-FLT_MAX);
@@ -152,7 +152,7 @@ void Witness::attach(Entity* pEntity)
 	{
 		// Initialize default view Range
 		ENGINE_COMPONENT_INFO& ecinfo = ServerConfig::getSingleton().getCellApp();
-		setViewRadius(ecinfo.defaultViewRadius, ecinfo.defaultViewHysteresisArea);
+		setViewRadius(ecinfo.defaultViewRadius, ecinfo.defaultViewLagArea);
 	}
 
 	Cellapp::getSingleton().addUpdatable(this);
@@ -236,14 +236,14 @@ void Witness::clear(Entity* pEntity)
 	
 	pEntity_ = NULL;
 	viewRadius_ = 0.0f;
-	viewHysteresisArea_ = 5.0f;
+	viewLagArea_ = 5.0f;
 	clientViewSize_ = 0;
 
-	// 不需要销毁，后面还可以重用
-	// 此处销毁可能会产生错误，因为enterview过程中可能导致实体销毁
-	// 在pViewTrigger_流程没走完之前这里销毁了pViewTrigger_就crash
+	// Do not need to destroy, can also be reused later
+	// Destruction here may produce errors because enterView may result in the destruction of the entity
+	// if pViewTrigger_ is destroyed here before the pViewTrigger_ process is finished.
 	//SAFE_RELEASE(pViewTrigger_);
-	//SAFE_RELEASE(pViewHysteresisAreaTrigger_);
+	//SAFE_RELEASE(pViewLagAreaTrigger_);
 
 	viewEntities_.clear();
 	viewEntities_map_.clear();
@@ -309,18 +309,19 @@ void Witness::setViewRadius(float radius, float hyst)
 		return;
 
 	viewRadius_ = radius;
-	viewHysteresisArea_ = hyst;
+	viewLagArea_ = hyst;
 
-	// 由于位置同步使用了相对位置压缩传输，可用范围为-512~512之间，因此超过范围将出现同步错误
-	// 这里做一个限制，如果需要过大的数值客户端应该调整坐标单位比例，将其放大使用。
-	// 参考: MemoryStream::appendPackXZ
-	if(viewRadius_ + viewHysteresisArea_ > 512)
+	// Because position synchronization uses the relative position compression for transmission,
+	//  the usable range is between -512 and 512, so an out of range error will occur.
+	// Limit it here. If you need a large value, the client should adjust the scale of the coordinate unit and enlarge it.
+	// Reference: MemoryStream::appendPackXZ
+	if(viewRadius_ + viewLagArea_ > 512)
 	{
 		viewRadius_ = 512 - 5.0f;
-		viewHysteresisArea_ = 5.0f;
+		viewLagArea_ = 5.0f;
 		
 		ERROR_MSG(fmt::format("Witness::setViewRadius({}): View the size({}) of more than 512!\n", 
-			pEntity_->id(), (viewRadius_ + viewHysteresisArea_)));
+			pEntity_->id(), (viewRadius_ + viewLagArea_)));
 		
 		return;
 	}
@@ -331,7 +332,7 @@ void Witness::setViewRadius(float radius, float hyst)
 		{
 			pViewTrigger_ = new ViewTrigger((CoordinateNode*)pEntity_->pEntityCoordinateNode(), viewRadius_, viewRadius_);
 
-			// 如果实体已经在场景中，那么需要安装
+			// If the entity is already in the scene then it needs to be installed
 			if (((CoordinateNode*)pEntity_->pEntityCoordinateNode())->pCoordinateSystem())
 				pViewTrigger_->install();
 		}
@@ -339,36 +340,37 @@ void Witness::setViewRadius(float radius, float hyst)
 		{
 			pViewTrigger_->update(viewRadius_, viewRadius_);
 
-			// 如果实体已经在场景中，那么需要安装
+			// If the entity is already in the scene then it needs to be installed
 			if (!pViewTrigger_->isInstalled() && ((CoordinateNode*)pEntity_->pEntityCoordinateNode())->pCoordinateSystem())
 				pViewTrigger_->reinstall((CoordinateNode*)pEntity_->pEntityCoordinateNode());
 		}
 
-		if (viewHysteresisArea_ > 0.01f && pEntity_/*上面update流程可能导致销毁 */)
+		if (viewLagArea_ > 0.01f && pEntity_/* The above update process may lead to destruction */)
 		{
-			if (pViewHysteresisAreaTrigger_ == NULL)
+			if (pViewLagAreaTrigger_ == NULL)
 			{
-				pViewHysteresisAreaTrigger_ = new ViewTrigger((CoordinateNode*)pEntity_->pEntityCoordinateNode(),
-					viewHysteresisArea_ + viewRadius_, viewHysteresisArea_ + viewRadius_);
+				pViewLagAreaTrigger_ = new ViewTrigger((CoordinateNode*)pEntity_->pEntityCoordinateNode(),
+					viewLagArea_ + viewRadius_, viewLagArea_ + viewRadius_);
 
 				if (((CoordinateNode*)pEntity_->pEntityCoordinateNode())->pCoordinateSystem())
-					pViewHysteresisAreaTrigger_->install();
+					pViewLagAreaTrigger_->install();
 			}
 			else
 			{
-				pViewHysteresisAreaTrigger_->update(viewHysteresisArea_ + viewRadius_, viewHysteresisArea_ + viewRadius_);
+				pViewLagAreaTrigger_->update(viewLagArea_ + viewRadius_, viewLagArea_ + viewRadius_);
 
-				// 如果实体已经在场景中，那么需要安装
-				if (!pViewHysteresisAreaTrigger_->isInstalled() && ((CoordinateNode*)pEntity_->pEntityCoordinateNode())->pCoordinateSystem())
-					pViewHysteresisAreaTrigger_->reinstall((CoordinateNode*)pEntity_->pEntityCoordinateNode());
+				// If the entity is already in the scene then it needs to be installed
+				if (!pViewLagAreaTrigger_->isInstalled() && ((CoordinateNode*)pEntity_->pEntityCoordinateNode())->pCoordinateSystem())
+					pViewLagAreaTrigger_->reinstall((CoordinateNode*)pEntity_->pEntityCoordinateNode());
 			}
 		}
 		else
 		{
-			// 注意：此处如果不销毁pViewHysteresisAreaTrigger_则必须是update
-			// 因为离开View的判断如果pViewHysteresisAreaTrigger_存在，那么必须出了pViewHysteresisAreaTrigger_才算出View
-			if (pViewHysteresisAreaTrigger_)
-				pViewHysteresisAreaTrigger_->update(viewHysteresisArea_ + viewRadius_, viewHysteresisArea_ + viewRadius_);
+			// Note: If you do not destroy pViewLagAreaTrigger_ here, it must be updated
+			// Because if we leave the View to determine if pViewLagAreaTrigger_ exists, we must use
+			//  pViewLagAreaTrigger_ to calculate the View.
+			if (pViewLagAreaTrigger_)
+				pViewLagAreaTrigger_->update(viewLagArea_ + viewRadius_, viewLagArea_ + viewRadius_);
 		}
 	}
 	else
@@ -380,8 +382,8 @@ void Witness::setViewRadius(float radius, float hyst)
 //-------------------------------------------------------------------------------------
 void Witness::onEnterView(ViewTrigger* pViewTrigger, Entity* pEntity)
 {
-	// 如果进入的是Hysteresis区域，那么不产生作用
-	 if (pViewHysteresisAreaTrigger_ == pViewTrigger)
+	// should only count as entering the view if into the actual view trigger, not the lag area around it
+	 if (pViewLagAreaTrigger_ == pViewTrigger)
 		return;
 
 	// 先增加一个引用，避免实体在回调中被销毁造成后续判断出错
@@ -439,8 +441,8 @@ void Witness::onEnterView(ViewTrigger* pViewTrigger, Entity* pEntity)
 //-------------------------------------------------------------------------------------
 void Witness::onLeaveView(ViewTrigger* pViewTrigger, Entity* pEntity)
 {
-	// 如果设置过Hysteresis区域，那么离开Hysteresis区域才算离开View
-	if (pViewHysteresisAreaTrigger_ && pViewHysteresisAreaTrigger_ != pViewTrigger)
+	// 如果设置过Lag区域，那么离开Lag区域才算离开View
+	if (pViewLagAreaTrigger_ && pViewLagAreaTrigger_ != pViewTrigger)
 		return;
 
 	VIEW_ENTITIES_MAP::iterator iter = viewEntities_map_.find(pEntity->id());
@@ -564,19 +566,19 @@ void Witness::installViewTrigger()
 		if (viewRadius_ <= 0.f)
 			return;
 
-		// 必须先安装pViewHysteresisAreaTrigger_，否则一些极端情况会出现错误的结果
+		// 必须先安装pViewLagAreaTrigger_，否则一些极端情况会出现错误的结果
 		// 例如：一个Avatar正好进入到世界此时正在安装View触发器，而安装过程中这个实体onWitnessed触发导致自身被销毁了
 		// 由于View触发器并未完全安装完毕导致触发器的节点old_xx等都为-FLT_MAX，所以该实体在离开坐标管理器时Avatar的View触发器判断错误
-		// 如果先安装pViewHysteresisAreaTrigger_则不会触发实体进入View事件，这样在安装pViewTrigger_时触发事件导致上面出现的问题时也能之前捕获离开事件了
-		if (pViewHysteresisAreaTrigger_ && pEntity_/*上面流程可能导致销毁 */)
-			pViewHysteresisAreaTrigger_->reinstall((CoordinateNode*)pEntity_->pEntityCoordinateNode());
+		// 如果先安装pViewLagAreaTrigger_则不会触发实体进入View事件，这样在安装pViewTrigger_时触发事件导致上面出现的问题时也能之前捕获离开事件了
+		if (pViewLagAreaTrigger_ && pEntity_/*上面流程可能导致销毁 */)
+			pViewLagAreaTrigger_->reinstall((CoordinateNode*)pEntity_->pEntityCoordinateNode());
 
 		if (pEntity_/*上面流程可能导致销毁 */)
 			pViewTrigger_->reinstall((CoordinateNode*)pEntity_->pEntityCoordinateNode());
 	}
 	else
 	{
-		KBE_ASSERT(pViewHysteresisAreaTrigger_ == NULL);
+		KBE_ASSERT(pViewLagAreaTrigger_ == NULL);
 	}
 }
 
@@ -586,8 +588,8 @@ void Witness::uninstallViewTrigger()
 	if (pViewTrigger_)
 		pViewTrigger_->uninstall();
 
-	if (pViewHysteresisAreaTrigger_)
-		pViewHysteresisAreaTrigger_->uninstall();
+	if (pViewLagAreaTrigger_)
+		pViewLagAreaTrigger_->uninstall();
 
 	// 通知所有实体离开View
 	VIEW_ENTITIES::iterator iter = viewEntities_.begin();
