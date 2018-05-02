@@ -62,8 +62,8 @@ public:
 	
 	bool findBroadcastInterface();
 
-	/** 网络接口
-		某个app广播了自己的地址
+	/** Network interface
+		An app broadcasts its own address
 	*/
 	void onBroadcastInterface(Network::Channel* pChannel, int32 uid, std::string& username, 
 							COMPONENT_TYPE componentType, COMPONENT_ID componentID, COMPONENT_ID componentIDEx, 
@@ -72,78 +72,78 @@ public:
 							float cpu, float mem, uint32 usedmem, int8 state, uint32 machineID, uint64 extradata,
 							uint64 extradata1, uint64 extradata2, uint64 extradata3, uint32 backRecvAddr, uint16 backRecvPort);
 	
-	/** 网络接口
-		某个app寻找另一个app的地址
+	/** Network interface
+		An app looks for another app's address
 	*/
 	void onFindInterfaceAddr(Network::Channel* pChannel, int32 uid, std::string& username, 
 		COMPONENT_TYPE componentType, COMPONENT_ID componentID, COMPONENT_TYPE findComponentType, uint32 finderAddr, uint16 finderRecvPort);
 
-	/** 网络接口
-		查询所有接口信息
+	/** Network interface
+		Query all interface information
 	*/
 	void onQueryAllInterfaceInfos(Network::Channel* pChannel, int32 uid, std::string& username, 
 		uint16 finderRecvPort);
 
-	/** 网络接口
-	查询所有machine进程
+	/** Network interface
+		Query all machine processes
 	*/
 	void onQueryMachines(Network::Channel* pChannel, int32 uid, std::string& username,
 		uint16 finderRecvPort);
 
 	void handleTimeout(TimerHandle handle, void * arg);
 
-	/* 初始化相关接口 */
+	/* Initialization related interfaces */
 	bool initializeBegin();
 	bool inInitialize();
 	bool initializeEnd();
 	void finalise();
 	bool initNetwork();
 
-	/** 网络接口
-		启动服务器
-		@uid: 提供启动的uid参数
-		@components: 启动哪些组件(可能采取分布式启动方案)
+	/** Network interface
+		Start the server
+		@uid: Provide start uid parameters
+		@components: Which components to start (may take a distributed startup scheme)
 	*/
 	void startserver(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	/** 信号处理
+	/** Signal processing
 	*/
 	virtual bool installSignals();
 	virtual void onSignalled(int sigNum);
 
 #if KBE_PLATFORM != PLATFORM_WIN32
 	/**
-	* 在linux下启动一个新进程
+	* Start a new process under Linux
 	*/
 	uint16 startLinuxProcess(int32 uid, COMPONENT_TYPE componentType, uint64 cid, int16 gus, 
 		std::string& KBE_ROOT, std::string& KBE_RES_PATH, std::string& KBE_BIN_PATH);
 #else
 	/**
-	* 在windows下启动一个新进程
+	* Start a new process under windows
 	*/
 	DWORD startWindowsProcess(int32 uid, COMPONENT_TYPE componentType, uint64 cid, int16 gus, 
 		std::string& KBE_ROOT, std::string& KBE_RES_PATH, std::string& KBE_BIN_PATH);
 #endif
 
-	/** 网络接口
-		关闭服务器
-		@uid: 提供启动的uid参数
+	/** Network interface
+		Shut down the server
+		@uid: Provide start uid parameters
 	*/
 	void stopserver(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
-	/** 网络接口
-	杀死服务器
-	@uid: 提供启动的uid参数
+	/** Network interface
+	Kill the server
+	@uid: Provide start uid parameters
 	*/
 	void killserver(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
 	/**
-		对本机运行的组件进行检查是否可用
+		Check whether the components running on the machine are available
 	*/
 	bool checkComponentUsable(const Components::ComponentInfos* info, bool getdatas, bool autoerase);
 
 protected:
-	// udp广播地址
+	// UDP broadcast address
 	u_int32_t					broadcastAddr_;
 	Network::EndPoint			ep_;
 	Network::EndPoint			epBroadcast_;
@@ -154,7 +154,7 @@ protected:
 	Network::UDPPacketReceiver* pEBPacketReceiver_;
 	Network::UDPPacketReceiver* pEPLocalPacketReceiver_;
 
-	// 本机使用的uid
+	// Native uid
 	std::vector<int32>			localuids_;
 };
 
