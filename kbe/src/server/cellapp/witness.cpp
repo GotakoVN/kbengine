@@ -386,11 +386,11 @@ void Witness::onEnterView(ViewTrigger* pViewTrigger, Entity* pEntity)
 	 if (pViewLagAreaTrigger_ == pViewTrigger)
 		return;
 
-	// 先增加一个引用，避免实体在回调中被销毁造成后续判断出错
+	// First add a reference to prevent the entity from being destroyed in the callback causing subsequent errors
 	Py_INCREF(pEntity);
 
-	// 在onEnteredview和addWitnessed可能导致自己销毁然后
-	// pEntity_将被设置为NULL，后面没有机会DECREF
+	// On onEnterView and addWitnessed may lead to destroy themselves
+	// pEntity_ will be set to NULL, with no chance to DECREF
 	Entity* pSelfEntity = pEntity_;
 	Py_INCREF(pSelfEntity);
 
@@ -403,9 +403,8 @@ void Witness::onEnterView(ViewTrigger* pViewTrigger, Entity* pEntity)
 			//DEBUG_MSG(fmt::format("Witness::onEnterView: {} entity={}\n", 
 			//	pEntity_->id(), pEntity->id()));
 
-			// 如果flags是ENTITYREF_FLAG_LEAVE_CLIENT_PENDING | ENTITYREF_FLAG_NORMAL状态那么我们
-			// 只需要撤销离开状态并将其还原到ENTITYREF_FLAG_NORMAL即可
-			// 如果是ENTITYREF_FLAG_LEAVE_CLIENT_PENDING状态那么此时应该将它设置为进入状态 ENTITYREF_FLAG_ENTER_CLIENT_PENDING
+			// If flags are (ENTITYREF_FLAG_LEAVE_CLIENT_PENDING | ENTITYREF_FLAG_NORMAL) we only need to undo leave state and restore it to ENTITYREF_FLAG_NORMAL
+			// If it is ENTITYREF_FLAG_LEAVE_CLIENT_PENDING state then it should be set to enter state at this time ENTITYREF_FLAG_ENTER_CLIENT_PENDING
 			if ((pEntityRef->flags() & ENTITYREF_FLAG_NORMAL) > 0)
 				pEntityRef->flags(ENTITYREF_FLAG_NORMAL);
 			else
@@ -441,7 +440,7 @@ void Witness::onEnterView(ViewTrigger* pViewTrigger, Entity* pEntity)
 //-------------------------------------------------------------------------------------
 void Witness::onLeaveView(ViewTrigger* pViewTrigger, Entity* pEntity)
 {
-	// 如果设置过Lag区域，那么离开Lag区域才算离开View
+	// If a LagArea is set, only leaving LagArea should leave View
 	if (pViewLagAreaTrigger_ && pViewLagAreaTrigger_ != pViewTrigger)
 		return;
 
@@ -458,7 +457,8 @@ void Witness::_onLeaveView(EntityRef* pEntityRef)
 	//DEBUG_MSG(fmt::format("Witness::onLeaveView: {} entity={}\n", 
 	//	pEntity_->id(), pEntityRef->id()));
 
-	// 这里不delete， 我们需要待update将此行为更新至客户端时再进行
+	// This does not delete, we need to wait update to update this behavior to the client
+	// Shouldn't delete here, we need to wait for update to update this behavior to the client
 	//EntityRef::reclaimPoolObject((*iter));
 	//viewEntities_.erase(iter);
 	//viewEntities_map_.erase(iter);
@@ -499,7 +499,7 @@ void Witness::onEnterSpace(Space* pSpace)
 	Network::Bundle* pSendBundle = Network::Bundle::createPoolObject();
 	NETWORK_ENTITY_MESSAGE_FORWARD_CLIENT_BEGIN(pEntity_->id(), (*pSendBundle));
 
-	// 通知位置强制改变
+	// Notify client of forced position change
 	Position3D &pos = pEntity_->position();
 	Direction3D &dir = pEntity_->direction();
 	ENTITY_MESSAGE_FORWARD_CLIENT_BEGIN(pSendBundle, ClientInterface::onSetEntityPosAndDir, setEntityPosAndDir);
@@ -508,7 +508,7 @@ void Witness::onEnterSpace(Space* pSpace)
 	(*pSendBundle) << dir.roll() << dir.pitch() << dir.yaw();
 	ENTITY_MESSAGE_FORWARD_CLIENT_END(pSendBundle, ClientInterface::onSetEntityPosAndDir, setEntityPosAndDir);
 	
-	// 通知进入了新地图
+	// Notify client entered new map
 	ENTITY_MESSAGE_FORWARD_CLIENT_BEGIN(pSendBundle, ClientInterface::onEntityEnterSpace, entityEnterSpace);
 
 	(*pSendBundle) << pEntity_->id();
@@ -518,7 +518,7 @@ void Witness::onEnterSpace(Space* pSpace)
 
 	ENTITY_MESSAGE_FORWARD_CLIENT_END(pSendBundle, ClientInterface::onEntityEnterSpace, entityEnterSpace);
 
-	// 发送消息并清理
+	// Send messages and clean up
 	pEntity_->clientEntityCall()->sendCall(pSendBundle);
 
 	installViewTrigger();
@@ -562,18 +562,27 @@ void Witness::installViewTrigger()
 {
 	if (pViewTrigger_)
 	{
-		// 在设置View半径为0后掉线重登陆会出现这种情况
-		if (viewRadius_ <= 0.f)
+		// This situation occurs if you lose connection and re-login after setting the View radius to 0
+		if (viewRadius_ <= 0.0f)
 			return;
 
 		// 必须先安装pViewLagAreaTrigger_，否则一些极端情况会出现错误的结果
 		// 例如：一个Avatar正好进入到世界此时正在安装View触发器，而安装过程中这个实体onWitnessed触发导致自身被销毁了
 		// 由于View触发器并未完全安装完毕导致触发器的节点old_xx等都为-FLT_MAX，所以该实体在离开坐标管理器时Avatar的View触发器判断错误
 		// 如果先安装pViewLagAreaTrigger_则不会触发实体进入View事件，这样在安装pViewTrigger_时触发事件导致上面出现的问题时也能之前捕获离开事件了
-		if (pViewLagAreaTrigger_ && pEntity_/*上面流程可能导致销毁 */)
+		//...goog translate:
+		// pViewLagAreaTrigger_ must be installed first, otherwise some extreme situations will lead to wrong results
+		// For example: An Avatar just enters the world and the View trigger is being installed,
+		//  and the entity's onWitnessed trigger causes it to be destroyed during installation.
+		// Since the View trigger is not completely installed, the result of the trigger's node old_xx is -FLT_MAX,
+		//  so the entity's View trigger determines the error when leaving the coordinate manager
+		// If the pViewLagAreaTrigger_ is installed first, it will not trigger the entity to enter the View event,
+		//  so that when the triggering event causes the above problem to occur when installing pViewTrigger_,
+		//  it can also capture the leaving event.
+		if (pViewLagAreaTrigger_ && pEntity_/* The above process may lead to destruction */)
 			pViewLagAreaTrigger_->reinstall((CoordinateNode*)pEntity_->pEntityCoordinateNode());
 
-		if (pEntity_/*上面流程可能导致销毁 */)
+		if (pEntity_/* The above process may lead to destruction */)
 			pViewTrigger_->reinstall((CoordinateNode*)pEntity_->pEntityCoordinateNode());
 	}
 	else
@@ -591,7 +600,7 @@ void Witness::uninstallViewTrigger()
 	if (pViewLagAreaTrigger_)
 		pViewLagAreaTrigger_->uninstall();
 
-	// 通知所有实体离开View
+	// Notify all entities to leave View
 	VIEW_ENTITIES::iterator iter = viewEntities_.begin();
 	for (; iter != viewEntities_.end(); ++iter)
 	{
@@ -636,8 +645,8 @@ void Witness::_addViewEntityIDToBundle(Network::Bundle* pBundle, EntityRef* pEnt
 	}
 	else
 	{
-		// 注意：不可在该模块外部使用，否则可能出现客户端表找不到entityID的情况
-		// clientViewSize_需要实体真正同步到客户端时才会增加
+		// Note: It is not possible to use outside the class, otherwise the client table may not find entityID
+		// clientViewSize_ will only increase when the entity is actually synchronized to the client
 		if(clientViewSize_ > 255)
 		{
 			(*pBundle) << pEntityRef->id();
@@ -707,7 +716,7 @@ bool Witness::entityID2AliasID(ENTITY_ID id, uint8& aliasID)
 		return false;
 	}
 
-	// 溢出
+	// overflow
 	if (pEntityRef->aliasID() > 255)
 	{
 		aliasID = 0;
@@ -768,7 +777,7 @@ bool Witness::update()
 	{
 		Network::Bundle* pSendBundle = pChannel->createSendBundle();
 		
-		// 得到当前pSendBundle中是否有数据，如果有数据表示该bundle是重用的缓存的数据包
+		// Get the whether the current pSendBundle has data, if there is data, the bundle is a cached packet, reuse.
 		bool isBufferedSendBundleMessageLength = pSendBundle->packets().size() > 0 ? true : 
 			(pSendBundle->pCurrPacket() && pSendBundle->pCurrPacket()->length() > 0);
 		
@@ -782,7 +791,7 @@ bool Witness::update()
 			
 			if((pEntityRef->flags() & ENTITYREF_FLAG_ENTER_CLIENT_PENDING) > 0)
 			{
-				// 这里使用id查找一下， 避免entity在进入View时的回调里被意外销毁
+				// Use id to find out here to avoid the accidental destruction of the entity in the callback into View
 				Entity* otherEntity = Cellapp::getSingleton().findEntity(pEntityRef->id());
 				if(otherEntity == NULL)
 				{
@@ -864,7 +873,7 @@ bool Witness::update()
 		}
 
 		size_t pSendBundleMessageLength = pSendBundle->currMsgLength();
-		if (pSendBundleMessageLength > 8/*NETWORK_ENTITY_MESSAGE_FORWARD_CLIENT_BEGIN产生的基础包大小*/)
+		if (pSendBundleMessageLength > 8/*Base packet size generated by NETWORK_ENTITY_MESSAGE_FORWARD_CLIENT_BEGIN*/)
 		{
 			if(pSendBundleMessageLength > PACKET_MAX_SIZE_TCP)
 			{
@@ -877,9 +886,9 @@ bool Witness::update()
 		}
 		else
 		{
-			// 如果bundle是channel缓存的包
-			// 取出来重复利用的如果想丢弃本次消息发送
-			// 此时应该将NETWORK_ENTITY_MESSAGE_FORWARD_CLIENT_BEGIN从其中抹除掉
+			// if the bundle is a cached packet
+			// Take out and reuse if you want to discard this message
+			// At this point NETWORK_ENTITY_MESSAGE_FORWARD_CLIENT_BEGIN should be erased from it
 			if(isBufferedSendBundleMessageLength)
 			{
 				KBE_ASSERT(pSendBundleMessageLength == 8);
@@ -1257,9 +1266,9 @@ uint32 Witness::getEntityVolatileDataUpdateFlags(Entity* otherEntity)
 {
 	uint32 flags = UPDATE_FLAG_NULL;
 
-	/* 如果目标被我控制了，则目标的位置不通知我的客户端。
-	   注意：当这个被我控制的entity在服务器中使用moveToPoint()等接口移动时，
-	         也会由于这个判定导致坐标不会同步到控制者的客户端中
+	/*  If the witnessed entity is under my control, the its location is not updated to my client.
+		Note: When the entity I control is moved on the server using interfaces such as moveToPoint(),
+		Also due to this check, the coordinates will not be synchronized to the controller's client
 	*/
 	if (otherEntity->controlledBy() && pEntity_->id() == otherEntity->controlledBy()->id())
 		return flags;
