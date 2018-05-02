@@ -37,7 +37,7 @@ namespace Network{
 }
 
 /*
-	处理计费、第三方运营账号、注册登录系统等挂接
+	Handles billing, third-party account operations, registration/login system, etc.
 */
 class InterfacesHandler
 {

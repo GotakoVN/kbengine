@@ -85,7 +85,7 @@ bool InterfacesHandler_Dbmgr::createAccount(Network::Channel* pChannel, std::str
 		return false;
 	}
 
-	// 如果是email，先查询账号是否存在然后将其登记入库
+	// If it is email, first check whether the account exists and then register it in the database
 	if(uatype == ACCOUNT_TYPE_MAIL)
 	{
 		pThreadPool->addTask(new DBTaskCreateMailAccount(pChannel->addr(),
@@ -488,7 +488,7 @@ bool InterfacesHandler_Interfaces::reconnect()
 		}
 	}
 
-	// 不检查超时
+	// Do not check for timeout
 	pInterfacesChannel->stopInactivityDetection();
 	Dbmgr::getSingleton().networkInterface().registerChannel(pInterfacesChannel);
 	return true;
@@ -562,7 +562,7 @@ void InterfacesHandler_Interfaces::onChargeCB(KBEngine::MemoryStream& s)
 		ERROR_MSG(fmt::format("InterfacesHandler_Interfaces::onChargeCB: baseapp not found!, chargeID={}, cid={}.\n", 
 			chargeID, cid));
 
-		// 此时应该随机找一个baseapp调用onLoseChargeCB
+		// At this point should be randomly choose a baseapp to call onLoseChargeCB
 		bool found = false;
 
 		Components::COMPONENTS& components = Components::getSingleton().getComponents(BASEAPP_TYPE);
@@ -619,21 +619,21 @@ void InterfacesHandler_Interfaces::eraseClientReq(Network::Channel* pChannel, st
 //-------------------------------------------------------------------------------------
 void InterfacesHandler_Interfaces::accountActivate(Network::Channel* pChannel, std::string& scode)
 {
-	// 该功能不支持第三方系统，所以当做本地账号系统执行
+	// This function does not support third-party systems, so it is performed with the local account system
 	InterfacesHandler_Dbmgr::accountActivate(pChannel, scode);
 }
 
 //-------------------------------------------------------------------------------------
 void InterfacesHandler_Interfaces::accountReqResetPassword(Network::Channel* pChannel, std::string& accountName)
 {
-	// 该功能不支持第三方系统，所以当做本地账号系统执行
+	// This function does not support third-party systems, so it is performed with the local account system
 	InterfacesHandler_Dbmgr::accountReqResetPassword(pChannel, accountName);
 }
 
 //-------------------------------------------------------------------------------------
 void InterfacesHandler_Interfaces::accountResetPassword(Network::Channel* pChannel, std::string& accountName, std::string& newpassword, std::string& scode)
 {
-	// 该功能不支持第三方系统，所以当做本地账号系统执行
+	// This function does not support third-party systems, so it is performed with the local account system
 	InterfacesHandler_Dbmgr::accountResetPassword(pChannel, accountName, newpassword, scode);
 }
 
@@ -641,14 +641,14 @@ void InterfacesHandler_Interfaces::accountResetPassword(Network::Channel* pChann
 void InterfacesHandler_Interfaces::accountReqBindMail(Network::Channel* pChannel, ENTITY_ID entityID, std::string& accountName,
 												   std::string& password, std::string& email)
 {
-	// 该功能不支持第三方系统，所以当做本地账号系统执行
+	// This function does not support third-party systems, so it is performed with the local account system
 	InterfacesHandler_Dbmgr::accountReqBindMail(pChannel, entityID, accountName, password, email);
 }
 
 //-------------------------------------------------------------------------------------
 void InterfacesHandler_Interfaces::accountBindMail(Network::Channel* pChannel, std::string& username, std::string& scode)
 {
-	// 该功能不支持第三方系统，所以当做本地账号系统执行
+	// This function does not support third-party systems, so it is performed with the local account system
 	InterfacesHandler_Dbmgr::accountBindMail(pChannel, username, scode);
 }
 
@@ -656,7 +656,7 @@ void InterfacesHandler_Interfaces::accountBindMail(Network::Channel* pChannel, s
 void InterfacesHandler_Interfaces::accountNewPassword(Network::Channel* pChannel, ENTITY_ID entityID, std::string& accountName,
 												   std::string& password, std::string& newpassword)
 {
-	// 该功能不支持第三方系统，所以当做本地账号系统执行
+	// This function does not support third-party systems, so it is performed with the local account system
 	InterfacesHandler_Dbmgr::accountNewPassword(pChannel, entityID, accountName, password, newpassword);
 }
 

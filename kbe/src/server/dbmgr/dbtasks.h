@@ -38,7 +38,7 @@ class Buffered_DBTasks;
 struct ACCOUNT_INFOS;
 
 /*
-	数据库线程任务基础类
+	Database thread task base class
 */
 
 class DBTask : public DBTaskBase
@@ -116,7 +116,7 @@ private:
 };
 
 /**
-	执行一条sql语句
+	Execute an sql statement
 */
 class DBTaskExecuteRawDatabaseCommand : public DBTask
 {
@@ -141,7 +141,7 @@ protected:
 
 
 /**
-	执行一条sql语句
+	Execute an sql statement
 */
 class DBTaskExecuteRawDatabaseCommandByEntity : public EntityDBTask
 {
@@ -165,7 +165,7 @@ protected:
 };
 
 /**
-	向数据库写entity， 备份entity时也是这个机制
+	Write entity to the database, this mechanism is also used to backup the entity
 */
 class DBTaskWriteEntity : public EntityDBTask
 {
@@ -192,7 +192,7 @@ protected:
 };
 
 /**
-	从数据库中删除entity
+	Remove entity from the database
 */
 class DBTaskRemoveEntity : public EntityDBTask
 {
@@ -216,7 +216,7 @@ protected:
 };
 
 /**
-	从数据库中删除entity
+	Remove entity from the database by DBID
 */
 class DBTaskDeleteEntityByDBID : public DBTask
 {
@@ -243,7 +243,7 @@ protected:
 };
 
 /**
-	从数据库中自动加载实体
+	Automatically load entities from the database
 */
 class DBTaskEntityAutoLoad : public DBTask
 {
@@ -268,7 +268,7 @@ protected:
 };
 
 /**
-	通过dbid查询一个实体是否从数据库检出
+	Check if an entity is checked out from the database by dbid
 */
 class DBTaskLookUpEntityByDBID : public DBTask
 {
@@ -296,7 +296,7 @@ protected:
 };
 
 /**
-	创建一个账号到数据库
+	Create an account to the database
 */
 class DBTaskCreateAccount : public DBTask
 {
@@ -324,7 +324,7 @@ protected:
 };
 
 /**
-	创建一个email账号
+	Create an email account
 */
 class DBTaskCreateMailAccount : public DBTask
 {
@@ -349,7 +349,7 @@ protected:
 };
 
 /**
-	创建一个email账号
+	Activate an email account
 */
 class DBTaskActivateAccount : public DBTask
 {
@@ -370,7 +370,7 @@ protected:
 };
 
 /**
-	请求重置账号
+	Request to reset account
 */
 class DBTaskReqAccountResetPassword : public DBTask
 {
@@ -393,7 +393,7 @@ protected:
 };
 
 /**
-	完成重置账号
+	Complete reset account
 */
 class DBTaskAccountResetPassword : public DBTask
 {
@@ -417,7 +417,7 @@ protected:
 };
 
 /**
-	请求绑定email
+	Request to bind email
 */
 class DBTaskReqAccountBindEmail : public DBTask
 {
@@ -443,7 +443,7 @@ protected:
 };
 
 /**
-	完成绑定email
+	Complete bind email
 */
 class DBTaskAccountBindEmail : public DBTask
 {
@@ -465,7 +465,7 @@ protected:
 };
 
 /**
-	设置新密码
+	Set new password
 */
 class DBTaskAccountNewPassword : public DBTask
 {
@@ -488,7 +488,7 @@ protected:
 };
 
 /**
-	baseapp请求查询account信息
+	Baseapp request query account information
 */
 class DBTaskQueryAccount : public EntityDBTask
 {
@@ -523,7 +523,7 @@ protected:
 };
 
 /**
-	账号上线
+	Account online
 */
 class DBTaskAccountOnline : public EntityDBTask
 {
@@ -545,7 +545,7 @@ protected:
 
 
 /**
-	entity下线
+	Entity offline
 */
 class DBTaskEntityOffline : public EntityDBTask
 {
@@ -565,7 +565,7 @@ protected:
 
 
 /**
-	一个新用户登录， 需要检查合法性
+	A new user login, need to check the legality
 */
 class DBTaskAccountLogin : public DBTask
 {
@@ -598,7 +598,7 @@ protected:
 };
 
 /**
-	baseapp请求查询entity信息
+	Baseapp request query entity information
 */
 class DBTaskQueryEntity : public EntityDBTask
 {
@@ -624,7 +624,7 @@ protected:
 	MemoryStream s_;
 	ENTITY_ID entityID_;
 
-	// 如果实体已经激活，则这个属性指向实体所在app
+	// If the entity is already activated, this attribute points to the app where the entity is located
 	bool wasActive_;
 	COMPONENT_ID wasActiveCID_;
 	ENTITY_ID wasActiveEntityID_;
@@ -633,7 +633,7 @@ protected:
 };
 
 /**
-	写服务器日志
+	Write server log
 */
 class DBTaskServerLog : public DBTask
 {

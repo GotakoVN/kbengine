@@ -91,7 +91,7 @@ bool Dbmgr::canShutdown()
 {
 	if (getEntryScript().get() && PyObject_HasAttrString(getEntryScript().get(), "onReadyForShutDown") > 0)
 	{
-		// 所有脚本都加载完毕
+		// All scripts are loaded
 		PyObject* pyResult = PyObject_CallMethod(getEntryScript().get(),
 			const_cast<char*>("onReadyForShutDown"),
 			const_cast<char*>(""));
@@ -167,7 +167,7 @@ void Dbmgr::onShutdownBegin()
 {
 	PythonApp::onShutdownBegin();
 
-	// 通知脚本
+	// Notify script
 	SCOPED_PROFILE(SCRIPTCALL_PROFILE);
 	SCRIPT_OBJECT_CALL_ARGS0(getEntryScript().get(), const_cast<char*>("onDBMgrShutDown"), false);
 }
@@ -253,7 +253,7 @@ bool Dbmgr::initializeBegin()
 //-------------------------------------------------------------------------------------
 bool Dbmgr::inInitialize()
 {
-	// 初始化所有扩展模块
+	// Initialize all extension modules
 	// assets/scripts/
 	if (!PythonApp::inInitialize())
 		return false;
@@ -271,14 +271,14 @@ bool Dbmgr::initializeEnd()
 {
 	PythonApp::initializeEnd();
 
-	// 添加一个timer， 每秒检查一些状态
+	// Add a timer, check some status every second
 	loopCheckTimerHandle_ = this->dispatcher().addTimer(1000000, this,
 							reinterpret_cast<void *>(TIMEOUT_CHECK_STATUS));
 
 	mainProcessTimer_ = this->dispatcher().addTimer(1000000 / 50, this,
 							reinterpret_cast<void *>(TIMEOUT_TICK));
 
-	// 添加globalData, baseAppData, cellAppData支持
+	// Add globalData, baseAppData, cellAppData support
 	pGlobalData_ = new GlobalDataServer(GlobalDataServer::GLOBAL_DATA);
 	pBaseAppData_ = new GlobalDataServer(GlobalDataServer::BASEAPP_DATA);
 	pCellAppData_ = new GlobalDataServer(GlobalDataServer::CELLAPP_DATA);
@@ -292,7 +292,7 @@ bool Dbmgr::initializeEnd()
 	
 	SCOPED_PROFILE(SCRIPTCALL_PROFILE);
 
-	// 所有脚本都加载完毕
+	// All scripts are loaded
 	PyObject* pyResult = PyObject_CallMethod(getEntryScript().get(), 
 										const_cast<char*>("onDBMgrReady"), 
 										const_cast<char*>(""));
@@ -429,7 +429,7 @@ void Dbmgr::onReqAllocEntityID(Network::Channel* pChannel, COMPONENT_ORDER compo
 {
 	KBEngine::COMPONENT_TYPE ct = static_cast<KBEngine::COMPONENT_TYPE>(componentType);
 
-	// 获取一个id段 并传输给IDClient
+	// Get an id segment and transfer it to IDClient
 	std::pair<ENTITY_ID, ENTITY_ID> idRange = idServer_.allocRange();
 	Network::Bundle* pBundle = Network::Bundle::createPoolObject();
 
@@ -468,9 +468,9 @@ void Dbmgr::onRegisterNewApp(Network::Channel* pChannel, int32 uid, std::string&
 	if(pSyncAppDatasHandler_ == NULL)
 		pSyncAppDatasHandler_ = new SyncAppDatasHandler(this->networkInterface());
 
-	// 下一步:
-	// 如果是连接到dbmgr则需要等待接收app初始信息
-	// 例如：初始会分配entityID段以及这个app启动的顺序信息（是否第一个baseapp启动）
+	// Next step:
+	// If you are connecting to dbmgr, you need to wait to receive app initial information
+	// For example: initial allocation of the entityID segment and the sequence of the app startup (whether the first baseapp started)
 	if(tcomponentType == BASEAPP_TYPE || 
 		tcomponentType == CELLAPP_TYPE || 
 		tcomponentType == LOGINAPP_TYPE)
@@ -501,7 +501,7 @@ void Dbmgr::onRegisterNewApp(Network::Channel* pChannel, int32 uid, std::string&
 
 	pSyncAppDatasHandler_->pushApp(componentID, startGroupOrder, startGlobalOrder);
 
-	// 如果是baseapp或者cellapp则将自己注册到所有其他baseapp和cellapp
+	// If it is a baseapp or a cellapp register it to all other baseapps and cellapps
 	if(tcomponentType == BASEAPP_TYPE || 
 		tcomponentType == CELLAPP_TYPE)
 	{
@@ -950,7 +950,7 @@ std::string Dbmgr::selectAccountDBInterfaceName(const std::string& name)
 {
 	std::string dbInterfaceName = "default";
 
-	// 把请求交由脚本处理
+	// Callback to the script
 	SCOPED_PROFILE(SCRIPTCALL_PROFILE);
 	PyObject* pyResult = PyObject_CallMethod(getEntryScript().get(),
 		const_cast<char*>("onSelectAccountDBInterface"),

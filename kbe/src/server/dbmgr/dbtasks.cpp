@@ -194,7 +194,7 @@ thread::TPTask::TPTaskState DBTaskExecuteRawDatabaseCommandByEntity::presentMain
 {
 	DEBUG_MSG(fmt::format("Dbmgr::ExecuteRawDatabaseCommandByEntity::presentMainThread: {}.\n", sdatas_.c_str()));
 
-	// 如果不需要回调则结束
+	// End if no callback is needed
 	if(callbackID_ <= 0)
 		return EntityDBTask::presentMainThread();
 
@@ -237,7 +237,7 @@ thread::TPTask::TPTaskState DBTaskExecuteRawDatabaseCommand::presentMainThread()
 {
 	DEBUG_MSG(fmt::format("Dbmgr::ExecuteRawDatabaseCommandByEntity::presentMainThread: {}.\n", sdatas_.c_str()));
 
-	// 如果不需要回调则结束
+	// End if no callback is needed
 	if(callbackID_ <= 0)
 		return thread::TPTask::TPTASK_STATE_COMPLETED;
 
@@ -320,7 +320,7 @@ bool DBTaskWriteEntity::db_thread_process()
 	{
 		success_ = false;
 
-		// 先写log， 如果写失败则可能这个entity已经在线
+		// Write the log first. If the write fails, the entity may be online.
 		KBEEntityLogTable* pELTable = static_cast<KBEEntityLogTable*>(entityTables.findKBETable(KBE_TABLE_PERFIX "_entitylog"));
 		KBE_ASSERT(pELTable);
 
@@ -342,7 +342,7 @@ thread::TPTask::TPTaskState DBTaskWriteEntity::presentMainThread()
 	ScriptDefModule* pModule = EntityDef::findScriptModule(sid_);
 	DEBUG_MSG(fmt::format("Dbmgr::writeEntity: {0}({1}).\n", pModule->getName(), entityDBID_));
 
-	// 返回写entity的结果， 成功或者失败
+	// Return result of writing entity, success or failure
 
 	Network::Bundle* pBundle = Network::Bundle::createPoolObject();
 	(*pBundle).newMessage(BaseappInterface::onWriteToDBCallback);
@@ -433,7 +433,7 @@ bool DBTaskDeleteEntityByDBID::db_thread_process()
 
 	haslog = pELTable->queryEntity(pdbi_, entityDBID_, entitylog, pModule->getUType());
 
-	// 如果有在线纪录
+	// If you have an online record
 	if(haslog)
 	{
 		success_ = false;
@@ -560,7 +560,7 @@ bool DBTaskLookUpEntityByDBID::db_thread_process()
 
 	ScriptDefModule* pModule = EntityDef::findScriptModule(sid_);
 
-	// 如果有在线纪录
+	// If you have an online record
 	if(pELTable->queryEntity(pdbi_, entityDBID_, entitylog, pModule->getUType()))
 	{
 		if(entitylog.logger != g_componentID)
@@ -652,8 +652,8 @@ bool DBTaskCreateAccount::writeAccount(DBInterface* pdbi, const std::string& acc
 		return false;
 	}
 
-	// 寻找dblog是否有此账号， 如果有则创建失败
-	// 如果没有则向account表新建一个entity数据同时在accountlog表写入一个log关联dbid
+	// Find if dblog has this account, if it fails, 
+	// Create an entity data to the account table and write a log association dbid in the accountlog table.
 	EntityTables& entityTables = EntityTables::findByInterfaceName(pdbi->name());
 	KBEAccountTable* pTable = static_cast<KBEAccountTable*>(entityTables.findKBETable(KBE_TABLE_PERFIX "_accountinfos"));
 	KBE_ASSERT(pTable);
@@ -689,7 +689,7 @@ bool DBTaskCreateAccount::writeAccount(DBInterface* pdbi, const std::string& acc
 	
 	if(entityDBID == 0)
 	{
-		// 防止多线程问题， 这里做一个拷贝。
+		// To prevent multithreading problems, make a copy here.
 		MemoryStream copyAccountDefMemoryStream(pTable->accountDefMemoryStream());
 
 		entityDBID = EntityTables::findByInterfaceName(pdbi->name()).writeEntity(pdbi, 0, -1,
@@ -801,7 +801,7 @@ bool DBTaskCreateMailAccount::db_thread_process()
 		return false;
 	}
 
-	// 寻找dblog是否有此账号， 如果有则创建失败
+	// Find if dblog has this account, if it fails, create it
 	EntityTables& entityTables = EntityTables::findByInterfaceName(pdbi_->name());
 	KBEAccountTable* pTable = static_cast<KBEAccountTable*>(entityTables.findKBETable(KBE_TABLE_PERFIX "_accountinfos"));
 	KBE_ASSERT(pTable);
@@ -818,8 +818,8 @@ bool DBTaskCreateMailAccount::db_thread_process()
 		return false;
 	}
 
-	// 生成激活码并存储激活码到数据库
-	// 发送smtp邮件到邮箱， 用户点击确认后即可激活
+	// Generate an activation code and store the activation code into the database
+	// Send smtp mail to email, user can click activate to activate
 	std::string codestr = genmail_code(password_);
 	KBEEmailVerificationTable* pTable1 = static_cast<KBEEmailVerificationTable*>(entityTables.findKBETable(KBE_TABLE_PERFIX "_email_verification"));
 	KBE_ASSERT(pTable1);
@@ -963,8 +963,8 @@ bool DBTaskReqAccountResetPassword::db_thread_process()
 	if(info.dbid == 0 || info.flags != ACCOUNT_FLAG_NORMAL)
 		return false;
 	
-	// 生成激活码并存储激活码到数据库
-	// 发送smtp邮件到邮箱， 用户点击确认后即可激活
+	// Generate an activation code and store the activation code into the database
+	// Send smtp mail to email, user can click activate to activate
 	KBEEmailVerificationTable* pTable1 = 
 		static_cast<KBEEmailVerificationTable*>(entityTables.findKBETable(KBE_TABLE_PERFIX "_email_verification"));
 	KBE_ASSERT(pTable1);
@@ -1079,8 +1079,8 @@ bool DBTaskReqAccountBindEmail::db_thread_process()
 		return false;
 	}
 
-	// 生成激活码并存储激活码到数据库
-	// 发送smtp邮件到邮箱， 用户点击确认后即可激活
+	// Generate an activation code and store the activation code into the database
+	// Send smtp mail to email, user can click activate to activate
 	KBEEmailVerificationTable* pTable1 = static_cast<KBEEmailVerificationTable*>(
 		EntityTables::findByInterfaceName(pdbi_->name()).findKBETable(KBE_TABLE_PERFIX "_email_verification"));
 
@@ -1283,7 +1283,7 @@ bool DBTaskQueryAccount::db_thread_process()
 	info.dbid = dbid_;
 	info.datas = "";
 
-	// 为了每次都能获得bindata因此这里需要每次都查询
+	// Need to get bindata every time, so it needs to be queried every time.
 	//if(dbid_ == 0)
 	{
 		if(!pTable->queryAccount(pdbi_, accountName_, info))
@@ -1334,7 +1334,7 @@ bool DBTaskQueryAccount::db_thread_process()
 
 	success_ = false;
 
-	// 先写log， 如果写失败则可能这个entity已经在线
+	// Write the log first. If the write fails, the entity may be online.
 	KBEEntityLogTable* pELTable = static_cast<KBEEntityLogTable*>
 		(entityTables.findKBETable(KBE_TABLE_PERFIX "_entitylog"));
 	
@@ -1418,7 +1418,7 @@ thread::TPTask::TPTaskState DBTaskAccountOnline::presentMainThread()
 	DEBUG_MSG(fmt::format("Dbmgr::onAccountOnline: componentID:{}, entityID:{}.\n", componentID_, EntityDBTask_entityID()));
 
 	/*
-	// 如果没有连接db则从log中查找账号是否还在线
+	// If there is no connection to db then find out from the log whether the account is still online
 	if(!pDBInterface_)
 	{
 		PROXIES_ONLINE_LOG::iterator iter = proxiesOnlineLogs_.find(accountName_);
@@ -1503,7 +1503,7 @@ DBTaskAccountLogin::~DBTaskAccountLogin()
 //-------------------------------------------------------------------------------------
 bool DBTaskAccountLogin::db_thread_process()
 {
-	// 如果Interfaces已经判断不成功就没必要继续下去
+	// If Interfaces has returned failure, there is no need to continue
 	if(retcode_ != SERVER_SUCCESS)
 	{
 		ERROR_MSG(fmt::format("DBTaskAccountLogin::db_thread_process(): interfaces is failed!\n"));
@@ -1612,7 +1612,7 @@ bool DBTaskAccountLogin::db_thread_process()
 	KBEEntityLogTable::EntityLog entitylog;
 	bool success = !pELTable->queryEntity(pdbi_, info.dbid, entitylog, pModule->getUType());
 
-	// 如果有在线纪录
+	// If you have an online record
 	if(!success)
 	{
 		componentID_ = entitylog.componentID;
@@ -1658,7 +1658,8 @@ thread::TPTask::TPTaskState DBTaskAccountLogin::presentMainThread()
 		entityID_ = 0;
 	}
 	
-	// 一个用户登录， 构造一个数据库查询指令并加入到执行队列， 执行完毕将结果返回给loginapp
+	// A user logs in, constructs a database query instruction and joins the execution queue,
+	//  and returns the result to the loginapp after execution completes.
 	Network::Bundle* pBundle = Network::Bundle::createPoolObject();
 	(*pBundle).newMessage(LoginappInterface::onLoginAccountQueryResultFromDbmgr);
 
@@ -1667,7 +1668,7 @@ thread::TPTask::TPTaskState DBTaskAccountLogin::presentMainThread()
 	(*pBundle) << accountName_;
 	(*pBundle) << password_;
 	(*pBundle) << needCheckPassword_;
-	(*pBundle) << componentID_;   // 如果大于0则表示账号还存活在某个baseapp上
+	(*pBundle) << componentID_;   // If greater than 0 then the account is still alive on a baseapp
 	(*pBundle) << entityID_;
 	(*pBundle) << dbid_;
 	(*pBundle) << flags_;
@@ -1716,7 +1717,7 @@ bool DBTaskQueryEntity::db_thread_process()
 
 	if(success_)
 	{
-		// 先写log， 如果写失败则可能这个entity已经在线
+		// Write the log first. If the write fails, the entity may be online.
 		KBEEntityLogTable* pELTable = static_cast<KBEEntityLogTable*>
 			(entityTables.findKBETable(KBE_TABLE_PERFIX "_entitylog"));
 

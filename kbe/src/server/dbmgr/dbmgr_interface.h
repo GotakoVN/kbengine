@@ -44,14 +44,10 @@ along with KBEngine.  If not, see <http://www.gnu.org/licenses/>.
 namespace KBEngine{
 
 /**
-	Dbmgr消息宏，  参数为流， 需要自己解开
-*/
-
-/**
-	DBMGR所有消息接口在此定义
+	DBMGR all message interfaces are defined here
 */
 NETWORK_INTERFACE_DECLARE_BEGIN(DbmgrInterface)
-	// 某app注册自己的接口地址到本app
+	// Another app registers its own interface address to this app
 	DBMGR_MESSAGE_DECLARE_ARGS11(onRegisterNewApp,					NETWORK_VARIABLE_MESSAGE,
 									int32,							uid, 
 									std::string,					username,
@@ -65,34 +61,34 @@ NETWORK_INTERFACE_DECLARE_BEGIN(DbmgrInterface)
 									uint16,							extport,
 									std::string,					extaddrEx)
 
-	// 某app主动请求look。
+	// Another app actively requests a look.
 	DBMGR_MESSAGE_DECLARE_ARGS0(lookApp,							NETWORK_FIXED_MESSAGE)
 
-	// 某个app请求查看该app负载状态。
+	// An app requests to see the app load status.
 	DBMGR_MESSAGE_DECLARE_ARGS0(queryLoad,							NETWORK_FIXED_MESSAGE)
 
-	// 某app请求获取一个entityID段 
+	// An app requests an entityID segment
 	DBMGR_MESSAGE_DECLARE_ARGS2(onReqAllocEntityID,					NETWORK_FIXED_MESSAGE,
 								COMPONENT_TYPE,						componentType,
 								COMPONENT_ID,						componentID)
 
-	// global数据改变
+	// Global data changes
 	DBMGR_MESSAGE_DECLARE_STREAM(onBroadcastGlobalDataChanged,		NETWORK_VARIABLE_MESSAGE)
 
-	// 某个app向本app告知处于活动状态。
+	// An app informs the app that it is active.
 	DBMGR_MESSAGE_DECLARE_ARGS2(onAppActiveTick,					NETWORK_FIXED_MESSAGE,
 									COMPONENT_TYPE,					componentType, 
 									COMPONENT_ID,					componentID)
 
-	// loginapp请求创建账号。
+	// Loginapp requests to create an account.
 	DBMGR_MESSAGE_DECLARE_STREAM(reqCreateAccount,					NETWORK_VARIABLE_MESSAGE)
 	DBMGR_MESSAGE_DECLARE_STREAM(onCreateAccountCBFromInterfaces,	NETWORK_VARIABLE_MESSAGE)
 
-	// 登陆账号。
+	// Login account.
 	DBMGR_MESSAGE_DECLARE_STREAM(onAccountLogin,					NETWORK_VARIABLE_MESSAGE)
 	DBMGR_MESSAGE_DECLARE_STREAM(onLoginAccountCBBFromInterfaces,	NETWORK_VARIABLE_MESSAGE)
 
-	// baseapp查询账号信息。
+	// Baseapp query account information.
 	DBMGR_MESSAGE_DECLARE_ARGS8(queryAccount,						NETWORK_VARIABLE_MESSAGE,
 									std::string,					accountName,
 									std::string,					password,
@@ -103,41 +99,41 @@ NETWORK_INTERFACE_DECLARE_BEGIN(DbmgrInterface)
 									uint32,							ip,
 									uint16,							port)
 
-	// baseapp上账号上线。
+	// Baseapp on the account online.
 	DBMGR_MESSAGE_DECLARE_ARGS3(onAccountOnline,					NETWORK_VARIABLE_MESSAGE,
 									std::string,					accountName,
 									COMPONENT_ID,					componentID,
 									ENTITY_ID,						entityID)
 		
-	// baseapp上entity下线。
+	// Baseapp on the entity offline.
 	DBMGR_MESSAGE_DECLARE_ARGS3(onEntityOffline,					NETWORK_FIXED_MESSAGE,
 									DBID,							dbid,
 									uint16,							sid,
 									uint16,							dbInterfaceIndex)
 
-	// 请求擦除客户端请求任务。
+	// Requests a wipe client request task.
 	DBMGR_MESSAGE_DECLARE_ARGS1(eraseClientReq,						NETWORK_VARIABLE_MESSAGE,
 									std::string,					logkey)
 
-	// 数据库查询
+	// Database query
 	DBMGR_MESSAGE_DECLARE_STREAM(executeRawDatabaseCommand,			NETWORK_VARIABLE_MESSAGE)
 
-	// 某个entity存档
+	// Archive entity
 	DBMGR_MESSAGE_DECLARE_STREAM(writeEntity,						NETWORK_VARIABLE_MESSAGE)
 
-	// 删除某个entity的存档
+	// Delete an entity's archive
 	DBMGR_MESSAGE_DECLARE_STREAM(removeEntity,						NETWORK_VARIABLE_MESSAGE)
 
-	// 请求从数据库删除实体
+	// Request to delete entity from database
 	DBMGR_MESSAGE_DECLARE_STREAM(deleteEntityByDBID,				NETWORK_VARIABLE_MESSAGE)
 
-	// 通过dbid查询一个实体是否从数据库检出
+	// Check if an entity is checked out from the database by dbid
 	DBMGR_MESSAGE_DECLARE_STREAM(lookUpEntityByDBID,				NETWORK_VARIABLE_MESSAGE)
 
-	// 请求关闭服务器
+	// Request to shut down the server
 	DBMGR_MESSAGE_DECLARE_STREAM(reqCloseServer,					NETWORK_VARIABLE_MESSAGE)
 
-	// 某个app向本app告知处于活动状态。
+	// Another app informs this app that it is active.
 	DBMGR_MESSAGE_DECLARE_ARGS7(queryEntity,						NETWORK_VARIABLE_MESSAGE, 
 									uint16,							dbInterfaceIndex,
 									COMPONENT_ID,					componentID,
@@ -147,58 +143,58 @@ NETWORK_INTERFACE_DECLARE_BEGIN(DbmgrInterface)
 									CALLBACK_ID,					callbackID,
 									ENTITY_ID,						entityID)
 
-	// 实体自动加载功能
+	// Entity automatic loading function
 	DBMGR_MESSAGE_DECLARE_STREAM(entityAutoLoad,					NETWORK_VARIABLE_MESSAGE)
 
-	// 同步entity流模板
+	// Synchronize entity flow template
 	DBMGR_MESSAGE_DECLARE_STREAM(syncEntityStreamTemplate,			NETWORK_VARIABLE_MESSAGE)
 
-	// 请求查询watcher数据
+	// Request for watcher data
 	DBMGR_MESSAGE_DECLARE_STREAM(queryWatcher,						NETWORK_VARIABLE_MESSAGE)
 
-	// 充值请求
+	// Recharge request
 	DBMGR_MESSAGE_DECLARE_STREAM(charge,							NETWORK_VARIABLE_MESSAGE)
 
-	// 充值回调
+	// Recharge callback
 	DBMGR_MESSAGE_DECLARE_STREAM(onChargeCB,						NETWORK_VARIABLE_MESSAGE)
 
-	// 激活回调。
+	// Activate the callback.
 	DBMGR_MESSAGE_DECLARE_ARGS1(accountActivate,					NETWORK_VARIABLE_MESSAGE,
 									std::string,					scode)
 
-	// 账号请求重置密码。
+	// The account request resets the password.
 	DBMGR_MESSAGE_DECLARE_ARGS1(accountReqResetPassword,			NETWORK_VARIABLE_MESSAGE,
 									std::string,					accountName)
 
-	// 账号完成重置密码。
+	// The account has completed resetting the password.
 	DBMGR_MESSAGE_DECLARE_ARGS3(accountResetPassword,				NETWORK_VARIABLE_MESSAGE,
 									std::string,					accountName,
 									std::string,					newpassword,
 									std::string,					code)
 
-	// 账号请求绑定邮箱。
+	// The account request is bound to the mailbox.
 	DBMGR_MESSAGE_DECLARE_ARGS4(accountReqBindMail,					NETWORK_VARIABLE_MESSAGE,
 									ENTITY_ID,						entityID,
 									std::string,					accountName,
 									std::string,					password,
 									std::string,					email)
 
-	// 账号完成绑定邮箱。
+	// The account is complete with a binding email.
 	DBMGR_MESSAGE_DECLARE_ARGS2(accountBindMail,					NETWORK_VARIABLE_MESSAGE,
 									std::string,					username,
 									std::string,					code)
 
-	// 账号修改密码。
+	// Account change password.
 	DBMGR_MESSAGE_DECLARE_ARGS4(accountNewPassword,					NETWORK_VARIABLE_MESSAGE,
 									ENTITY_ID,						entityID,
 									std::string,					accountName,
 									std::string,					password,
 									std::string,					newpassword)
 
-	// 开始profile
+	// Start profile
 	DBMGR_MESSAGE_DECLARE_STREAM(startProfile,						NETWORK_VARIABLE_MESSAGE)
 
-	// 请求强制杀死当前app
+	// Request to kill the current app
 	DBMGR_MESSAGE_DECLARE_STREAM(reqKillServer,						NETWORK_VARIABLE_MESSAGE)
 
 NETWORK_INTERFACE_DECLARE_END()
