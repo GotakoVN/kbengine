@@ -95,7 +95,7 @@ void SpaceViewers::handleTimeout(TimerHandle handle, void * arg)
 	std::map< Network::Address, SpaceViewer>::iterator iter = spaceViews_.begin();
 	for (; iter != spaceViews_.end(); )
 	{
-		// 如果该viewer地址找不到了则将其擦除
+		// Erase the viewer if it is not found
 		Network::Channel* pChannel = Cellappmgr::getSingleton().networkInterface().findChannel(iter->second.addr());
 		if (pChannel == NULL)
 		{
@@ -196,8 +196,8 @@ void SpaceViewer::updateClient()
 			{
 				s << iter3->first;
 
-				// 其他信息待分割功能实现后完成
-				// 例如cell大小形状等信息
+			// Other viewing information will be completed after the space splitting across cells is implemented
+			// Such as cell size and shape information
 			}
 		}
 	}

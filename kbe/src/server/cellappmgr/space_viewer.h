@@ -58,7 +58,7 @@ protected:
 
 	Network::Address addr_;
 
-	// 当前所查看的space
+	// Currently viewed space
 	SPACE_ID spaceID_;
 };
 

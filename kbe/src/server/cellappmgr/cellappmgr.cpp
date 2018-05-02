@@ -43,7 +43,7 @@ class AppForwardItem : public ForwardItem
 public:
 	virtual bool isOK()
 	{
-		// 必须存在一个准备好的进程
+		// There must be a prepared process
 		Components::COMPONENTS& cts = Components::getSingleton().getComponents(CELLAPP_TYPE);
 		Components::COMPONENTS::iterator ctiter = cts.begin();
 		for (; ctiter != cts.end(); ++ctiter)
@@ -139,7 +139,7 @@ Cellapp& Cellappmgr::getCellapp(COMPONENT_ID cid)
 		return iter->second;
 	}
 
-	// 添加了一个新的cellapp
+	// Added a new cellapp
 	Cellapp& cellapp = cellapps_[cid];
 
 	INFO_MSG(fmt::format("Cellappmgr::getCellapp: added new cellapp({0}).\n",
@@ -166,7 +166,7 @@ void Cellappmgr::handleTimeout(TimerHandle handle, void * arg)
 //-------------------------------------------------------------------------------------
 void Cellappmgr::onChannelDeregister(Network::Channel * pChannel)
 {
-	// 如果是app死亡了
+	// If the app is dead
 	if(pChannel->isInternal())
 	{
 		Components::ComponentInfos* cinfo = Components::getSingleton().findComponent(pChannel);
@@ -257,14 +257,14 @@ COMPONENT_ID Cellappmgr::findFreeCellapp(void)
 		if ((iter->second.flags() & APP_FLAGS_NOT_PARTCIPATING_LOAD_BALANCING) > 0)
 			continue;
 		
-		// 首先进程必须活着且初始化完毕
-		if(!iter->second.isDestroyed() && iter->second.initProgress() > 1.f)
+		// First, the process must be alive and initialized
+		if(!iter->second.isDestroyed() && iter->second.initProgress() > 1.0f)
 		{
-			// 如果没有任何实体则无条件分配
+			// If cellapp has no entities, it is free
 			if(iter->second.numEntities() == 0)
 				return iter->first;
 
-			// 比较并记录负载最小的进程最终被分配
+			// Otherwise, compare and record to find the least loaded process to eventually return most free cellapp
 			if(minload > iter->second.load() || 
 				(minload == iter->second.load() && numEntities > iter->second.numEntities()))
 			{
@@ -331,9 +331,9 @@ void Cellappmgr::reqCreateCellEntityInNewSpace(Network::Channel* pChannel, Memor
 	COMPONENT_ID componentID;
 	bool hasClient;
 
-	// 如果cellappIndex为0，则代表不强制指定cellapp
-	// 非0的情况下，选择的cellapp可以用1,2,3,4来代替
-	// 假如预期有4个cellapp， 假如不够4个， 只有3个， 那么4代表1
+	// If cellappIndex is 0, it means no cellapp is specified, create on any
+	// In case of non-zero, the selected cellapp can be replaced by 1, 2, 3, 4
+	// Modulus is used on index, so if there are only 3 cellapps, but index is 4, 4 represents 1
 	uint32 cellappIndex = 0;
 
 	s >> entityType;
@@ -361,7 +361,7 @@ void Cellappmgr::reqCreateCellEntityInNewSpace(Network::Channel* pChannel, Memor
 	{
 		updateBestCellapp();
 
-		// 选择特定的cellapp创建space
+		// Select a specific cellapp to create space
 		if (cellappIndex > 0)
 		{
 			uint32 index = (cellappIndex - 1) % cellappSize;
@@ -402,7 +402,7 @@ void Cellappmgr::reqCreateCellEntityInNewSpace(Network::Channel* pChannel, Memor
 	DEBUG_MSG(fmt::format("Cellappmgr::reqCreateCellEntityInNewSpace: entityType={}, entityID={}, componentID={}, cellapp(cid={}, load={}, numEntities={}).\n",
 		entityType, id, componentID, bestCellappID_, cellapp_iter->second.load(), cellapp_iter->second.numEntities()));
 
-	// 预先将实体数量增加
+	// Increase the number of entities in advance
 	if (cellapp_iter != cellapps_.end())
 	{
 		cellapp_iter->second.incNumEntities();
@@ -453,7 +453,7 @@ void Cellappmgr::reqRestoreSpaceInCell(Network::Channel* pChannel, MemoryStream&
 		cinfos->pChannel->send(pBundle);
 	}
 
-	// 预先将实体数量增加
+	// Increase the number of entities in advance
 	std::map< COMPONENT_ID, Cellapp >::iterator cellapp_iter = cellapps_.find(bestCellappID_);
 	if (cellapp_iter != cellapps_.end())
 	{
@@ -521,7 +521,7 @@ void Cellappmgr::addCellappComponentID(COMPONENT_ID cid)
 	if (!isInserted)
 		cellapp_cids_.push_back(cid);
 
-	// 输出日志，如果要校验cellapp插入的顺序是否正确，可以打开下面的注释进行测试
+	// Output log, if you want to verify the correct order of cellapp insertion, you can uncomment the following to test
 	/*
 	{
 		std::string sCID = "";
@@ -580,7 +580,7 @@ void Cellappmgr::querySpaces(Network::Channel* pChannel, MemoryStream& s)
 
 		(*pBundle) << iter1->first;
 		
-		// 如果不强制，则在win64下，它是8字节，而win32下是4字节
+		// Without cast, it is 8 bytes under Win64, 4 bytes under Win32
 		(*pBundle) << (uint32)spaces.size(); 
 
 		std::map<SPACE_ID, Space>& allSpaces = spaces.spaces();
@@ -601,8 +601,8 @@ void Cellappmgr::querySpaces(Network::Channel* pChannel, MemoryStream& s)
 			{
 				(*pBundle) << iter3->first;
 
-				// 其他信息待分割功能实现后完成
-				// 例如cell大小形状等信息
+				// Other information will be completed after the space splitting into cells is implemented
+				// Such as cell size and shape information
 			}
 		}
 	}
