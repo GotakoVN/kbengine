@@ -11,7 +11,7 @@ KBEngine
 	Unity3d		: https://github.com/krogank9/kbengine_unity3d_warring/releases/latest
 	UE4		: https://github.com/krogank9/kbengine_ue4_demo/releases/latest
 	Ogre		: https://github.com/krogank9/kbengine_ogre_demo/releases/latest
-	Cocos2d_js	: https://github.com/krogank9/kbengine_cocos2d_js_demo/releases/latest
+	Cocos2d_js	: https://github.com/krogank9/kbengine_cocos2d_js_demo/releases/latest [defunct needs update to 2.0.0 sdk generation]
 	Godot Engine	: https://github.com/krogank9/kbe_godot_demo/releases/latest
 
 
