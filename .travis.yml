@@ -9,7 +9,7 @@ branches:
 #  - stable
 before_install:
    - sudo apt-get update
-   - sudo apt-get install -y libjemalloc-dev valgrind build-essential g++ libssl-dev mysql-server libmysqld-dev python libssl-dev libpython-dev libapr1-dev libaprutil1-dev libexpat1-dev liblog4cxx-dev libtinyxml-dev libzip-dev libhiredis-dev zlib1g-dev
+   - sudo apt-get install -y libjemalloc-dev valgrind build-essential g++ libssl-dev mysql-server libmysqld-dev python libssl-dev libpython-dev libapr1-dev libaprutil1-dev libexpat1-dev libtinyxml-dev libzip-dev libhiredis-dev zlib1g-dev
 notifications:
   recipients:
     - kbesrv@gmail.com
