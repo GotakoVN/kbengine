@@ -2,7 +2,6 @@ KBEngine
 ========
 
 [![Build Status](https://travis-ci.org/krogank9/kbengine.svg?branch=master)](https://travis-ci.org/krogank9/kbengine)
-[![Appveyor (Windows) Build  Status](https://ci.appveyor.com/api/projects/status/github/krogank9/kbengine?branch=master&svg=true)](https://ci.appveyor.com/project/krogank9/kbengine/branch/master)
 
 
 ## Demo sources
@@ -10,8 +9,8 @@ KBEngine
 	Unity3d		: https://github.com/krogank9/kbengine_unity3d_demo/releases/latest
 	Unity3d		: https://github.com/krogank9/kbengine_unity3d_warring/releases/latest
 	UE4		: https://github.com/krogank9/kbengine_ue4_demo/releases/latest
-	Ogre		: https://github.com/krogank9/kbengine_ogre_demo/releases/latest
-	Cocos2d_js	: https://github.com/krogank9/kbengine_cocos2d_js_demo/releases/latest [defunct needs update to 2.0.0 sdk generation]
+	Ogre		: https://github.com/krogank9/kbengine_ogre_demo/releases/latest - [maybe defunct 2.0.0 protocol]
+	Cocos2d_js	: https://github.com/krogank9/kbengine_cocos2d_js_demo/releases/latest - [defunct needs update to 2.0.0 sdk generation]
 	Godot Engine	: https://github.com/krogank9/kbe_godot_demo/releases/latest
 
 
