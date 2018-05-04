@@ -51,7 +51,8 @@ endif
 # In order to build src/lib/python, which includes this file, we need to define
 # this even when not explicitly requiring Python. This assists in setting up
 # the target for libpython<version>.a when common.mak is re-included.
-PYTHONLIB = python
+PYTHONLIB = python3.6m
+KBE_INCLUDES += -I /usr/include/python3.6m
 
 # If SEPARATE_DEBUG_INFO is defined, the debug information for an executable
 # will be placed in a separate file. For example, cellapp and cellapp.dbg. The
@@ -138,7 +139,6 @@ KBE_INCLUDES += -I $(KBE_ROOT)/kbe/src
 KBE_INCLUDES += -I $(KBE_ROOT)/kbe/src/lib
 KBE_INCLUDES += -I $(KBE_ROOT)/kbe/src/server
 KBE_INCLUDES += -I $(KBE_ROOT)/kbe/src/lib/dependencies
-KBE_INCLUDES += -I $(KBE_ROOT)/kbe/src/lib/dependencies/tinyxml
 
 # Preprocessor output only (useful when debugging macros)
 # CPPFLAGS += -E
@@ -152,9 +152,6 @@ CPPFLAGS += -DENABLE_WATCHERS
 endif
 
 ifdef USE_PYTHON
-USE_KBE_PYTHON = 1
-KBE_INCLUDES += -I $(KBE_ROOT)/kbe/src/lib/python/Include
-KBE_INCLUDES += -I $(KBE_ROOT)/kbe/src/lib/python
 LDLIBS += -l$(PYTHONLIB) -lpthread -lutil -ldl
 endif # USE_PYTHON
 
@@ -173,7 +170,6 @@ endif # USE_MYSQL
 ifdef USE_REDIS
 LDLIBS += -lhiredis
 CPPFLAGS += -DUSE_REDIS
-KBE_INCLUDES += -I $(KBE_ROOT)/kbe/src/lib/dependencies/hiredis
 endif # USE_REDIS
 
 # everyone needs pthread if LDLINUX_TLS_IS_BROKEN
@@ -187,7 +183,6 @@ LDFLAGS += -export-dynamic
 # The OpenSSL redist is used for all builds as common/md5.[ch]pp depends
 # on the OpenSSL MD5 implementation.
 
-KBE_INCLUDES += -I $(KBE_ROOT)/kbe/src/lib/dependencies/log4cxx/src/main/include
 ifeq ($(NO_USE_LOG4CXX),0)
 ifeq ($(KBE_CONFIG), Hybrid64)
 LDLIBS += -llog4cxx -lapr-1 -laprutil-1 -lexpat
@@ -198,8 +193,6 @@ else
 CPPFLAGS += -DNO_USE_LOG4CXX
 endif
 
-OPENSSL_DIR = $(KBE_ROOT)/kbe/src/lib/dependencies/openssl
-KBE_INCLUDES += -I$(OPENSSL_DIR)/include
 ifeq ($(USE_OPENSSL),1)
 LDLIBS += -lssl -lcrypto -ldl
 CPPFLAGS += -DUSE_OPENSSL
@@ -233,15 +226,11 @@ LDLIBS += -ltmxparser
 CPPFLAGS += -DUSE_TMXPARSER
 endif
 
-ZIP_DIR = $(KBE_ROOT)/kbe/src/lib/dependencies/zip
-KBE_INCLUDES += -I$(ZIP_DIR)
 ifeq ($(USE_ZIP),1)
-LDLIBS += -lzip
+LDLIBS += -lzip -lz
 CPPFLAGS += -DUSE_ZIP
 endif
 
-JEMALLOC_DIR = $(KBE_ROOT)/kbe/src/lib/dependencies/jemalloc
-KBE_INCLUDES += -I$(JEMALLOC_DIR)/include
 #ifeq ($(USE_JEMALLOC),1)
 LDLIBS += -ljemalloc
 CPPFLAGS += -DUSE_JEMALLOC
@@ -446,8 +435,6 @@ MY_LIBNAMES = $(foreach L, $(MY_LIBS), $(LIBDIR)/lib$(L).a)
 
 .PHONY: always
 
-KBE_PYTHONLIB=$(LIBDIR)/lib$(PYTHONLIB).a
-
 
 # Strip the prefixed "lib" string. Be careful not to strip any _lib
 $(MY_LIBNAMES): always
@@ -547,13 +534,6 @@ endif
 # Local targets
 #----------------------------------------------------------------------------
 
-ifeq ($(USE_OPENSSL),1)
-OPENSSL_DEP = $(LIBDIR)/libssl.a $(LIBDIR)/libcrypto.a
-else
-OPENSSL_DEP =
-endif
-
-
 # For executables
 
 ifdef BIN
@@ -565,14 +545,7 @@ $(OUTPUTDIR)/$(BIN)::
 	@echo -e \\n------ Configuration $(@F) - $(KBE_CONFIG) ------ > $(MSG_FILE)
 endif
 
-ifdef USE_KBE_PYTHON
-PYTHON_DEP = $(KBE_PYTHONLIB)
-else
-PYTHON_DEP =
-endif
-
-
-$(OUTPUTDIR)/$(BIN):: $(CONFIG_OBJS) $(MY_LIBNAMES) $(PYTHON_DEP) $(OPENSSL_DEP)
+$(OUTPUTDIR)/$(BIN):: $(CONFIG_OBJS) $(MY_LIBNAMES)
 
 ifdef QUIET_BUILD
 	test -e $(MSG_FILE) && cat $(MSG_FILE); rm -f $(MSG_FILE)
@@ -607,12 +580,6 @@ endif # BIN
 # for shared objects
 ifdef SO
 
-ifdef USE_KBE_PYTHON
-PYTHON_DEP = $(KBE_PYTHONLIB)
-else
-PYTHON_DEP =
-endif
-
 ifdef QUIET_BUILD
 $(OUTPUTDIR)/$(SO).so::
 	@echo -e \\n------ Configuration $(@F) - $(KBE_CONFIG) ------ > $(MSG_FILE)
@@ -622,7 +589,7 @@ ifdef BUILD_TIME_FILE
 BUILD_TIME_FILE_OBJ= $(KBE_CONFIG)/$(BUILD_TIME_FILE).o
 endif
 
-$(OUTPUTDIR)/$(SO).so:: $(CONFIG_OBJS) $(MY_LIBNAMES) $(PYTHON_DEP) $(BUILD_TIME_FILE_OBJ) $(OPENSSL_DEP)
+$(OUTPUTDIR)/$(SO).so:: $(CONFIG_OBJS) $(MY_LIBNAMES) $(BUILD_TIME_FILE_OBJ)
 ifdef BUILD_TIME_FILE
 	@echo Updating Compile Time String
 	@if test -e $(BUILD_TIME_FILE).cpp; then \

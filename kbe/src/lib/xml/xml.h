@@ -66,7 +66,7 @@ along with KBEngine.  If not, see <http://www.gnu.org/licenses/>.
 #include "helper/debug_helper.h"
 #include "common/common.h"
 #include "common/smartpointer.h"
-#include "dependencies/tinyxml/tinyxml.h"
+#include "tinyxml.h"
 
 namespace KBEngine{
 

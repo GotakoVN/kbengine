@@ -33,7 +33,7 @@
 #include "TmxUtil.h"
 #include "TmxMap.h"
 #include "TmxTileset.h"
-#include "zip/zlib.h"
+#include "zlib.h"
 
 namespace Tmx 
 {
