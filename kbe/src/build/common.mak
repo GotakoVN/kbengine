@@ -48,9 +48,6 @@ QUIET_BUILD=1
 endif
 
 
-# In order to build src/lib/python, which includes this file, we need to define
-# this even when not explicitly requiring Python. This assists in setting up
-# the target for libpython<version>.a when common.mak is re-included.
 PYTHONLIB = python3.6m
 KBE_INCLUDES += -I /usr/include/python3.6m
 
