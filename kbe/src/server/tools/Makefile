@@ -1,15 +1,11 @@
-ifndef KBE_ROOT
-export KBE_ROOT := $(subst /kbe/src/server/tools,,$(CURDIR))
-endif
-
 all clean realclean all_config install unit_tests unit_tests_build unit_tests_run unit_tests_clean::
 
 # Check with and without the trailing slash
-ifneq ($(CURDIR),$(KBE_ROOT)/kbe/src/server/tools)
-ifneq ($(CURDIR),$(KBE_ROOT)kbe/src/server/tools)
-	@echo 'Error: KBE_ROOT=$(KBE_ROOT)'
+ifneq ($(CURDIR),$(KBE_SRC_ROOT)/kbe/src/server/tools)
+ifneq ($(CURDIR),$(KBE_SRC_ROOT)kbe/src/server/tools)
+	@echo 'Error: KBE_SRC_ROOT=$(KBE_SRC_ROOT)'
 	@echo '       is not the root of $(CURDIR)'
-	@echo 'Remove the KBE_ROOT environment variable.'
+	@echo 'Remove the KBE_SRC_ROOT environment variable.'
 	@false
 endif
 endif

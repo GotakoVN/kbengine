@@ -30,7 +30,7 @@ along with KBEngine.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace KBEngine{ namespace script{
 
-/** 脚本系统路径 */
+/** Script system path */
 #ifdef _LP64
 #define SCRIPT_PATH													\
 					L"../../res/scripts;"							\

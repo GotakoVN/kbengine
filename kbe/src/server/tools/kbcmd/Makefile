@@ -33,9 +33,5 @@ endif
 #HAS_PCH = 1
 CPPFLAGS += -DKBE_CMD
 
-ifndef KBE_ROOT
-export KBE_ROOT := $(subst /kbe/src/server/tools/$(BIN),,$(CURDIR))
-endif
-
-include $(KBE_ROOT)/kbe/src/build/common.mak
+include $(KBE_SRC_ROOT)/kbe/src/build/common.mak
 

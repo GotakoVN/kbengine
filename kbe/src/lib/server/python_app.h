@@ -85,58 +85,58 @@ public:
 
 	virtual void handleTimeout(TimerHandle, void * arg);
 
-	/** 网络接口
-		请求执行一段python指令
+	/** Network interface
+		Request to execute a python instruction
 	*/
 	void onExecScriptCommand(Network::Channel* pChannel, KBEngine::MemoryStream& s);
 
 	/** 
-		console请求开始profile
+		Console requests start profile
 	*/
 	virtual void startProfile_(Network::Channel* pChannel, std::string profileName, int8 profileType, uint32 timelen);
 
 	/**
-		获取apps发布状态, 可在脚本中获取该值
+		Get app release status, python script interface
 	*/
 	static PyObject* __py_getAppPublish(PyObject* self, PyObject* args);
 
 	/**
-		设置脚本输出类型前缀
+		Set script log type, python script interface
 	*/
 	static PyObject* __py_setScriptLogType(PyObject* self, PyObject* args);
 
 	/**
-		重新导入所有的脚本
+		Re-import all scripts
 	*/
 	virtual void reloadScript(bool fullReload);
 	virtual void onReloadScript(bool fullReload);
 
 	/**
-		通过相对路径获取资源的全路径
+		Get the full path to a resource through a relative path, py interface
 	*/
 	static PyObject* __py_getResFullPath(PyObject* self, PyObject* args);
 
 	/**
-		通过相对路径判断资源是否存在
+		Determine if the resource exists through the relative path, py interface
 	*/
 	static PyObject* __py_hasRes(PyObject* self, PyObject* args);
 
 	/**
-		open文件
+		Open file, py interface
 	*/
 	static PyObject* __py_kbeOpen(PyObject* self, PyObject* args);
 
 	/**
-		列出目录下所有文件
+		List all files in the directory, py interface
 	*/
 	static PyObject* __py_listPathRes(PyObject* self, PyObject* args);
 
 	/**
-		匹配相对路径获得全路径 
+		Match relative path to get full path, py interface
 	*/
 	static PyObject* __py_matchPath(PyObject* self, PyObject* args);
 
-	/** Timer操作
+	/** Timer functions, py interfaces
 	*/
 	static PyObject* __py_addTimer(PyObject* self, PyObject* args);
 	static PyObject* __py_delTimer(PyObject* self, PyObject* args);

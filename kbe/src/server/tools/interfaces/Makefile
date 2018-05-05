@@ -30,11 +30,7 @@ endif
 #HAS_PCH = 1
 CPPFLAGS += -DKBE_INTERFACES
 
-ifndef KBE_ROOT
-export KBE_ROOT := $(subst /kbe/src/server/tools/$(BIN),,$(CURDIR))
-endif
+#KBE_INCLUDES += -I $(KBE_SRC_ROOT)/kbe/src/lib/dependencies/mysql/include
 
-#KBE_INCLUDES += -I $(KBE_ROOT)/kbe/src/lib/dependencies/mysql/include
-
-include $(KBE_ROOT)/kbe/src/build/common.mak
+include $(KBE_SRC_ROOT)/kbe/src/build/common.mak
 

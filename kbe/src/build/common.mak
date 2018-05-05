@@ -41,15 +41,13 @@ all::
 	@false
 endif
 
-LIBDIR = $(KBE_ROOT)/kbe/src/libs
+LIBDIR = $(KBE_SRC_ROOT)/kbe/src/libs
 
 ifneq (,$(findstring s, $(MAKEFLAGS)))
 QUIET_BUILD=1
 endif
 
-
-PYTHONLIB = python3.6m
-KBE_INCLUDES += -I /usr/include/python3.6m
+KBE_INCLUDES= $(shell python3-config --includes)
 
 # If SEPARATE_DEBUG_INFO is defined, the debug information for an executable
 # will be placed in a separate file. For example, cellapp and cellapp.dbg. The
@@ -65,14 +63,14 @@ ifdef BIN
 MAKE_LIBS=1
 ifndef INSTALL_DIR
 ifeq ($(IS_COMMAND),1)
-	OUTPUTDIR = $(KBE_ROOT)/kbe/bin/server/commands
+	OUTPUTDIR = $(KBE_SRC_ROOT)/kbe/bin/server/commands
 else
-	OUTPUTDIR = $(KBE_ROOT)/kbe/bin/server
+	OUTPUTDIR = $(KBE_SRC_ROOT)/kbe/bin/server
 endif # IS_COMMAND == 1
 else # INSTALL_DIR
 
 # INSTALL_ALL_CONFIGS has been put in to be used by unit_tests so the Debug
-# and Hybrid binaries are both placed in KBE_ROOT/tests/KBE_CONFIG not just
+# and Hybrid binaries are both placed in KBE_SRC_ROOT/tests/KBE_CONFIG not just
 # the Hybrid builds.
 ifdef INSTALL_ALL_CONFIGS
 	OUTPUTDIR = $(INSTALL_DIR)/$(KBE_CONFIG)
@@ -99,7 +97,7 @@ endif # BIN
 ifdef SO
 MAKE_LIBS=1
 ifndef OUTPUTDIR
-	OUTPUTDIR = $(KBE_ROOT)/kbe/bin/server/$(COMPONENT)-extensions
+	OUTPUTDIR = $(KBE_SRC_ROOT)/kbe/bin/server/$(COMPONENT)-extensions
 endif # OUTPUTDIR
 	OUTPUTFILE = $(OUTPUTDIR)/$(SO).so
 endif # SO
@@ -132,10 +130,10 @@ endif
 
 # Include and lib paths
 LDFLAGS += -L$(LIBDIR)
-KBE_INCLUDES += -I $(KBE_ROOT)/kbe/src
-KBE_INCLUDES += -I $(KBE_ROOT)/kbe/src/lib
-KBE_INCLUDES += -I $(KBE_ROOT)/kbe/src/server
-KBE_INCLUDES += -I $(KBE_ROOT)/kbe/src/lib/dependencies
+KBE_INCLUDES += -I $(KBE_SRC_ROOT)/kbe/src
+KBE_INCLUDES += -I $(KBE_SRC_ROOT)/kbe/src/lib
+KBE_INCLUDES += -I $(KBE_SRC_ROOT)/kbe/src/server
+KBE_INCLUDES += -I $(KBE_SRC_ROOT)/kbe/src/lib/dependencies
 
 # Preprocessor output only (useful when debugging macros)
 # CPPFLAGS += -E
@@ -149,7 +147,7 @@ CPPFLAGS += -DENABLE_WATCHERS
 endif
 
 ifdef USE_PYTHON
-LDLIBS += -l$(PYTHONLIB) -lpthread -lutil -ldl
+LDLIBS += $(shell python3-config --libs)
 endif # USE_PYTHON
 
 ifdef USE_MYSQL
@@ -195,28 +193,28 @@ LDLIBS += -lssl -lcrypto -ldl
 CPPFLAGS += -DUSE_OPENSSL
 endif
 
-G3DMATH_DIR = $(KBE_ROOT)/kbe/src/lib/dependencies/g3dlite
+G3DMATH_DIR = $(KBE_SRC_ROOT)/kbe/src/lib/dependencies/g3dlite
 KBE_INCLUDES += -I$(G3DMATH_DIR)
 ifeq ($(USE_G3DMATH),1)
 LDLIBS += -lg3dlite
 CPPFLAGS += -DUSE_G3DMATH
 endif
 
-SIGAR_DIR = $(KBE_ROOT)/kbe/src/lib/dependencies/sigar
+SIGAR_DIR = $(KBE_SRC_ROOT)/kbe/src/lib/dependencies/sigar
 KBE_INCLUDES += -I$(SIGAR_DIR)/linux
 #ifeq ($(USE_SIGAR),1)
 LDLIBS += -lsigar
 CPPFLAGS += -DUSE_SIGAR
 #endif
 
-JWSMTP_DIR = $(KBE_ROOT)/kbe/src/lib/dependencies/jwsmtp
+JWSMTP_DIR = $(KBE_SRC_ROOT)/kbe/src/lib/dependencies/jwsmtp
 KBE_INCLUDES += -I$(JWSMTP_DIR)/jwsmtp/jwsmtp
 ifeq ($(USE_JWSMTP),1)
 LDLIBS += -ljwsmtp
 CPPFLAGS += -DUSE_JWSMTP
 endif
 
-TMXPARSER_DIR = $(KBE_ROOT)/kbe/src/lib/dependencies/tmxparser
+TMXPARSER_DIR = $(KBE_SRC_ROOT)/kbe/src/lib/dependencies/tmxparser
 KBE_INCLUDES += -I$(TMXPARSER_DIR)
 ifeq ($(USE_TMXPARSER),1)
 LDLIBS += -ltmxparser
@@ -380,6 +378,7 @@ SHOULD_NOT_LINK=1
 endif
 
 clean::
+#	@echo Cleaning
 	@filemissing=0;  					\
 	 for i in $(SRCS); do 				\
 		if [ -e $$i.cpp ]; then		 	\
@@ -435,7 +434,7 @@ MY_LIBNAMES = $(foreach L, $(MY_LIBS), $(LIBDIR)/lib$(L).a)
 
 # Strip the prefixed "lib" string. Be careful not to strip any _lib
 $(MY_LIBNAMES): always
-	$(MAKE) -C $(KBE_ROOT)/kbe/src/lib/$(subst XXXXX,_lib,$(subst lib,,$(subst _lib,XXXXX,$(*F)))) \
+	$(MAKE) -C $(KBE_SRC_ROOT)/kbe/src/lib/$(subst XXXXX,_lib,$(subst lib,,$(subst _lib,XXXXX,$(*F)))) \
 		"KBE_CONFIG=$(KBE_CONFIG)"
 
 endif # MAKE_LIBS

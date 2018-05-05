@@ -28,7 +28,7 @@ namespace KBEngine{
 KBEngine::ScriptTimers KBEngine::PythonApp::scriptTimers_;
 
 /**
-内部定时器处理类
+Internal timer processing class
 */
 class ScriptTimerHandler : public TimerHandler
 {
@@ -247,7 +247,7 @@ bool PythonApp::uninstallPyScript()
 //-------------------------------------------------------------------------------------
 bool PythonApp::installPyModules()
 {
-	// 安装入口模块
+	// Install entry module
 	PyObject *entryScriptFileName = NULL;
 	if(componentType() == BASEAPP_TYPE)
 	{
@@ -288,11 +288,10 @@ bool PythonApp::installPyModules()
 
 	APPEND_SCRIPT_MODULE_METHOD(module, MemoryStream, script::PyMemoryStream::py_new, METH_VARARGS, 0);
 
-	// 注册创建entity的方法到py
-	// 向脚本注册app发布状态
+	// Register get app release status to script
 	APPEND_SCRIPT_MODULE_METHOD(module, publish, __py_getAppPublish, METH_VARARGS, 0);
 
-	// 注册设置脚本输出类型
+	// Register set script log output type
 	APPEND_SCRIPT_MODULE_METHOD(module, scriptLogType, __py_setScriptLogType, METH_VARARGS, 0);
 	
 	// 获得资源全路径
@@ -343,7 +342,7 @@ bool PythonApp::installPyModules()
 		ERROR_MSG( "PythonApp::installPyModules: Unable to set KBEngine.NEXT_ONLY.\n");
 	}
 	
-	// 注册所有pythonApp都要用到的通用接口
+	// Register all common interfaces used by pythonApp
 	APPEND_SCRIPT_MODULE_METHOD(module,		addTimer,						__py_addTimer,											METH_VARARGS,	0);
 	APPEND_SCRIPT_MODULE_METHOD(module,		delTimer,						__py_delTimer,											METH_VARARGS,	0);
 	APPEND_SCRIPT_MODULE_METHOD(module,		registerReadFileDescriptor,		PyFileDescriptor::__py_registerReadFileDescriptor,		METH_VARARGS,	0);
@@ -700,7 +699,7 @@ void PythonApp::onExecScriptCommand(Network::Channel* pChannel, KBEngine::Memory
 		retbuf = "\r\n";
 	}
 
-	// 将结果返回给客户端
+	// Return result to the client
 	Network::Bundle* pBundle = Network::Bundle::createPoolObject();
 	ConsoleInterface::ConsoleExecCommandCBMessageHandler msgHandler;
 	(*pBundle).newMessage(msgHandler);
