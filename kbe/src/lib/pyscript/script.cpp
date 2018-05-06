@@ -75,8 +75,7 @@ PyObject * PyTuple_FromStringVector(const std::vector< std::string > & v)
 Script::Script():
 module_(NULL),
 extraModule_(NULL),
-pyStdouterr_(NULL),
-initialPyPath(NULL)
+pyStdouterr_(NULL)
 {
 }
 
@@ -149,9 +148,7 @@ int Script::run_simpleString(const char* command, std::string* retBufferPtr)
 bool Script::install(const wchar_t* pythonHomeDir, std::wstring pyPaths, 
 	const char* moduleName, COMPONENT_TYPE componentType)
 {
-	if(initialPyPath == NULL)
-		initialPyPath = Py_GetPath();
-	pyPaths += initialPyPath;
+	pyPaths = Py_GetPath() + (L":" + pyPaths);
 
 	// First set the python environment variable
 	// No longer needed since changed to using system's Python

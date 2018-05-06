@@ -183,44 +183,44 @@ bool PythonApp::installPyScript()
 		return false;
 	}
 
-	std::wstring pyPaths = user_scripts_path + L"common;";
-	pyPaths += user_scripts_path + L"data;";
-	pyPaths += user_scripts_path + L"user_type;";
+	std::wstring pyPaths = user_scripts_path + L"common:";
+	pyPaths += user_scripts_path + L"data:";
+	pyPaths += user_scripts_path + L"user_type:";
 
 	switch (componentType_)
 	{
 	case BASEAPP_TYPE:
-		pyPaths += user_scripts_path + L"server_common;";
-		pyPaths += user_scripts_path + L"base;";
-		pyPaths += user_scripts_path + L"base/interfaces;";
-		pyPaths += user_scripts_path + L"base/components;";
+		pyPaths += user_scripts_path + L"server_common:";
+		pyPaths += user_scripts_path + L"base:";
+		pyPaths += user_scripts_path + L"base/interfaces:";
+		pyPaths += user_scripts_path + L"base/components:";
 		break;
 	case CELLAPP_TYPE:
-		pyPaths += user_scripts_path + L"server_common;";
-		pyPaths += user_scripts_path + L"cell;";
-		pyPaths += user_scripts_path + L"cell/interfaces;";
-		pyPaths += user_scripts_path + L"cell/components;";
+		pyPaths += user_scripts_path + L"server_common:";
+		pyPaths += user_scripts_path + L"cell:";
+		pyPaths += user_scripts_path + L"cell/interfaces:";
+		pyPaths += user_scripts_path + L"cell/components:";
 		break;
 	case DBMGR_TYPE:
-		pyPaths += user_scripts_path + L"server_common;";
-		pyPaths += user_scripts_path + L"db;";
+		pyPaths += user_scripts_path + L"server_common:";
+		pyPaths += user_scripts_path + L"db:";
 		break;
 	case INTERFACES_TYPE:
-		pyPaths += user_scripts_path + L"server_common;";
-		pyPaths += user_scripts_path + L"interface;";
+		pyPaths += user_scripts_path + L"server_common:";
+		pyPaths += user_scripts_path + L"interface:";
 		break;
 	case LOGINAPP_TYPE:
-		pyPaths += user_scripts_path + L"server_common;";
-		pyPaths += user_scripts_path + L"login;";
+		pyPaths += user_scripts_path + L"server_common:";
+		pyPaths += user_scripts_path + L"login:";
 		break;
 	case LOGGER_TYPE:
-		pyPaths += user_scripts_path + L"server_common;";
-		pyPaths += user_scripts_path + L"logger;";
+		pyPaths += user_scripts_path + L"server_common:";
+		pyPaths += user_scripts_path + L"logger:";
 		break;
 	default:
-		pyPaths += user_scripts_path + L"client;";
-		pyPaths += user_scripts_path + L"client/interfaces;";
-		pyPaths += user_scripts_path + L"client/components;";
+		pyPaths += user_scripts_path + L"client:";
+		pyPaths += user_scripts_path + L"client/interfaces:";
+		pyPaths += user_scripts_path + L"client/components:";
 		break;
 	};
 	
