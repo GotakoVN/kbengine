@@ -117,7 +117,7 @@ inline bool installPyScript(KBEngine::script::Script& script, COMPONENT_TYPE com
 	kbe_res_path += "scripts/common";
 
 	tbuf = KBEngine::strutil::char2wchar(const_cast<char*>(kbe_res_path.c_str()));
-	bool ret = script.install(tbuf, pyPaths, "KBEngine", componentType);
+	bool ret = script.install(pyPaths, "KBEngine", componentType);
 	free(tbuf);
 
 	EntityDef::installScript(script.getModule());

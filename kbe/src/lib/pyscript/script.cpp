@@ -145,13 +145,26 @@ int Script::run_simpleString(const char* command, std::string* retBufferPtr)
 }
 
 //-------------------------------------------------------------------------------------
-bool Script::install(const wchar_t* pythonHomeDir, std::wstring pyPaths, 
-	const char* moduleName, COMPONENT_TYPE componentType)
+bool Script::install(std::wstring pyPaths, const char* moduleName, COMPONENT_TYPE componentType)
 {
-	// First set the python environment variable
-	// No longer needed since changed to using system's Python
-	//ERROR_MSG( fmt::format("Py_GetPythonHome(): {}\n", strutil::wchar2char(Py_GetPythonHome())) );
-	//Py_SetPythonHome(const_cast<wchar_t*>(SCRIPT_PATH));
+	pyPaths += Py_GetPath();
+	
+#if KBE_PLATFORM == PLATFORM_WIN32
+	std::wstring fs = L":";
+	std::wstring rs = L";";
+	size_t pos = 0; 
+
+	while(true)
+	{ 
+		pos = pyPaths.find(fs, pos);
+		if (pos == std::wstring::npos) break;
+		pyPaths.replace(pos, fs.length(), rs);
+	}  
+#endif
+
+	char* tmpchar = strutil::wchar2char(const_cast<wchar_t*>(pyPaths.c_str()));
+	DEBUG_MSG(fmt::format("Script::install(): paths={}.\n", tmpchar));
+	free(tmpchar);
 
 	// Initialise python
 	// Py_VerboseFlag = 2;
@@ -162,7 +175,7 @@ bool Script::install(const wchar_t* pythonHomeDir, std::wstring pyPaths,
 	Py_NoSiteFlag = 1;
 	Py_IgnoreEnvironmentFlag = 1;
 
-	Py_SetPath( (pyPaths + Py_GetPath()).c_str() );
+	Py_SetPath(pyPaths.c_str());
 
 	// python解释器的初始化  
 	Py_Initialize();

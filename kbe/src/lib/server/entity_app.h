@@ -442,7 +442,7 @@ bool EntityApp<E>::installPyScript()
 	kbe_res_path += "scripts/common";
 
 	tbuf = KBEngine::strutil::char2wchar(const_cast<char*>(kbe_res_path.c_str()));
-	bool ret = getScript().install(tbuf, pyPaths, "KBEngine", componentType_);
+	bool ret = getScript().install(pyPaths, "KBEngine", componentType_);
 	free(tbuf);
 	return ret;
 }
