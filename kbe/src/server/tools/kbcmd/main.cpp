@@ -162,7 +162,7 @@ int process_make_client_sdk(int argc, char* argv[], const std::string clientType
 
 		app.finalise();
 
-		// 如果还有日志未同步完成， 这里会继续同步完成才结束
+		// If the debug log is still not synchronized, block until synced
 		DebugHelper::getSingleton().finalise();
 		return -1;
 	}
@@ -174,7 +174,7 @@ int process_make_client_sdk(int argc, char* argv[], const std::string clientType
 
 		app.finalise();
 
-		// 如果还有日志未同步完成， 这里会继续同步完成才结束
+		// If the debug log is still not synchronized, block until synced
 		DebugHelper::getSingleton().finalise();
 		return -1;
 	}
@@ -212,7 +212,7 @@ int process_make_client_sdk(int argc, char* argv[], const std::string clientType
 	app.finalise();
 	INFO_MSG(fmt::format("{}({}) has shut down. ClientSDK={}\n", COMPONENT_NAME_EX(g_componentType), g_componentID, pClientSDK->good()));
 
-	// 如果还有日志未同步完成， 这里会继续同步完成才结束
+	// If the debug log is still not synchronized, block until synced
 	DebugHelper::getSingleton().finalise();
 
 	if(pClientSDK)

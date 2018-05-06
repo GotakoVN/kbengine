@@ -169,11 +169,10 @@ bool Script::install(std::wstring pyPaths, const char* moduleName, COMPONENT_TYP
 	free(tmpchar);
 	
 	// Can't use Py_SetPath(pyPaths.c_str()); because of apparent python api bug, crashes
-	// Add to append all from pyPath to sys.path
+	// Get sys.path as PyList and append all from pyPath
 	PyObject *sys = PyImport_ImportModule("sys");
 	PyObject *path = PyObject_GetAttrString(sys, "path");
 	PyObject *newPaths = PyUnicode_Split(PyUnicode_FromWideChar(pyPaths.c_str(), -1), PyUnicode_FromWideChar(L";", 1), -1);
-	
 	for(int i=0; i<PyList_Size(newPaths); i++) {
 		PyObject *p = PyList_GetItem(newPaths, i);
 		if( PyUnicode_GetLength(p) > 0 )
