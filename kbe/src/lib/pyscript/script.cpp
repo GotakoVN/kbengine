@@ -148,23 +148,26 @@ int Script::run_simpleString(const char* command, std::string* retBufferPtr)
 bool Script::install(std::wstring pyPaths, const char* moduleName, COMPONENT_TYPE componentType)
 {
 	pyPaths += Py_GetPath();
-	
-#if KBE_PLATFORM == PLATFORM_WIN32
-	std::wstring fs = L":";
-	std::wstring rs = L";";
-	size_t pos = 0; 
 
+	// Python needs platform specific delimeters in path. Ensure:
+	std::wstring fs = L";";// : for Unix
+	std::wstring rs = L":";
+#if KBE_PLATFORM == PLATFORM_WIN32
+	fs = L":"; // ; for Windows
+	rs = L";";
+#endif
+	size_t pos = 0; 
 	while(true)
 	{ 
 		pos = pyPaths.find(fs, pos);
 		if (pos == std::wstring::npos) break;
 		pyPaths.replace(pos, fs.length(), rs);
 	}  
-#endif
 
 	char* tmpchar = strutil::wchar2char(const_cast<wchar_t*>(pyPaths.c_str()));
-	DEBUG_MSG(fmt::format("Script::install(): paths={}.\n", tmpchar));
+	DEBUG_MSG(fmt::format("Script::install(): paths={}\n", tmpchar));
 	free(tmpchar);
+	DEBUG_MSG(fmt::format("Script::install(): test after paths\n"));
 
 	// Initialise python
 	// Py_VerboseFlag = 2;
@@ -175,9 +178,11 @@ bool Script::install(std::wstring pyPaths, const char* moduleName, COMPONENT_TYP
 	Py_NoSiteFlag = 1;
 	Py_IgnoreEnvironmentFlag = 1;
 
+	DEBUG_MSG("Script::install(): doing Py_SetPath\n");
 	Py_SetPath(pyPaths.c_str());
+	DEBUG_MSG("Script::install(): done Py_SetPath\n");
 
-	// python解释器的初始化  
+	// python解释器的初始化 
 	Py_Initialize();
     if (!Py_IsInitialized())
     {
@@ -186,11 +191,16 @@ bool Script::install(std::wstring pyPaths, const char* moduleName, COMPONENT_TYP
     } 
 
 	PyObject *m = PyImport_AddModule("__main__");
+	
+	DEBUG_MSG("Script::install(): done AddModule __main__\n");
 
 	// 添加一个脚本基础模块
 	module_ = PyImport_AddModule(moduleName);
-	if (module_ == NULL)
+	if (module_ == NULL) {
+		ERROR_MSG(fmt::format("Script::install(): Couldn't load module {}\n",
+				moduleName));
 		return false;
+	}
 	
 	const char* componentName = COMPONENT_NAME_EX(componentType);
 	if (PyModule_AddStringConstant(module_, "component", componentName))

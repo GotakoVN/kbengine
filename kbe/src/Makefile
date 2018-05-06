@@ -25,18 +25,27 @@ GET_SRCS=$(shell find $(1) -type f \( -iname \*.cpp -o -iname \*.c -o -iname \*.
 # default target #
 ##################
 
-all: $(KBE_SERVER_BINARIES)
+LIBS_COUNT=$(shell find libs/ -type f | wc -l)
 
-#remake faster after fully compiled once
-remake:
-	$(MAKE) KBE_LIBS="$(COMMON_LIBS)" all
+all:
+ifeq ($(LIBS_COUNT),20)
+	$(MAKE) re_make
+else
+	$(MAKE) first_make
+endif
+
+first_make: $(KBE_SERVER_BINARIES)
+
+#remake faster after all libs compiled once
+re_make:
+	$(MAKE) KBE_LIBS="$(COMMON_LIBS)" first_make
 
 ###################
 # server/ targets #
 ###################
 
 BASEAPP_SRCS=$(call GET_SRCS,server/baseapp)
-../bin/server/baseapp: $(BASEAPP_SRCS) $(KBE_LIBS) libs/libpyscript.a libs/libresmgr.a libs/libmath.a libs/libentitydef.a
+../bin/server/baseapp: $(BASEAPP_SRCS) $(KBE_LIBS) libs/libresmgr.a libs/libmath.a libs/libentitydef.a libs/libpyscript.a
 	$(MAKE) -C server/baseapp
 
 BASEAPPMGR_SRCS=$(call GET_SRCS,server/baseappmgr)
@@ -44,7 +53,7 @@ BASEAPPMGR_SRCS=$(call GET_SRCS,server/baseappmgr)
 	$(MAKE) -C server/baseappmgr
 
 CELLAPP_SRCS=$(call GET_SRCS,server/cellapp)
-../bin/server/cellapp: $(CELLAPP_SRCS) $(KBE_LIBS) libs/libnavigation.a libs/libpyscript.a libs/libmath.a libs/libentitydef.a
+../bin/server/cellapp: $(CELLAPP_SRCS) $(KBE_LIBS) libs/libnavigation.a libs/libmath.a libs/libentitydef.a libs/libpyscript.a
 	$(MAKE) -C server/cellapp
 
 CELLAPPMGR_SRCS=$(call GET_SRCS,server/cellappmgr)
@@ -52,11 +61,11 @@ CELLAPPMGR_SRCS=$(call GET_SRCS,server/cellappmgr)
 	$(MAKE) -C server/cellappmgr
 
 DBMGR_SRCS=$(call GET_SRCS,server/dbmgr)
-../bin/server/dbmgr: $(DBMGR_SRCS) $(KBE_LIBS) libs/libpyscript.a libs/libresmgr.a libs/libmath.a libs/libentitydef.a libs/libdb_interface.a libs/libdb_mysql.a
+../bin/server/dbmgr: $(DBMGR_SRCS) $(KBE_LIBS) libs/libresmgr.a libs/libmath.a libs/libentitydef.a libs/libdb_interface.a libs/libdb_mysql.a libs/libpyscript.a
 	$(MAKE) -C server/dbmgr
 
 LOGINAPP_SRCS=$(call GET_SRCS,server/loginapp)
-../bin/server/loginapp: $(LOGINAPP_SRCS) $(KBE_LIBS)
+../bin/server/loginapp: $(LOGINAPP_SRCS) $(KBE_LIBS) libs/libpyscript.a
 	$(MAKE) -C server/loginapp
 
 MACHINE_SRCS=$(call GET_SRCS,server/machine)
@@ -68,11 +77,11 @@ MACHINE_SRCS=$(call GET_SRCS,server/machine)
 #########################
 
 BOTS_SRCS=$(call GET_SRCS,server/tools/bots)
-../bin/server/bots: $(BOTS_SRCS) $(KBE_LIBS) libs/libpyscript.a libs/libresmgr.a libs/libentitydef.a
+../bin/server/bots: $(BOTS_SRCS) $(KBE_LIBS) libs/libresmgr.a libs/libentitydef.a libs/libpyscript.a
 	$(MAKE) -C server/tools/bots
 
 INTERFACES_SRCS=$(call GET_SRCS,server/tools/interfaces)
-../bin/server/interfaces: $(INTERFACES_SRCS) $(KBE_LIBS) libs/libresmgr.a
+../bin/server/interfaces: $(INTERFACES_SRCS) $(KBE_LIBS) libs/libresmgr.a libs/libpyscript.a
 	$(MAKE) -C server/tools/interfaces
 
 KBCMD_SRCS=$(call GET_SRCS,server/tools/kbcmd)
