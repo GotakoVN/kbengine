@@ -1,9 +1,6 @@
 KBEngine
 ========
 
-[![Build Status](https://travis-ci.org/krogank9/kbengine.svg?branch=master)](https://travis-ci.org/krogank9/kbengine)
-
-
 ## Demo sources
 
 	Unity3d		: https://github.com/krogank9/kbengine_unity3d_demo/releases/latest
