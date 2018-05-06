@@ -147,27 +147,18 @@ int Script::run_simpleString(const char* command, std::string* retBufferPtr)
 //-------------------------------------------------------------------------------------
 bool Script::install(std::wstring pyPaths, const char* moduleName, COMPONENT_TYPE componentType)
 {
-	pyPaths += Py_GetPath();
-
-	// Python needs platform specific delimeters in path. Ensure:
-	std::wstring fs = L";";// : for Unix
-	std::wstring rs = L":";
-#if KBE_PLATFORM == PLATFORM_WIN32
-	fs = L":"; // ; for Windows
-	rs = L";";
-#endif
-	size_t pos = 0; 
-	while(true)
-	{ 
-		pos = pyPaths.find(fs, pos);
-		if (pos == std::wstring::npos) break;
-		pyPaths.replace(pos, fs.length(), rs);
-	}  
+	// python解释器的初始化 
+	Py_Initialize();
+    if (!Py_IsInitialized())
+    {
+    	ERROR_MSG("Script::install(): Py_Initialize is failed!\n");
+        return false;
+    }
 
 	char* tmpchar = strutil::wchar2char(const_cast<wchar_t*>(pyPaths.c_str()));
-	DEBUG_MSG(fmt::format("Script::install():: paths={}\n", tmpchar));
+	DEBUG_MSG(fmt::format("Script::install(): paths={}\n", tmpchar));
 	free(tmpchar);
-	DEBUG_MSG(fmt::format("Script::install():: test after paths\n"));
+	DEBUG_MSG(fmt::format("Script::install(): test after paths\n"));
 
 	// Initialise python
 	// Py_VerboseFlag = 2;
@@ -178,17 +169,18 @@ bool Script::install(std::wstring pyPaths, const char* moduleName, COMPONENT_TYP
 	Py_NoSiteFlag = 1;
 	Py_IgnoreEnvironmentFlag = 1;
 
-	DEBUG_MSG("Script::install():: doing Py_SetPath\n");
-	Py_SetPath(pyPaths.c_str());
-	DEBUG_MSG("Script::install():: done Py_SetPath\n");
-
-	// python解释器的初始化 
-	Py_Initialize();
-    if (!Py_IsInitialized())
-    {
-    	ERROR_MSG("Script::install(): Py_Initialize is failed!\n");
-        return false;
-    } 
+	DEBUG_MSG("Script::install(): doing Py_SetPath\n");
+	//Py_SetPath(pyPaths.c_str());
+	PyObject *sys = PyImport_ImportModule("sys");
+	PyObject *path = PyObject_GetAttrString(sys, "path");
+	PyObject *newPaths = PyUnicode_Split(PyUnicode_FromWideChar(pyPaths.c_str(), -1), PyUnicode_FromWideChar(L";", 1), -1);
+	
+	for(int i=0; i<PyList_Size(newPaths); i++) {
+		PyObject *p = PyList_GetItem(newPaths, i);
+		if( PyUnicode_GetLength(p) > 0 )
+			PyList_Append(path, p);
+	}
+	DEBUG_MSG("Script::install(): done Py_SetPath\n");
 
 	PyObject *m = PyImport_AddModule("__main__");
 	
