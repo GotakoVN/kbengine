@@ -148,6 +148,8 @@ protected:
 	PyObject*					extraModule_;		// 扩展脚本模块
 
 	ScriptStdOutErr*			pyStdouterr_;
+	
+	wchar_t* initialPyPath;
 } ;
 
 }

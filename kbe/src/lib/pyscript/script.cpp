@@ -75,7 +75,8 @@ PyObject * PyTuple_FromStringVector(const std::vector< std::string > & v)
 Script::Script():
 module_(NULL),
 extraModule_(NULL),
-pyStdouterr_(NULL)
+pyStdouterr_(NULL),
+initialPyPath(NULL)
 {
 }
 
@@ -148,17 +149,16 @@ int Script::run_simpleString(const char* command, std::string* retBufferPtr)
 bool Script::install(const wchar_t* pythonHomeDir, std::wstring pyPaths, 
 	const char* moduleName, COMPONENT_TYPE componentType)
 {
-	std::wstring pySysPaths = SCRIPT_PATH;
-	wchar_t* pwpySysResPath = strutil::char2wchar(const_cast<char*>(Resmgr::getSingleton().getPySysResPath().c_str()));
-	strutil::kbe_replace(pySysPaths, L"../../res/", pwpySysResPath);
-	pyPaths += pySysPaths;
-	free(pwpySysResPath);
+	if(initialPyPath == NULL)
+		initialPyPath = Py_GetPath();
+	pyPaths += initialPyPath;
 
-	// 先设置python的环境变量
+	// First set the python environment variable
+	// No longer needed since changed to using system's Python
 	//ERROR_MSG( fmt::format("Py_GetPythonHome(): {}\n", strutil::wchar2char(Py_GetPythonHome())) );
-	Py_SetPythonHome(const_cast<wchar_t*>(SCRIPT_PATH));
+	//Py_SetPythonHome(const_cast<wchar_t*>(SCRIPT_PATH));
 
-#if KBE_PLATFORM != PLATFORM_WIN32
+//#if KBE_PLATFORM != PLATFORM_WIN32
 	std::wstring fs = L";";
 	std::wstring rs = L":";
 	size_t pos = 0; 
@@ -174,7 +174,7 @@ bool Script::install(const wchar_t* pythonHomeDir, std::wstring pyPaths,
 	DEBUG_MSG(fmt::format("Script::install(): paths={}.\n", tmpchar));
 	free(tmpchar);
 	
-#endif
+//#endif
 	// Initialise python
 	// Py_VerboseFlag = 2;
 	Py_FrozenFlag = 1;
