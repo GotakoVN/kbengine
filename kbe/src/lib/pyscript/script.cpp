@@ -165,9 +165,9 @@ bool Script::install(std::wstring pyPaths, const char* moduleName, COMPONENT_TYP
 	}  
 
 	char* tmpchar = strutil::wchar2char(const_cast<wchar_t*>(pyPaths.c_str()));
-	DEBUG_MSG(fmt::format("Script::install(): paths={}\n", tmpchar));
+	DEBUG_MSG(fmt::format("Script::install():: paths={}\n", tmpchar));
 	free(tmpchar);
-	DEBUG_MSG(fmt::format("Script::install(): test after paths\n"));
+	DEBUG_MSG(fmt::format("Script::install():: test after paths\n"));
 
 	// Initialise python
 	// Py_VerboseFlag = 2;
@@ -178,9 +178,9 @@ bool Script::install(std::wstring pyPaths, const char* moduleName, COMPONENT_TYP
 	Py_NoSiteFlag = 1;
 	Py_IgnoreEnvironmentFlag = 1;
 
-	DEBUG_MSG("Script::install(): doing Py_SetPath\n");
+	DEBUG_MSG("Script::install():: doing Py_SetPath\n");
 	Py_SetPath(pyPaths.c_str());
-	DEBUG_MSG("Script::install(): done Py_SetPath\n");
+	DEBUG_MSG("Script::install():: done Py_SetPath\n");
 
 	// python解释器的初始化 
 	Py_Initialize();

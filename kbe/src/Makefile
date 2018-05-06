@@ -7,7 +7,9 @@ export KBE_SRC_ROOT=$(shell cd ../.. && pwd)
 KBE_SERVER_BINARIES =	../bin/server/baseapp ../bin/server/baseappmgr \
 						../bin/server/cellapp ../bin/server/cellappmgr \
 						../bin/server/dbmgr ../bin/server/loginapp \
-						../bin/server/machine ../bin/server/kbcmd
+						../bin/server/machine ../bin/server/kbcmd \
+						../bin/server/bots ../bin/server/interfaces \
+						../bin/server/logger
 				
 KBE_LIBS =	libs/libclient_lib.a libs/libcommon.a libs/libdb_redis.a \
 			libs/libdb_mysql.a libs/libdb_interface.a libs/libentitydef.a \
