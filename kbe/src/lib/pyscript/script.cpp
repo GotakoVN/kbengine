@@ -147,6 +147,15 @@ int Script::run_simpleString(const char* command, std::string* retBufferPtr)
 //-------------------------------------------------------------------------------------
 bool Script::install(std::wstring pyPaths, const char* moduleName, COMPONENT_TYPE componentType)
 {
+	// Initialise python
+	// Py_VerboseFlag = 2;
+	Py_FrozenFlag = 1;
+
+	// Warn if tab and spaces are mixed in indentation.
+	// Py_TabcheckFlag = 1;
+	Py_NoSiteFlag = 1;
+	Py_IgnoreEnvironmentFlag = 1;
+	
 	// python解释器的初始化 
 	Py_Initialize();
     if (!Py_IsInitialized())
@@ -158,19 +167,9 @@ bool Script::install(std::wstring pyPaths, const char* moduleName, COMPONENT_TYP
 	char* tmpchar = strutil::wchar2char(const_cast<wchar_t*>(pyPaths.c_str()));
 	DEBUG_MSG(fmt::format("Script::install(): paths={}\n", tmpchar));
 	free(tmpchar);
-	DEBUG_MSG(fmt::format("Script::install(): test after paths\n"));
-
-	// Initialise python
-	// Py_VerboseFlag = 2;
-	Py_FrozenFlag = 1;
-
-	// Warn if tab and spaces are mixed in indentation.
-	// Py_TabcheckFlag = 1;
-	Py_NoSiteFlag = 1;
-	Py_IgnoreEnvironmentFlag = 1;
-
-	DEBUG_MSG("Script::install(): doing Py_SetPath\n");
-	//Py_SetPath(pyPaths.c_str());
+	
+	// Can't use Py_SetPath(pyPaths.c_str()); because of apparent python api bug, crashes
+	// Add to append all from pyPath to sys.path
 	PyObject *sys = PyImport_ImportModule("sys");
 	PyObject *path = PyObject_GetAttrString(sys, "path");
 	PyObject *newPaths = PyUnicode_Split(PyUnicode_FromWideChar(pyPaths.c_str(), -1), PyUnicode_FromWideChar(L";", 1), -1);
@@ -180,7 +179,6 @@ bool Script::install(std::wstring pyPaths, const char* moduleName, COMPONENT_TYP
 		if( PyUnicode_GetLength(p) > 0 )
 			PyList_Append(path, p);
 	}
-	DEBUG_MSG("Script::install(): done Py_SetPath\n");
 
 	PyObject *m = PyImport_AddModule("__main__");
 	
