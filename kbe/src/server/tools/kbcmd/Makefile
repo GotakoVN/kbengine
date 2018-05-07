@@ -1,6 +1,7 @@
 BIN  = kbcmd
 SRCS =					\
 	client_sdk			\
+	client_sdk_godot	\
 	client_sdk_unity	\
 	client_sdk_ue4		\
 	entity_component	\

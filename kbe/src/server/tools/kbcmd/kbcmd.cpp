@@ -23,6 +23,7 @@ along with KBEngine.  If not, see <http://www.gnu.org/licenses/>.
 #include "kbcmd_interface.h"
 #include "client_sdk_unity.h"
 #include "client_sdk_ue4.h"
+#include "client_sdk_godot.h"
 #include "network/common.h"
 #include "network/tcp_packet.h"
 #include "network/udp_packet.h"
@@ -114,7 +115,7 @@ bool KBCMD::initializeBegin()
 bool KBCMD::inInitialize()
 {
 	PythonApp::inInitialize();
-	// 广播自己的地址给网上上的所有kbemachine
+	// Broadcast your own address to all kbemachines on the network
 	Components::getSingleton().pHandler(this);
 	return true;
 }
